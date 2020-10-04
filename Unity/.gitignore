@@ -1,0 +1,9 @@
+Temp
+Library
+*.sln
+*.csproj
+*.vs
+obj/
+Build
+CodeCoverage
+ProjectSettings/Packages/com.unity.testtools.codecoverage
