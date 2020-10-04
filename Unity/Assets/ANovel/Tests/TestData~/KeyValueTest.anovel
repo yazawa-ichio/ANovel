@@ -1,0 +1,17 @@
+@command1
+	@command1
+@command2 key1="Value1" key2="Value2"
+  @command2 key1="Value1"key2="Value2"
+	@command2 key1=Value1 key2="Value2"
+@command2 key1  = "Value1" key2=  "Value2"
+@command3 key1 key2
+@command4 key1="escape\"test"
+@command4 key1=escape"test
+
+#nexterror
+
+@
+	@
+@error1 key=
+	@error2 key="test
+	@ error3

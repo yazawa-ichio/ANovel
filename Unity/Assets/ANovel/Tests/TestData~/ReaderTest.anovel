@@ -1,0 +1,8 @@
+#preprocess
+;comment
+	@command key="Value"
+  &systemcommand key="Value"
+*label name="Label"
+テストテキスト
+
+@command key2="Value2"

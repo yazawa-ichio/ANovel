@@ -1,0 +1,8 @@
+@test_default_formatter Key1="test1" key2="10" key3="2.5" key4=false
+@test_default_formatter Key1="test1" key2="error"
+@test_custom_formatter key1="1,2,3" key2="1,2,3" key3="四五"
+@test_custom_formatter key1="1,2,3" key2="1,2,3" key3="四五"
+@test_required required optional
+@test_required required
+@test_required optional
+@replace_test_default_formatter Key1="test1" key2_replace key3="2.5" key4=false

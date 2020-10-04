@@ -1,0 +1,12 @@
+
+#importmacro path="MacroSet.anovel"
+
+#if condition="IMMEDIATE_DEFINE" not
+	;defineは即時反映される
+	#define name="IMMEDIATE_DEFINE"
+	#if condition="IMMEDIATE_DEFINE"
+		#macro name="dep_macrolog"
+		@macrolog2 m="dep"
+		#endmacro
+	#endif
+#endif

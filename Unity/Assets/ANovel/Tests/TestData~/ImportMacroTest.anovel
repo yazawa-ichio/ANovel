@@ -1,0 +1,13 @@
+;ローカルのシンボルはインポート先には影響しない
+#define name="SKIP_MACRO_LOG"
+
+#importmacro path="MacroSet.anovel"
+
+#if condition="SKIP_MACRO_LOG_DEFINE" not
+@macrolog m="tt"
+#endif
+
+@macrolog2 m="bb"
+
+@definelog
+
