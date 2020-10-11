@@ -25,7 +25,7 @@ namespace ANovel.Core.Tests
 			var block = new Block();
 			Assert.IsTrue(reader.TryRead(block));
 
-			block.Commands.ForEach(x => (x as IExecute).Execute());
+			block.Commands.ForEach(x => x.Execute());
 
 			var logs = block.Commands.OfType<TestLogCommand>().ToArray();
 			for (int i = 0; i < output.Length; i++)
@@ -76,6 +76,9 @@ namespace ANovel.Core.Tests
 				Assert.AreEqual(TextBlockType.Text, block.Text.Type);
 				Assert.AreEqual("二行テキスト\n二行テキスト", block.Text.Get());
 				Assert.AreEqual("二行テキスト\r\n二行テキスト", block.Text.Get("\r\n"), "指定の改行コードに出来る");
+				Assert.AreEqual("二行テキスト", block.Text.GetRange(1));
+				Assert.AreEqual("二行テキスト\n二行テキスト", block.Text.GetRange(0, 2));
+				Assert.AreEqual(2, block.Text.LineCount);
 			}
 			{
 				Assert.IsTrue(reader.TryRead(block));
@@ -166,36 +169,31 @@ namespace ANovel.Core.Tests
 			}
 		}
 
-		interface IExecute
-		{
-			void Execute();
-		}
-
 		[CommandName("test_log")]
-		class TestLogCommand : Command, IExecute
+		class TestLogCommand : Command
 		{
 			[CommandField]
 			public string Message { get; private set; }
 
-			public void Execute()
+			protected override void Execute()
 			{
 				Debug.Log(Message);
 			}
 		}
 
 		[CommandName("test_macro_define")]
-		class TestMacroDefineCommand : Command, IExecute
+		class TestMacroDefineCommand : Command
 		{
 			[CommandField]
 			public string Message { get; private set; }
 
-			public void Execute()
+			protected override void Execute()
 			{
 				Debug.Log(Message);
 			}
 		}
 
-		class DummyLoader : IFileLoader
+		class DummyLoader : IScenarioLoader
 		{
 			string m_Text;
 			public DummyLoader(string text)
@@ -207,6 +205,7 @@ namespace ANovel.Core.Tests
 			{
 				return Task.FromResult(m_Text);
 			}
+			public void Dispose() { }
 		}
 
 

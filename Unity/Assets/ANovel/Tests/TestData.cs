@@ -10,6 +10,8 @@ namespace ANovel.Core.Tests
 			{"circleimport.anovel", CircleImport},
 			{"CircleImportTest.anovel", CircleImportTest},
 			{"circleimporttest.anovel", CircleImportTest},
+			{"ConductorTest.anovel", ConductorTest},
+			{"conductortest.anovel", ConductorTest},
 			{"ImportMacroTest.anovel", ImportMacroTest},
 			{"importmacrotest.anovel", ImportMacroTest},
 			{"KeyValueTest.anovel", KeyValueTest},
@@ -49,6 +51,24 @@ namespace ANovel.Core.Tests
 		@dep_macrolog
 		*/
 		public const string CircleImportTest = "\n#importmacro path=\"CircleImport.anovel\"\n\n@dep_macrolog";
+
+		/* file:ConductorTest.anovel
+		
+		
+		テキスト表示
+		
+		@test_prepare_wait time=0.5
+		@test_preload path="test1"
+		@test_preload path="test2"
+		
+		【名前】
+		名前付きテキスト表示
+		
+		@test_sync
+		
+		同期が終わるまでテキストまで進まない
+		*/
+		public const string ConductorTest = "\n\nテキスト表示\n\n@test_prepare_wait time=0.5\n@test_preload path=\"test1\"\n@test_preload path=\"test2\"\n\n【名前】\n名前付きテキスト表示\n\n@test_sync\n\n同期が終わるまでテキストまで進まない\n";
 
 		/* file:ImportMacroTest.anovel
 		;ローカルのシンボルはインポート先には影響しない

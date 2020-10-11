@@ -1,0 +1,14 @@
+
+
+テキスト表示
+
+@test_prepare_wait time=0.5
+@test_preload path="test1"
+@test_preload path="test2"
+
+【名前】
+名前付きテキスト表示
+
+@test_sync
+
+同期が終わるまでテキストまで進まない

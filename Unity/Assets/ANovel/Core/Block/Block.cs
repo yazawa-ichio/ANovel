@@ -6,7 +6,7 @@ namespace ANovel.Core
 	{
 		public BlockLabelInfo LabelInfo;
 
-		public List<Command> Commands { get; private set; } = new List<Command>();
+		public List<ICommand> Commands { get; private set; } = new List<ICommand>();
 
 		public TextBlock Text { get; private set; } = new TextBlock();
 

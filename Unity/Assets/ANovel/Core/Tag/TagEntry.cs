@@ -10,6 +10,7 @@ namespace ANovel.Core
 		Type m_Type;
 		TagNameAttribute m_Attr;
 		TagFieldEntry[] m_Fields;
+		InjectParamEntry[] m_InjectParams;
 
 		public string Name => m_Attr.Name;
 
@@ -20,6 +21,7 @@ namespace ANovel.Core
 			m_Type = type;
 			m_Attr = attr;
 			m_Fields = GetFields().ToArray();
+			m_InjectParams = GetInjectParams().ToArray();
 		}
 
 		IEnumerable<TagFieldEntry> GetFields()
@@ -28,6 +30,19 @@ namespace ANovel.Core
 			while (type != typeof(Tag))
 			{
 				foreach (var entry in GetFields(type))
+				{
+					yield return entry;
+				}
+				type = type.BaseType;
+			}
+		}
+
+		IEnumerable<InjectParamEntry> GetInjectParams()
+		{
+			var type = m_Type;
+			while (type != typeof(Tag))
+			{
+				foreach (var entry in GetInjectParams(type))
 				{
 					yield return entry;
 				}
@@ -47,7 +62,7 @@ namespace ANovel.Core
 		public Tag Create(in LineData data, Dictionary<string, string> param)
 		{
 			var tag = (Tag)Activator.CreateInstance(m_Type);
-			tag.Set(data);
+			tag.Set(m_Attr.Name, data);
 			foreach (var field in m_Fields)
 			{
 				if (param.TryGetValue(field.Name, out var value))
@@ -65,6 +80,10 @@ namespace ANovel.Core
 				{
 					throw new LineDataException(in data, $"{Name} {field.Name} required key");
 				}
+			}
+			foreach (var injectParam in m_InjectParams)
+			{
+				injectParam.Set(tag, param);
 			}
 			return tag;
 		}

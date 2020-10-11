@@ -6,7 +6,7 @@ namespace ANovel.Core
 {
 	public class BlockReader
 	{
-		IFileLoader m_Loader;
+		IScenarioLoader m_Loader;
 		LineReader m_LineReader;
 		PreProcessor m_PreProcessor;
 		TagProvider m_TagProvider;
@@ -17,11 +17,11 @@ namespace ANovel.Core
 
 		public bool EndOfFile => m_LineReader?.EndOfFile ?? false;
 
-		public BlockReader(IFileLoader loader) : this(loader, Array.Empty<string>())
+		public BlockReader(IScenarioLoader loader) : this(loader, Array.Empty<string>())
 		{
 		}
 
-		public BlockReader(IFileLoader loader, string[] symbols)
+		public BlockReader(IScenarioLoader loader, string[] symbols)
 		{
 			m_Loader = loader;
 			m_PreProcessor = new PreProcessor(loader, symbols);
@@ -76,13 +76,13 @@ namespace ANovel.Core
 			return !first;
 		}
 
-		void OnCommand(in LineData data, List<Command> list)
+		void OnCommand(in LineData data, List<ICommand> list)
 		{
 			m_Tags.Clear();
 			m_TagProvider.Provide(in data, m_Tags);
 			foreach (var tag in m_Tags)
 			{
-				list.Add(tag as Command);
+				list.Add((ICommand)tag);
 			}
 		}
 

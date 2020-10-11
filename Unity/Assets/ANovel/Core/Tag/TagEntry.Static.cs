@@ -11,6 +11,7 @@ namespace ANovel.Core
 
 		static Dictionary<string, TagEntry[]>[] s_Dic;
 		static Dictionary<Type, TagFieldEntry[]> s_Fields = new Dictionary<Type, TagFieldEntry[]>();
+		static Dictionary<Type, InjectParamEntry[]> s_InjectParams = new Dictionary<Type, InjectParamEntry[]>();
 
 		static TagEntry()
 		{
@@ -45,7 +46,7 @@ namespace ANovel.Core
 		{
 			foreach (var type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()))
 			{
-				if (type.IsAssignableFrom(typeof(Tag)))
+				if (!typeof(Tag).IsAssignableFrom(type))
 				{
 					continue;
 				}
@@ -78,7 +79,7 @@ namespace ANovel.Core
 			return false;
 		}
 
-		static TagFieldEntry[] GetFields(Type type)
+		internal static TagFieldEntry[] GetFields(Type type)
 		{
 			if (!s_Fields.TryGetValue(type, out var ret))
 			{
@@ -101,6 +102,33 @@ namespace ANovel.Core
 				foreach (var attr in info.GetCustomAttributes<TagFieldAttribute>())
 				{
 					yield return new TagFieldEntry(info, attr);
+				}
+			}
+		}
+
+		internal static InjectParamEntry[] GetInjectParams(Type type)
+		{
+			if (!s_InjectParams.TryGetValue(type, out var ret))
+			{
+				s_InjectParams[type] = ret = GetInjectParamsImpl(type).ToArray();
+			}
+			return ret;
+		}
+
+		static IEnumerable<InjectParamEntry> GetInjectParamsImpl(Type type)
+		{
+			foreach (var info in type.GetFields(s_BindingFlags))
+			{
+				foreach (var attr in info.GetCustomAttributes<InjectParamAttribute>())
+				{
+					yield return new InjectParamEntry(info, attr);
+				}
+			}
+			foreach (var info in type.GetProperties(s_BindingFlags))
+			{
+				foreach (var attr in info.GetCustomAttributes<InjectParamAttribute>())
+				{
+					yield return new InjectParamEntry(info, attr);
 				}
 			}
 		}

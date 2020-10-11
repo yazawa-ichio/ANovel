@@ -40,7 +40,7 @@ namespace ANovel.Core
 
 		}
 
-		IFileLoader m_Loader;
+		IScenarioLoader m_Loader;
 		Dictionary<string, Result> m_Cache = new Dictionary<string, Result>();
 		string[] m_Symbols;
 		List<Tag> m_Tags = new List<Tag>();
@@ -48,7 +48,7 @@ namespace ANovel.Core
 
 		Entry Current => m_Stack.Peek();
 
-		public PreProcessor(IFileLoader loader, string[] symbols)
+		public PreProcessor(IScenarioLoader loader, string[] symbols)
 		{
 			m_Loader = loader;
 			m_Symbols = symbols ?? Array.Empty<string>();

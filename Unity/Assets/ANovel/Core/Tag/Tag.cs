@@ -2,9 +2,15 @@
 {
 	public abstract class Tag
 	{
-		protected LineData LineData { get; private set; }
+		public string TagName { get; private set; }
 
-		internal void Set(in LineData data) => LineData = data;
+		public LineData LineData { get; private set; }
+
+		internal void Set(string name, in LineData data)
+		{
+			TagName = name;
+			LineData = data;
+		}
 
 	}
 }

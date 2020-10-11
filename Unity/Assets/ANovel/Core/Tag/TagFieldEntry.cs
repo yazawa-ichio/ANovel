@@ -11,7 +11,7 @@ namespace ANovel.Core
 		TagFieldAttribute m_Attr;
 		Type m_FieldType;
 
-		public bool Required => m_Attr.Required;
+		public bool Required => m_Attr?.Required ?? false;
 
 		public string Name { get; private set; }
 
@@ -46,6 +46,10 @@ namespace ANovel.Core
 
 		void SetAttr(TagFieldAttribute attr)
 		{
+			if (attr == null)
+			{
+				return;
+			}
 			m_Attr = attr;
 			if (!string.IsNullOrEmpty(attr.KeyName))
 			{

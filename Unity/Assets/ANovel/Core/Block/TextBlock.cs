@@ -19,6 +19,8 @@ namespace ANovel.Core
 
 		public ExtensionTextBlockInfo Extension { get; private set; }
 
+		public int LineCount => m_Lines.Count;
+
 		public void Clear()
 		{
 			m_Lines.Clear();
@@ -41,6 +43,11 @@ namespace ANovel.Core
 			m_Lines.AddRange(texts);
 		}
 
+		public string GetLine(int index)
+		{
+			return m_Lines[index].Line;
+		}
+
 		public string Get()
 		{
 			return Get("\n");
@@ -48,12 +55,32 @@ namespace ANovel.Core
 
 		public string Get(string newline)
 		{
+			return GetImpl(newline, 0, -1);
+		}
+
+		public string GetRange(int start, int count)
+		{
+			return GetImpl("\n", start, count);
+		}
+
+		public string GetRange(int start)
+		{
+			return GetImpl("\n", start, -1);
+		}
+
+		string GetImpl(string newline, int start, int count)
+		{
 			m_StringBuilder.Clear();
-			for (int i = 0; i < m_Lines.Count; i++)
+			if (count < 0)
 			{
-				var line = m_Lines[i].Line;
+				count = m_Lines.Count - start;
+			}
+			for (int i = 0; i < count; i++)
+			{
+				var lineIndex = start + i;
+				var line = m_Lines[lineIndex].Line;
 				m_StringBuilder.Append(line);
-				if (i + 1 < m_Lines.Count)
+				if (lineIndex + 1 < count)
 				{
 					m_StringBuilder.Append(newline);
 				}

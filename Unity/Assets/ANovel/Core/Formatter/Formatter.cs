@@ -59,6 +59,15 @@ namespace ANovel.Core
 
 		public static object Format(Type type, string value)
 		{
+			if (s_Func.TryGetValue(type, out var func))
+			{
+				return func(value);
+			}
+			var nullable = Nullable.GetUnderlyingType(type);
+			if (nullable != null && s_Func.TryGetValue(nullable, out func))
+			{
+				s_Func[type] = func;
+			}
 			return s_Func[type](value);
 		}
 

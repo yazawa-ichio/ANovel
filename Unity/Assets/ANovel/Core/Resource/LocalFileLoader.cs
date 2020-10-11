@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace ANovel.Core
 {
-	public class LocalFileLoader : IFileLoader
+	public class LocalFileLoader : IScenarioLoader
 	{
 		string m_Root;
 
@@ -29,6 +29,9 @@ namespace ANovel.Core
 			var text = File.ReadAllText(GetPath(path));
 			return Task.FromResult(text);
 		}
+
+		public void Dispose() { }
+
 	}
 
 }

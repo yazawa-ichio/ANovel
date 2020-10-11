@@ -2,8 +2,10 @@
 
 namespace ANovel.Core.Tests
 {
-	public class TestDataLoader : IFileLoader
+	public class TestDataLoader : IScenarioLoader
 	{
+		public void Dispose() { }
+
 		public Task<string> Load(string path)
 		{
 			var text = TestData.Get(path);
