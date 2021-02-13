@@ -12,6 +12,10 @@ namespace ANovel.Core
 	{
 		string m_Root;
 
+		public bool StrictUnloadMode { get; set; }
+
+		public int UnloadCounter { get; set; } = 32;
+
 		public ResourceLoader(string root)
 		{
 			m_Root = root;
@@ -56,6 +60,23 @@ namespace ANovel.Core
 		{
 			path = GetPath(path);
 			return Task.FromResult((T)(object)Resources.Load(path, typeof(T)));
+		}
+
+		int m_UnloadCount;
+		public void Unload(object obj)
+		{
+			if (obj is Object asset)
+			{
+				if (StrictUnloadMode)
+				{
+					Resources.UnloadAsset(asset);
+				}
+				else if (m_UnloadCount++ >= UnloadCounter)
+				{
+					m_UnloadCount = 0;
+					Resources.UnloadUnusedAssets();
+				}
+			}
 		}
 
 	}

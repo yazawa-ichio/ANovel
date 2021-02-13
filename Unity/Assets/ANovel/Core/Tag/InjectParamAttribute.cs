@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 #if UNITY_5_3_OR_NEWER
 using UnityEngine.Scripting;
 #endif
@@ -8,11 +9,59 @@ namespace ANovel
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class InjectParamAttribute : PreserveAttribute
 	{
-		public string[] Keys { get; private set; }
+		public string TargetKey { get; set; }
+
+		public string IgnoreKey { get; set; }
+
+		public string[] TargetKeys { get; set; }
+
+		public string[] IgnoreKeys { get; set; }
 
 		public InjectParamAttribute() { }
-		public InjectParamAttribute(params string[] keys) => Keys = keys;
 
+		public bool TryGetTargetKeys(out HashSet<string> keys)
+		{
+			if (TargetKeys == null && string.IsNullOrEmpty(TargetKey))
+			{
+				keys = null;
+				return false;
+			}
+			keys = new HashSet<string>();
+			if (TargetKeys != null)
+			{
+				keys.UnionWith(TargetKeys);
+			}
+			if (!string.IsNullOrEmpty(TargetKey))
+			{
+				keys.Add(TargetKey);
+			}
+			return true;
+		}
+
+		public bool TryGetIgnoreKeys(out HashSet<string> keys)
+		{
+			if (IgnoreKeys == null && string.IsNullOrEmpty(IgnoreKey))
+			{
+				keys = null;
+				return false;
+			}
+			keys = new HashSet<string>();
+			if (IgnoreKeys != null)
+			{
+				keys.UnionWith(IgnoreKeys);
+			}
+			if (!string.IsNullOrEmpty(IgnoreKey))
+			{
+				keys.Add(IgnoreKey);
+			}
+			return true;
+		}
+
+	}
+
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class SkipInjectParamAttribute : PreserveAttribute
+	{
 	}
 
 }

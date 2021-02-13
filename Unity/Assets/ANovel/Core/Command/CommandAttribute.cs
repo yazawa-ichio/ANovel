@@ -13,4 +13,11 @@ namespace ANovel
 	{
 		public CommandFieldAttribute() : base() { }
 	}
+
+	public class SystemCommandNameAttribute : TagNameAttribute
+	{
+		public SystemCommandNameAttribute(string name) : base(name, LineType.SystemCommand)
+		{
+		}
+	}
 }

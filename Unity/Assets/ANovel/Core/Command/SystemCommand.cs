@@ -1,4 +1,4 @@
-﻿namespace ANovel.Core
+﻿namespace ANovel.Commands
 {
 	public abstract class SystemCommand : Command
 	{

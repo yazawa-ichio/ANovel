@@ -18,21 +18,23 @@ namespace ANovel.Core.Tests
 			var reader = new BlockReader(new TestDataLoader());
 			var loader = new Loader();
 			var text = new Text();
-			var conductor = new Conductor(reader, loader, text);
-
-			conductor.Load("ConductorTest.anovel").Wait();
-
+			var conductor = new Conductor(reader, loader)
+			{
+				Text = text
+			};
+			conductor.Run("ConductorTest.anovel", null, CancellationToken.None).Wait();
 			conductor.Update();
 			Assert.AreEqual("テキスト表示", text.TextBlock.Get());
 			conductor.Update();
 			Assert.AreEqual("テキスト表示", text.TextBlock.Get());
 
 			Assert.AreEqual(2, loader.LoadCount);
+			var prevBlock = text.TextBlock;
 			Assert.IsTrue(conductor.TryNext(), "シナリオを進める");
 
-			Assert.Null(text.TextBlock, "プリロード中なのでテキストが読み取れない");
+			Assert.AreEqual(prevBlock, text.TextBlock, "プリロード中なのでテキストが読み取れない");
 
-			while (text.TextBlock == null)
+			while (text.TextBlock == prevBlock)
 			{
 				conductor.Update();
 				yield return null;
@@ -62,7 +64,7 @@ namespace ANovel.Core.Tests
 
 			Assert.IsTrue(conductor.TryNext(), "シナリオを進める");
 
-			Assert.IsFalse(conductor.IsRunning, "終端まで進んだ");
+			Assert.IsTrue(conductor.IsStop, "終端まで進んだ");
 
 
 			conductor.Dispose();
@@ -70,22 +72,37 @@ namespace ANovel.Core.Tests
 		}
 
 		[Test]
-		public void 読み込みエラーテスト()
+		public void エラーテスト()
 		{
 			var reader = new BlockReader(new TestDataLoader());
 			var loader = new Loader();
 			var text = new Text();
-			var conductor = new Conductor(reader, loader, text);
+			var conductor = new Conductor(reader, loader)
+			{
+				Text = text
+			};
 			Exception error = null; ;
+			conductor.OnError += (e) => error = e;
 			try
 			{
-				conductor.Load("Error").Wait();
+				conductor.Run("Error", null, CancellationToken.None).Wait();
 			}
 			catch (Exception ex)
 			{
 				error = ex;
 			}
 			Assert.NotNull(error);
+			Assert.IsTrue(conductor.HasError);
+			error = null;
+
+			conductor.Run("ConductorErrorTest.anovel", null, CancellationToken.None).Wait();
+			Assert.IsNull(error);
+
+			conductor.Update();
+
+			Assert.IsTrue(conductor.HasError);
+			Assert.IsNotNull(error, "Update時のエラーはOnErrorで受け取る");
+
 		}
 
 		[Test]
@@ -117,6 +134,245 @@ namespace ANovel.Core.Tests
 
 		}
 
+		[Test]
+		public void マニュアルジャンプテスト()
+		{
+			var reader = new BlockReader(new TestDataLoader());
+			var loader = new Loader();
+			var text = new Text();
+			var conductor = new Conductor(reader, loader)
+			{
+				Text = text
+			};
+			StoreData store;
+			conductor.Run("ConductorJumpTest.anovel", "", CancellationToken.None).Wait();
+			{
+				conductor.Update();
+				Assert.AreEqual("ジャンプテスト開始", text.TextBlock.Get());
+				conductor.TryNext();
+				conductor.Update();
+				Assert.AreEqual("停止", text.TextBlock.Get());
+				Assert.IsFalse(conductor.IsStop, "終了ブロックではない");
+				conductor.TryNext();
+				conductor.Update();
+				Assert.IsTrue(conductor.IsStop, "終了ブロックに来た");
+				Assert.AreEqual("停止", text.TextBlock.Get(), "stopの終了ブロックなので文字は消えない");
+			}
+			// ロールバック機能
+			{
+				conductor.Back(1, CancellationToken.None).Wait();
+				Assert.IsFalse(conductor.IsStop, "終了ブロック前に戻る");
+				Assert.AreEqual("ジャンプテスト開始", text.TextBlock.Get(), "stopの終了ブロックはヒストリーに記録されないので二つ前に戻る");
+				conductor.Back(1, CancellationToken.None).Wait();
+
+				Assert.AreEqual("ジャンプテスト開始", text.TextBlock.Get(), "stopの終了ブロックはヒストリーに記録されないので二つ前に戻る");
+
+				for (int i = 0; i < 100 && !conductor.IsStop; i++)
+				{
+					conductor.TryNext();
+					conductor.Update();
+				}
+				Assert.IsTrue(conductor.IsStop, "終端にいる");
+			}
+			// Jump機能テスト
+			{
+				conductor.Jump("ConductorJumpTest.anovel", "jump1", CancellationToken.None).Wait();
+				conductor.Update();
+				Assert.AreEqual("ジャンプ先1", text.TextBlock.Get());
+				Assert.IsFalse(conductor.IsStop, "終了ブロックではない");
+				conductor.TryNext();
+				conductor.Update();
+				Assert.IsTrue(conductor.IsStop, "終了ブロックに来た");
+				Assert.AreEqual("ジャンプ先1", text.TextBlock.Get(), "stopの終了ブロックなので文字は消えない");
+
+				store = conductor.Store();
+				Assert.NotNull(store, "セーブデータ");
+				Assert.NotNull(Packer.PackAndToJson(store), "セーブデータをシリアライズ出来る");
+			}
+			{
+
+				Assert.IsFalse(conductor.HasError);
+
+				Assert.Throws<AggregateException>(() =>
+				{
+					conductor.Seek("jump1", CancellationToken.None).Wait();
+				}, "シーク先が無いのでエラーになる");
+
+				Assert.IsTrue(conductor.HasError, "エラーフラグが立つ");
+
+				Assert.Throws<InvalidOperationException>(() =>
+				{
+					conductor.Jump("ConductorJumpTest.anovel", "jump1", CancellationToken.None).Wait();
+				}, "エラー後にJump操作は出来ない");
+
+				conductor.Restore(Packer.Unpack<StoreData>(Packer.Pack(store)), CancellationToken.None).Wait();
+				Assert.AreEqual(Packer.PackAndToJson(store), Packer.PackAndToJson(conductor.Store()), "シリアライズで欠損がない");
+				Assert.IsFalse(conductor.HasError, "ロードを行うとリカバリー出来る");
+
+			}
+			// JumpからのBack実行
+			{
+				conductor.Back(1, CancellationToken.None).Wait();
+				Assert.IsFalse(conductor.IsStop, "終了ブロック前に戻る");
+				Assert.AreEqual("停止", text.TextBlock.Get(), "JumpはBackで戻ることが出来る");
+				conductor.Back(1, CancellationToken.None).Wait();
+				Assert.AreEqual("ジャンプテスト開始", text.TextBlock.Get(), "JumpはBackで戻ることが出来る");
+			}
+			// シーク機能
+			{
+				conductor.Jump("ConductorJumpTest.anovel", "jump2", CancellationToken.None).Wait();
+				conductor.Update();
+				Assert.AreEqual("ジャンプ先2", text.TextBlock.Get());
+				Assert.IsFalse(conductor.IsStop, "終了ブロックではない");
+
+				//シーク出来ている
+				conductor.Seek("jump2", CancellationToken.None).Wait();
+				conductor.Update();
+				Assert.AreEqual("シーク先1", text.TextBlock.Get());
+
+
+				conductor.Seek("jump2", CancellationToken.None).Wait();
+				conductor.Update();
+				Assert.AreEqual("シーク先2", text.TextBlock.Get());
+
+				conductor.Seek((block) =>
+				{
+					return block.StopCommand != null;
+				}, CancellationToken.None).Wait();
+
+				conductor.Update();
+				Assert.AreEqual("停止", text.TextBlock.Get(), "任意の場所までシーク");
+
+				conductor.Back(1, CancellationToken.None).Wait();
+				Assert.AreEqual("シーク中", text.TextBlock.Get(), "履歴には残っている");
+				conductor.Back(1, CancellationToken.None).Wait();
+				Assert.AreEqual("シーク中", text.TextBlock.Get(), "履歴には残っている");
+				conductor.Back(1, CancellationToken.None).Wait();
+				Assert.AreEqual("シーク先2", text.TextBlock.Get(), "履歴には残っている");
+
+			}
+		}
+
+		[UnityTest, Timeout(1000)]
+		public IEnumerator コマンドテスト()
+		{
+			TestTrigger.Trigger = null;
+			var reader = new BlockReader(new TestDataLoader());
+			var loader = new Loader();
+			var text = new Text();
+			var conductor = new Conductor(reader, loader)
+			{
+				Text = text
+			};
+			conductor.Run("CommandTest.anovel", "", CancellationToken.None).Wait();
+			conductor.Update();
+			{
+				Assert.AreEqual("asyncを利用するとスコープ内に同期コマンドがあっても非同期実行される", text.TextBlock.Get());
+				while (string.IsNullOrEmpty(TestTrigger.Trigger))
+				{
+					conductor.Update();
+					TestSync.EndFlag = true;
+					yield return null;
+				}
+				Assert.AreEqual("syncend", TestTrigger.Trigger);
+				TestTrigger.Trigger = null;
+			}
+			{
+				conductor.TryNext();
+				conductor.Update();
+				Assert.AreEqual("非同期コマンド中にブロックを終了する", text.TextBlock.Get());
+				conductor.TryNext();
+
+				Assert.AreEqual("blockfinish", TestTrigger.Trigger);
+				TestTrigger.Trigger = null;
+				Assert.AreEqual("トリガーが実行されている", text.TextBlock.Get());
+			}
+			{
+				conductor.TryNext();
+				Assert.IsNull(text.TextBlock, "parallelコマンドはデフォルトどれかが同期だと同期コマンドになる");
+				Assert.AreEqual("parallelend", TestTrigger.Trigger, "全てのコマンドが並列実行されるで上の同期コマンドを待たない");
+				TestTrigger.Trigger = null;
+
+				while (text.TextBlock == null)
+				{
+					conductor.Update();
+					TestSync.EndFlag = true;
+					yield return null;
+				}
+				Assert.AreEqual("parallelを利用するとスコープ内を同時に実行できる", text.TextBlock.Get());
+			}
+			{
+				conductor.TryNext();
+				Assert.AreEqual("parallelend", TestTrigger.Trigger, "全てのコマンドが並列実行されるで上の同期コマンドを待たない");
+				TestTrigger.Trigger = null;
+				Assert.IsNotNull(text.TextBlock);
+				Assert.AreEqual("parallel内に同期命令がない場合は非同期実行される", text.TextBlock.Get());
+			}
+			{
+				conductor.TryNext();
+				Assert.AreEqual("parallelend", TestTrigger.Trigger);
+				TestTrigger.Trigger = null;
+				Assert.IsNotNull(text.TextBlock);
+				Assert.AreEqual("parallel内に同期命令があってもsyncフラグをfalseにすると非同期になる", text.TextBlock.Get());
+			}
+			{
+				conductor.TryNext();
+				while (text.TextBlock == null)
+				{
+					conductor.Update();
+					TestSync.EndFlag = true;
+					yield return null;
+				}
+				Assert.AreEqual("nestしたスコープ", text.TextBlock.Get());
+			}
+			{
+
+				conductor.TryNext();
+				Assert.AreEqual("ジャンプ前", text.TextBlock.Get());
+				conductor.TryNext();
+				// Task.Yieldを進める
+				yield return null;
+				conductor.Update();
+				Assert.IsFalse(conductor.HasError);
+				Assert.AreEqual("ジャンプコマンド", text.TextBlock.Get());
+			}
+
+		}
+
+		[Test]
+		public void エンドブロックテスト()
+		{
+			var reader = new BlockReader(new TestDataLoader());
+			var loader = new Loader();
+			var text = new Text();
+			var conductor = new Conductor(reader, loader)
+			{
+				Text = text
+			};
+			conductor.Run("CommandEndBlockTest.anovel", "", CancellationToken.None).Wait();
+			conductor.Update();
+
+			Assert.AreEqual("エンドブロックコマンドテスト", text.TextBlock.Get());
+			conductor.TryNext();
+			Assert.IsNull(text.TextBlock);
+			conductor.TryNext();
+			Assert.AreEqual("デフォルトセーブされる", text.TextBlock.Get());
+			conductor.Back(1, CancellationToken.None).Wait();
+			Assert.IsNull(text.TextBlock);
+			conductor.Back(1, CancellationToken.None).Wait();
+			Assert.AreEqual("エンドブロックコマンドテスト", text.TextBlock.Get());
+
+			conductor.TryNext();
+			conductor.TryNext();
+			conductor.TryNext();
+
+			Assert.IsNull(text.TextBlock);
+			conductor.TryNext();
+			Assert.AreEqual("ブロックは終了するがその地点でセーブは出来ない", text.TextBlock.Get());
+			conductor.Back(1, CancellationToken.None).Wait();
+			Assert.AreEqual("デフォルトセーブされる", text.TextBlock.Get());
+		}
+
 		class Loader : IResourceLoader
 		{
 			public int LoadCount;
@@ -132,9 +388,14 @@ namespace ANovel.Core.Tests
 				await Task.Delay(100);
 				return System.Activator.CreateInstance<T>();
 			}
+
+			public void Unload(object obj)
+			{
+			}
+
 		}
 
-		class Text : ITextProcessor
+		class Text : ITextProcessor, ITextProcessorRestoreHandler
 		{
 			public ServiceContainer Container { get; private set; }
 
@@ -148,18 +409,30 @@ namespace ANovel.Core.Tests
 			{
 				Container = container;
 			}
+
+			public void PreUpdate(TextBlock text, IEnvData data) { }
+
 			public void Set(TextBlock text)
 			{
-				TextBlock = text;
+				TextBlock = text?.Clone();
 			}
+
+			public void Restore(IEnvDataHolder data, TextBlock text)
+			{
+				TextBlock = text?.Clone();
+			}
+
 			public bool TryNext()
 			{
 				if (Next)
 				{
-					TextBlock = null;
 					return true;
 				}
 				return false;
+			}
+			public void Clear()
+			{
+				TextBlock = null;
 			}
 		}
 
@@ -219,8 +492,29 @@ namespace ANovel.Core.Tests
 
 		}
 
+		[CommandName("test_trigger")]
+		public class TestTrigger : Command
+		{
+			public static string Trigger;
 
+			[CommandField(Required = true)]
+			string m_Name = default;
 
+			protected override void Execute()
+			{
+				Trigger = m_Name;
+			}
+
+		}
+
+		[CommandName("test_error")]
+		public class TestError : Command
+		{
+			protected override void Execute()
+			{
+				throw new Exception("Error");
+			}
+		}
 
 	}
 }

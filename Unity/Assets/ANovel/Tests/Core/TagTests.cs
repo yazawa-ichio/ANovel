@@ -251,6 +251,7 @@ namespace ANovel.Core.Tests
 		}
 
 
+		[UnityEngine.Scripting.Preserve]
 		class IntArrayFormatter : IDefaultFormatter
 		{
 			public Type Target => typeof(int[]);
@@ -261,6 +262,7 @@ namespace ANovel.Core.Tests
 			}
 		}
 
+		[UnityEngine.Scripting.Preserve]
 		class Vector3Formatter : IFormatter
 		{
 			public object Format(string value)
@@ -270,6 +272,7 @@ namespace ANovel.Core.Tests
 			}
 		}
 
+		[UnityEngine.Scripting.Preserve]
 		class CustomIntFormatter : IFormatter
 		{
 			static char[] s_Index = new char[] { '〇', '一', '二', '三', '四', '五', '六', '七', '八', '九' };

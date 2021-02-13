@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace ANovel.Core.Tests
 {
@@ -6,7 +7,7 @@ namespace ANovel.Core.Tests
 	{
 		public void Dispose() { }
 
-		public Task<string> Load(string path)
+		public Task<string> Load(string path, CancellationToken token)
 		{
 			var text = TestData.Get(path);
 			return Task.FromResult(text);

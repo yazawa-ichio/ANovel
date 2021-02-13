@@ -37,6 +37,9 @@ namespace ANovel.Core.Tests
 				Assert.AreEqual(10, tag.Vec2.x, "キー制限");
 				Assert.AreEqual(0, tag.Vec2.y, "キー制限");
 			}
+			{
+				Assert.AreNotEqual(10, tag.SkipTest.X, "SkipInjectParam属性がある場合は値が入らない");
+			}
 		}
 
 
@@ -50,8 +53,10 @@ namespace ANovel.Core.Tests
 			return ret.Count > 0 ? ret[0] : null;
 		}
 
+		[UnityEngine.Scripting.Preserve]
 		class InjectParamTest
 		{
+			[UnityEngine.Scripting.Preserve]
 			public int X { get; set; }
 			int m_X = default;
 			public int PrivateX => m_X;
@@ -62,12 +67,20 @@ namespace ANovel.Core.Tests
 			public int ConvX => m_ConvX;
 		}
 
+		[UnityEngine.Scripting.Preserve]
+		class InjectParamSkipTest
+		{
+			[SkipInjectParam]
+			public int X { get; set; }
+		}
 
+		[UnityEngine.Scripting.Preserve]
 		class InjectParamTestDep : InjectParamTest
 		{
 			public int Z = 5;
 
 			public int Flag = default;
+
 		}
 
 		[CommandName("test_inject_param")]
@@ -86,8 +99,11 @@ namespace ANovel.Core.Tests
 			[InjectParam]
 			Vector2 m_Vec1 = default;
 			public Vector2 Vec1 => m_Vec1;
-			[InjectParam("x")]
+			[InjectParam(TargetKey = "x")]
 			public Vector2 Vec2 { get; set; } = default;
+			[InjectParam]
+			public InjectParamSkipTest SkipTest = default;
+
 		}
 
 	}

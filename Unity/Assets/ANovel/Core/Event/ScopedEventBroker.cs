@@ -1,44 +1,55 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ANovel.Core
 {
-	public struct ScopedEventBroker : IEventBroker, IDisposable
+	public class ScopedEventBroker : IDisposable
 	{
-		EventBroker m_EventBroker;
-		object m_Owner;
+		EventBroker m_Owner;
+		List<object> m_List;
 
-		public ScopedEventBroker(EventBroker broker, object owner)
+		public ScopedEventBroker(EventBroker owner)
 		{
 			m_Owner = owner;
-			m_EventBroker = broker;
+			m_List = ListPool<object>.Pop();
 		}
 
-		public EventPublisher Publisher()
+		public void Publish<T>(T name)
 		{
-			return m_EventBroker.Publisher();
+			m_Owner.Publish(name);
 		}
 
-		public EventPublisher<T> Publisher<T>()
+		public void Publish<T>(T name, object prm)
 		{
-			return m_EventBroker.Publisher<T>();
+			m_Owner.Publish(name, prm);
 		}
 
-		public EventSubscribeAccessor Subscribe(string name)
+		public void Subscribe(object obj)
 		{
-			return new EventSubscribeAccessor(this, m_Owner, name);
+			m_List.Add(obj);
+			m_Owner.Register(obj);
 		}
 
-		public EventSubscribeAccessor Subscribe<TEvent>(TEvent name) where TEvent : Enum
+		public void Unsubscribe(object obj)
 		{
-			return new EventSubscribeAccessor(this, m_Owner, EventNameToStrConverter.ToStr(name));
+			m_List.Remove(obj);
 		}
 
 		public void Dispose()
 		{
-			m_EventBroker?.Unsubscribe(m_Owner);
-			m_EventBroker = null;
-			m_Owner = null;
+			if (m_Owner != null)
+			{
+				foreach (var obj in m_List)
+				{
+					m_Owner.Unregister(obj);
+				}
+				ListPool<object>.Push(m_List);
+				m_List = null;
+				m_Owner = null;
+			}
 		}
 
 	}
+
+
 }

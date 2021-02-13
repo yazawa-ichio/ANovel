@@ -26,7 +26,7 @@ namespace ANovel.Core
 
 	}
 
-	public class CacheEntry<T> : CacheEntry
+	public class CacheEntry<T> : CacheEntry where T : class
 	{
 		string m_Path;
 		IResourceLoader m_Loader;
@@ -34,6 +34,9 @@ namespace ANovel.Core
 		Task<T> m_Task;
 		bool m_Loaded;
 		T m_Value;
+		bool m_Disposed;
+
+		public string Path => m_Path;
 
 		public override bool IsLoaded => m_Loaded;
 
@@ -51,6 +54,19 @@ namespace ANovel.Core
 			}
 		}
 
+		public Exception Error { get; private set; }
+
+		public bool IsDone
+		{
+			get
+			{
+				if (m_Disposed || IsLoaded)
+				{
+					return true;
+				}
+				return Error != null;
+			}
+		}
 
 		public CacheEntry(string path, IResourceLoader loader, CancellationTokenSource cancellationTokenSource, Task<T> task)
 		{
@@ -63,8 +79,20 @@ namespace ANovel.Core
 
 		async Task Set(Task<T> task)
 		{
-			m_Value = await task;
-			m_Loaded = true;
+			try
+			{
+				m_Value = await task;
+				m_Loaded = true;
+				if (m_Disposed && m_Value != null)
+				{
+					m_Loader.Unload(m_Value);
+					m_Value = null;
+				}
+			}
+			catch (Exception ex)
+			{
+				Error = ex;
+			}
 		}
 
 		public Task<T> GetAsync()
@@ -75,9 +103,15 @@ namespace ANovel.Core
 
 		public override void Dispose()
 		{
+			m_Disposed = true;
 			m_Task = null;
 			m_CancellationTokenSource?.Cancel();
 			m_CancellationTokenSource = null;
+			if (m_Value != null)
+			{
+				m_Loader.Unload(m_Value);
+				m_Value = null;
+			}
 		}
 
 	}

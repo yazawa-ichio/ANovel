@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using Assert = UnityEngine.Assertions.Assert;
@@ -21,11 +22,14 @@ namespace ANovel.Core.Tests
 		void TestMacroImport(string symbol, params string[] output)
 		{
 			var reader = new BlockReader(new TestDataLoader(), symbol != null ? new[] { symbol } : new string[0]);
-			reader.Load("ImportMacroTest.anovel").Wait();
-			var block = new Block();
-			Assert.IsTrue(reader.TryRead(block));
+			reader.Load("ImportMacroTest.anovel", CancellationToken.None).Wait();
+			//var block = new Block();
+			Assert.IsTrue(reader.TryRead(out var block));
 
-			block.Commands.ForEach(x => x.Execute());
+			foreach (var cmd in block.Commands)
+			{
+				cmd.Execute();
+			}
 
 			var logs = block.Commands.OfType<TestLogCommand>().ToArray();
 			for (int i = 0; i < output.Length; i++)
@@ -48,9 +52,8 @@ namespace ANovel.Core.Tests
 		public void 依存マクロインポート()
 		{
 			var reader = new BlockReader(new TestDataLoader());
-			reader.Load("CircleImportTest.anovel").Wait();
-			var block = new Block();
-			Assert.IsTrue(reader.TryRead(block));
+			reader.Load("CircleImportTest.anovel", CancellationToken.None).Wait();
+			Assert.IsTrue(reader.TryRead(out var block));
 			var log = block.Commands.OfType<TestLogCommand>().First();
 			Assert.AreEqual("dep", log.Message, "依存先のマクロが利用できている");
 		}
@@ -59,18 +62,17 @@ namespace ANovel.Core.Tests
 		public void テキストブロック()
 		{
 			var reader = new BlockReader(new TestDataLoader());
-			reader.Load("TextBlockTest.anovel").Wait();
-			var block = new Block();
+			reader.Load("TextBlockTest.anovel", CancellationToken.None).Wait();
 			int blockIndex = 0;
 			{
-				Assert.IsTrue(reader.TryRead(block));
+				Assert.IsTrue(reader.TryRead(out var block));
 				Assert.AreEqual("開始", block.LabelInfo.Name);
 				Assert.AreEqual(blockIndex++, block.LabelInfo.BlockIndex);
 				Assert.AreEqual(TextBlockType.Text, block.Text.Type);
 				Assert.AreEqual("一行テキスト", block.Text.Get());
 			}
 			{
-				Assert.IsTrue(reader.TryRead(block));
+				Assert.IsTrue(reader.TryRead(out var block));
 				Assert.AreEqual("開始", block.LabelInfo.Name);
 				Assert.AreEqual(blockIndex++, block.LabelInfo.BlockIndex, "ブロック単位でインクリメントされる");
 				Assert.AreEqual(TextBlockType.Text, block.Text.Type);
@@ -81,46 +83,46 @@ namespace ANovel.Core.Tests
 				Assert.AreEqual(2, block.Text.LineCount);
 			}
 			{
-				Assert.IsTrue(reader.TryRead(block));
+				Assert.IsTrue(reader.TryRead(out var block));
 				Assert.AreEqual(blockIndex++, block.LabelInfo.BlockIndex, "ブロック単位でインクリメントされる");
 				Assert.AreEqual(TextBlockType.Text, block.Text.Type);
 				Assert.AreEqual("空白ありテキスト\n\n上が空白", block.Text.Get(), "明示的なテキストブロックでは空行も含まれる");
 			}
 			{
-				Assert.IsTrue(reader.TryRead(block));
+				Assert.IsTrue(reader.TryRead(out var block));
 				Assert.AreEqual(blockIndex++, block.LabelInfo.BlockIndex, "ブロック単位でインクリメントされる");
 				Assert.AreEqual(2, block.Commands.Count, "命令とコマンドが一度に取れる");
 				Assert.AreEqual("命令とテキストが一度に取れる", block.Text.Get());
 			}
 			{
-				Assert.IsTrue(reader.TryRead(block));
+				Assert.IsTrue(reader.TryRead(out var block));
 				Assert.AreEqual(blockIndex++, block.LabelInfo.BlockIndex, "ブロック単位でインクリメントされる");
 				Assert.AreEqual(1, block.Commands.Count, "命令でテキストブロックは解除される");
 				Assert.AreEqual("命令でテキストブロックは解除される", block.Text.Get());
 			}
 			{
-				Assert.IsTrue(reader.TryRead(block));
+				Assert.IsTrue(reader.TryRead(out var block));
 				Assert.AreEqual(TextBlockType.Extension, block.Text.Type);
 				Assert.AreEqual("test", block.Text.Extension.Name);
 				Assert.AreEqual(null, block.Text.Extension.Value);
 				Assert.AreEqual("特殊テキストブロック", block.Text.Get());
 			}
 			{
-				Assert.IsTrue(reader.TryRead(block));
+				Assert.IsTrue(reader.TryRead(out var block));
 				Assert.AreEqual(TextBlockType.Extension, block.Text.Type);
 				Assert.AreEqual("test", block.Text.Extension.Name, "空白は無視される");
 				Assert.AreEqual("value", block.Text.Extension.Value, "値付きで取れる");
 				Assert.AreEqual("値付き特殊テキストブロック", block.Text.Get());
 			}
 			{
-				Assert.IsTrue(reader.TryRead(block));
+				Assert.IsTrue(reader.TryRead(out var block));
 				Assert.AreEqual("終了", block.LabelInfo.Name);
 				Assert.AreEqual(0, block.LabelInfo.BlockIndex, "新しいラベルリセットされる");
 				Assert.AreEqual("最終行テキスト", block.Text.Get());
 			}
 			{
-				Assert.IsFalse(reader.TryRead(block), "最後まで読み取った");
-				Assert.IsTrue(reader.EndOfFile, "最後まで読み取った");
+				Assert.IsFalse(reader.TryRead(out var block), "最後まで読み取った");
+				Assert.IsFalse(reader.CanRead, "最後まで読み取った");
 			}
 		}
 
@@ -159,9 +161,8 @@ namespace ANovel.Core.Tests
 		{
 			try
 			{
-				await reader.Load("errortest");
-				var block = new Block();
-				Assert.IsFalse(reader.TryRead(block), message);
+				await reader.Load("errortest", CancellationToken.None);
+				Assert.IsFalse(reader.TryRead(out var block), message);
 			}
 			catch (LineDataException ex)
 			{
@@ -201,7 +202,7 @@ namespace ANovel.Core.Tests
 				m_Text = text;
 			}
 
-			public Task<string> Load(string path)
+			public Task<string> Load(string path, CancellationToken token)
 			{
 				return Task.FromResult(m_Text);
 			}

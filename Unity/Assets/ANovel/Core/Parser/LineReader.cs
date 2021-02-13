@@ -7,6 +7,10 @@
 		int m_Index;
 		string[] m_Line;
 
+		public int Index => m_Index;
+
+		public string Path => m_Name;
+
 		public bool EndOfFile => m_Index >= m_Line.Length;
 
 		public LineReader(string name, string text)
@@ -18,6 +22,25 @@
 		public void Reset()
 		{
 			m_Index = 0;
+		}
+
+		public void SeekIndex(int index)
+		{
+			m_Index = index;
+		}
+
+		public void SeekLabel(string label)
+		{
+			m_Index = 0;
+			LineData data = default;
+			while (TryRead(ref data))
+			{
+				if (data.Type == LineType.Label && (data.ReadName(out _) == label))
+				{
+					return;
+				}
+			}
+			throw new System.Exception($"not found label:{label} {m_Name}");
 		}
 
 		public bool TryRead(ref LineData data, bool skipNoneAndComment = true)

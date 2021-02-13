@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ANovel.Core
+namespace ANovel
 {
+	[UnityEngine.Scripting.Preserve]
 	public interface IFormatter
 	{
 		object Format(string value);
 	}
 
+	[UnityEngine.Scripting.Preserve]
 	public interface IDefaultFormatter : IFormatter
 	{
 		Type Target { get; }
@@ -18,12 +20,13 @@ namespace ANovel.Core
 
 		static Dictionary<Type, Func<string, object>> s_Func = new Dictionary<Type, Func<string, object>>()
 		{
-			{ typeof(bool), (str) => str == null ? true : bool.Parse(str) },
+			{ typeof(bool), (str) => str == null || bool.Parse(str) },
 			{ typeof(int), (str) => int.Parse(str) },
 			{ typeof(long), (str) => long.Parse(str) },
 			{ typeof(float), (str) => float.Parse(str) },
 			{ typeof(double), (str) => double.Parse(str) },
 			{ typeof(string), (str) => str },
+			{ typeof(Millisecond), (str) => new Millisecond(int.Parse(str)) },
 		};
 
 		static Dictionary<Type, IFormatter> s_Instance = new Dictionary<Type, IFormatter>();
@@ -40,6 +43,11 @@ namespace ANovel.Core
 		public static void Register(IDefaultFormatter formatter)
 		{
 			s_Func[formatter.Target] = formatter.Format;
+			if (formatter.Target.IsValueType)
+			{
+				var nullable = typeof(Nullable<>).MakeGenericType(formatter.Target);
+				s_Func[nullable] = formatter.Format;
+			}
 		}
 
 		public static void Register<T>() where T : IDefaultFormatter, new()
@@ -63,10 +71,25 @@ namespace ANovel.Core
 			{
 				return func(value);
 			}
-			var nullable = Nullable.GetUnderlyingType(type);
-			if (nullable != null && s_Func.TryGetValue(nullable, out func))
+			if (type.IsEnum)
 			{
-				s_Func[type] = func;
+				return Enum.Parse(type, value, true);
+			}
+			var nullable = Nullable.GetUnderlyingType(type);
+			if (nullable != null)
+			{
+				if (s_Func.TryGetValue(nullable, out func))
+				{
+					s_Func[type] = func;
+				}
+				else if (nullable.IsEnum)
+				{
+					if (value != null)
+					{
+						return Enum.Parse(nullable, value, true);
+					}
+					return null;
+				}
 			}
 			return s_Func[type](value);
 		}

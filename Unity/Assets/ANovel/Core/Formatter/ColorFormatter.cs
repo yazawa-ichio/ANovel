@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ANovel.Core
 {
+	[UnityEngine.Scripting.Preserve]
 	public class ColorFormatter : IDefaultFormatter
 	{
 		public Type Target => typeof(Color);

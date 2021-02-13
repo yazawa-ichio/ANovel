@@ -21,6 +21,10 @@ namespace ANovel.Core.Tests
 			Check<float?>(-100f);
 			Check<double>(10000000000000d);
 			Check<double?>(-100024d);
+
+			Check<Millisecond>(Millisecond.FromSecond(12));
+			Check<Millisecond?>(Millisecond.FromSecond(2));
+
 		}
 
 		void Check<T>(T val)
@@ -39,8 +43,9 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void 列挙型のフォーマット()
 		{
-			var formatter = Formatter.Get(typeof(EnumFormatter<TestEnum>));
-			Assert.AreEqual(TestEnum.Val2, formatter.Format("Val2"));
+			Assert.AreEqual(TestEnum.Val2, Formatter.Format(typeof(TestEnum), "Val2"));
+			Assert.AreEqual(null, Formatter.Format(typeof(TestEnum?), null));
+			Assert.AreEqual(TestEnum.Val2, Formatter.Format(typeof(TestEnum?), "Val2"));
 		}
 
 		[Test]

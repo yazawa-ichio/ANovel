@@ -44,15 +44,15 @@ namespace ANovel.Core
 
 		static IEnumerable<TagEntry> GetEntries()
 		{
-			foreach (var type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()))
+			foreach (var type in TypeUtil.GetTypes())
 			{
 				if (!typeof(Tag).IsAssignableFrom(type))
 				{
 					continue;
 				}
-				foreach (var attr in type.GetCustomAttributes<TagNameAttribute>())
+				foreach (var attr in type.GetCustomAttributes(typeof(TagNameAttribute), inherit: false))
 				{
-					yield return new TagEntry(type, attr);
+					yield return new TagEntry(type, attr as TagNameAttribute);
 				}
 			}
 		}
@@ -83,26 +83,38 @@ namespace ANovel.Core
 		{
 			if (!s_Fields.TryGetValue(type, out var ret))
 			{
-				s_Fields[type] = ret = GetFieldsImpl(type).ToArray();
+				s_Fields[type] = ret = GetFieldsImpl(type);
 			}
 			return ret;
 		}
 
-		static IEnumerable<TagFieldEntry> GetFieldsImpl(Type type)
+		static TagFieldEntry[] GetFieldsImpl(Type type)
 		{
-			foreach (var info in type.GetFields(s_BindingFlags))
+			using (ListPool<TagFieldEntry>.Use(out var list))
 			{
-				foreach (var attr in info.GetCustomAttributes<TagFieldAttribute>())
+				foreach (var info in type.GetFields(s_BindingFlags))
 				{
-					yield return new TagFieldEntry(info, attr);
+					if (!info.IsDefined(typeof(TagFieldAttribute), inherit: false))
+					{
+						continue;
+					}
+					foreach (var attr in info.GetCustomAttributes(typeof(TagFieldAttribute), false))
+					{
+						list.Add(new TagFieldEntry(info, attr as TagFieldAttribute));
+					}
 				}
-			}
-			foreach (var info in type.GetProperties(s_BindingFlags))
-			{
-				foreach (var attr in info.GetCustomAttributes<TagFieldAttribute>())
+				foreach (var info in type.GetProperties(s_BindingFlags))
 				{
-					yield return new TagFieldEntry(info, attr);
+					if (!info.IsDefined(typeof(TagFieldAttribute), inherit: false))
+					{
+						continue;
+					}
+					foreach (var attr in info.GetCustomAttributes(typeof(TagFieldAttribute), false))
+					{
+						list.Add(new TagFieldEntry(info, attr as TagFieldAttribute));
+					}
 				}
+				return list.ToArray();
 			}
 		}
 
@@ -110,26 +122,38 @@ namespace ANovel.Core
 		{
 			if (!s_InjectParams.TryGetValue(type, out var ret))
 			{
-				s_InjectParams[type] = ret = GetInjectParamsImpl(type).ToArray();
+				s_InjectParams[type] = ret = GetInjectParamsImpl(type);
 			}
 			return ret;
 		}
 
-		static IEnumerable<InjectParamEntry> GetInjectParamsImpl(Type type)
+		static InjectParamEntry[] GetInjectParamsImpl(Type type)
 		{
-			foreach (var info in type.GetFields(s_BindingFlags))
+			using (ListPool<InjectParamEntry>.Use(out var list))
 			{
-				foreach (var attr in info.GetCustomAttributes<InjectParamAttribute>())
+				foreach (var info in type.GetFields(s_BindingFlags))
 				{
-					yield return new InjectParamEntry(info, attr);
+					if (!info.IsDefined(typeof(InjectParamAttribute), inherit: false))
+					{
+						continue;
+					}
+					foreach (var attr in info.GetCustomAttributes(typeof(InjectParamAttribute), inherit: false))
+					{
+						list.Add(new InjectParamEntry(info, attr as InjectParamAttribute));
+					}
 				}
-			}
-			foreach (var info in type.GetProperties(s_BindingFlags))
-			{
-				foreach (var attr in info.GetCustomAttributes<InjectParamAttribute>())
+				foreach (var info in type.GetProperties(s_BindingFlags))
 				{
-					yield return new InjectParamEntry(info, attr);
+					if (!info.IsDefined(typeof(InjectParamAttribute), inherit: false))
+					{
+						continue;
+					}
+					foreach (var attr in info.GetCustomAttributes(typeof(InjectParamAttribute), inherit: false))
+					{
+						list.Add(new InjectParamEntry(info, attr as InjectParamAttribute));
+					}
 				}
+				return list.ToArray();
 			}
 		}
 

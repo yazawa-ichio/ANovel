@@ -9,5 +9,7 @@ namespace ANovel
 		Task<T> Load<T>(string path, CancellationToken token) where T : UnityEngine.Object;
 #endif
 		Task<T> LoadRaw<T>(string path, CancellationToken token);
+
+		void Unload(object obj);
 	}
 }

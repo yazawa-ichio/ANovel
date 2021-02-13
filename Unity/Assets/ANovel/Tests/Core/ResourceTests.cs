@@ -151,11 +151,14 @@ namespace ANovel.Core.Tests
 			}
 		}
 
-
+		[UnityEngine.Scripting.Preserve]
 		class TestAsset1 : ScriptableObject { }
+		[UnityEngine.Scripting.Preserve]
 		class TestAsset2 : ScriptableObject { }
 
+		[UnityEngine.Scripting.Preserve]
 		class Test1 { }
+		[UnityEngine.Scripting.Preserve]
 		class Test2 { }
 
 		class DummyLoader : IResourceLoader
@@ -164,6 +167,8 @@ namespace ANovel.Core.Tests
 			public int Delay = 0;
 
 			public int LoadCount = 0;
+
+			public int UnloadCount = 0;
 
 			public async Task<T> Load<T>(string path, CancellationToken token) where T : Object
 			{
@@ -182,6 +187,10 @@ namespace ANovel.Core.Tests
 				return Task.FromResult(System.Activator.CreateInstance<T>());
 			}
 
+			public void Unload(object obj)
+			{
+				UnloadCount++;
+			}
 		}
 	}
 
