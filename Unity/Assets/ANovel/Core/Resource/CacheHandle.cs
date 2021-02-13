@@ -7,10 +7,20 @@ namespace ANovel.Core
 	{
 		bool IsLoaded { get; }
 		bool Disposed { get; }
+		bool IsDone { get; }
+
 		Task GetAsync();
+		void CheckError();
 	}
 
-	public class CacheHandle<T> : ICacheHandle
+	public interface ICacheHandle<T> : ICacheHandle where T : class
+	{
+		T Value { get; }
+		new Task<T> GetAsync();
+		ICacheHandle<T> Duplicate();
+	}
+
+	internal class CacheHandle<T> : ICacheHandle<T> where T : class
 	{
 		CacheEntry<T> m_Entry;
 
@@ -22,6 +32,15 @@ namespace ANovel.Core
 				return m_Entry.IsLoaded;
 			}
 		}
+
+		public bool IsDone
+		{
+			get
+			{
+				return Disposed || m_Entry.IsDone;
+			}
+		}
+
 		public T Value
 		{
 			get
@@ -56,7 +75,20 @@ namespace ANovel.Core
 			return m_Entry.GetAsync();
 		}
 
+		public ICacheHandle<T> Duplicate()
+		{
+			return new CacheHandle<T>(m_Entry);
+		}
+
 		Task ICacheHandle.GetAsync() => GetAsync();
+
+		public void CheckError()
+		{
+			if (m_Entry != null && m_Entry.Error != null)
+			{
+				System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(m_Entry.Error).Throw();
+			}
+		}
 
 		void CehckDisposed()
 		{

@@ -10,6 +10,7 @@ namespace ANovel.Core
 		IFormatter m_Formatter;
 		TagFieldAttribute m_Attr;
 		Type m_FieldType;
+		bool m_InitFormatter;
 
 		public bool Required => m_Attr?.Required ?? false;
 
@@ -33,11 +34,11 @@ namespace ANovel.Core
 
 		string ConvertName(string name)
 		{
-			if (name.StartsWith("_"))
+			if (name.StartsWith("_", StringComparison.Ordinal))
 			{
 				return name.Substring(1).ToLower();
 			}
-			else if (name.StartsWith("m_"))
+			else if (name.StartsWith("m_", StringComparison.Ordinal))
 			{
 				return name.Substring(2).ToLower();
 			}
@@ -55,14 +56,23 @@ namespace ANovel.Core
 			{
 				Name = attr.KeyName.ToLower();
 			}
-			if (attr.Formatter != null)
+		}
+
+		void TryInit()
+		{
+			if (!m_InitFormatter)
 			{
-				m_Formatter = Formatter.Get(attr.Formatter);
+				m_InitFormatter = true;
+				if (m_Attr != null && m_Attr.Formatter != null)
+				{
+					m_Formatter = Formatter.Get(m_Attr.Formatter);
+				}
 			}
 		}
 
 		public void Set(object obj, string value)
 		{
+			TryInit();
 			object val;
 			if (m_Formatter != null)
 			{

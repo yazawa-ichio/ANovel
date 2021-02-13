@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
 using UnityEngine.TestTools.Constraints;
-//using Assert = UnityEngine.Assertions.Assert;
 using Is = UnityEngine.TestTools.Constraints.Is;
 
 namespace ANovel.Core.Tests
@@ -13,15 +12,18 @@ namespace ANovel.Core.Tests
 		{
 			EventBroker broker = new EventBroker();
 			Handler handler = new Handler();
-			handler.Register(broker);
+			broker.Register(handler);
 			broker.Publish(Handler.Event.Increment);
 			Assert.AreEqual(1, handler.Total, "イベントが発行される");
-			broker.Publish(Handler.Event.Sum, 4);
+			broker.Publish(Handler.Event.Add, 4);
 			Assert.AreEqual(5, handler.Total, "引数付きイベントが発行される");
-			broker.Publish(Handler.Event.Sum, 4f);
-			Assert.AreEqual(5, handler.Total, "型が違うと無視される");
 
-			broker.Unsubscribe(handler);
+			Assert.Throws<ArgumentException>(() =>
+			{
+				broker.Publish(Handler.Event.Add, 4f);
+			}, "型が違うのでエラー");
+
+			broker.Unregister(handler);
 			broker.Publish(Handler.Event.Increment);
 			Assert.AreEqual(5, handler.Total, "オブジェクトを指定して購読を破棄したのでイベントが発行されない");
 
@@ -34,19 +36,18 @@ namespace ANovel.Core.Tests
 			Handler handler = new Handler();
 			using (var scope = broker.Scoped(handler))
 			{
-				handler.Register(scope);
-
-				broker.Publisher().Publish(Handler.Event.Increment);
+				scope.Publish(Handler.Event.Increment);
 				Assert.AreEqual(1, handler.Total, "イベントが発行される")
 					;
-				broker.Publisher<int>().Publish(Handler.Event.Sum, 4);
+				scope.Publish(Handler.Event.Add, 4);
 				Assert.AreEqual(5, handler.Total, "引数付きイベントが発行される");
 
-				broker.Publisher<float>().Publish(Handler.Event.Sum, 4f);
-				Assert.AreEqual(5, handler.Total, "型が違うと無視される");
+				Assert.Throws<ArgumentException>(() =>
+				{
+					scope.Publish(Handler.Event.Add, 4f);
+				}, "型が違うのでエラー");
 			}
 			broker.Publish(Handler.Event.Increment);
-			broker.Publisher().Publish(Handler.Event.Increment);
 			Assert.AreEqual(5, handler.Total, "スコープの機能で購読を解除");
 		}
 
@@ -55,39 +56,56 @@ namespace ANovel.Core.Tests
 		{
 			EventBroker broker = new EventBroker();
 			Handler handler = new Handler();
-			handler.RegisterBroker(broker);
+			broker.Register(handler);
 
-			broker.Publisher().Publish(Handler.Event.Increment);
+			broker.Publish(Handler.Event.Increment);
 			Assert.AreEqual(1, handler.Total, "イベントが発行される")
 				;
-			broker.Publisher<int>().Publish(Handler.Event.Sum, 4);
+			broker.Publish(Handler.Event.Add, 4);
 			Assert.AreEqual(5, handler.Total, "引数付きイベントが発行される");
 
-			handler.UnregisterIncrement(broker);
+			broker.Unregister(handler);
 			broker.Publish(Handler.Event.Increment);
 			Assert.AreEqual(5, handler.Total, "購読解除したので発火されない");
 
-			broker.Publisher<int>().Publish(Handler.Event.Sum, 4);
-			Assert.AreEqual(9, handler.Total, "一つだけ解除出来ている");
-
-			handler.UnregisterSum(broker);
-			broker.Publisher().Publish(Handler.Event.Increment);
-			Assert.AreEqual(9, handler.Total, "Sumの購読を解除");
-
 			broker.Dispose();
 
-			Assert.Throws(typeof(ObjectDisposedException), () =>
+			Assert.Throws<ObjectDisposedException>(() =>
+			{
+				broker.Register(handler);
+			}, "解放の登録はエラー");
+
+			Assert.Throws<ObjectDisposedException>(() =>
 			{
 				broker.Publish(Handler.Event.Increment);
-			}, "");
+			}, "イベントの発火もエラー");
 		}
 
+		[Test]
+		public void 多重登録は無効になる()
+		{
+			EventBroker broker = new EventBroker();
+			Handler handler = new Handler();
+			broker.Register(handler);
+			broker.Register(handler);
+
+			broker.Publish(Handler.Event.Increment);
+			Assert.AreEqual(1, handler.Total, "一度しか実行されない");
+
+			broker.Unregister(handler);
+
+			broker.Publish(Handler.Event.Increment);
+			Assert.AreEqual(1, handler.Total, "一度で解除される");
+
+		}
 
 		[Test]
 		public void イベント中のイベント登録()
 		{
 			EventBroker broker = new EventBroker();
-			Handler handler = new Handler();
+			Handler handler1 = new Handler();
+			Handler handler2 = new Handler();
+			Handler handler3 = new Handler();
 
 			Action register = default;
 			int registerCount = 0;
@@ -95,48 +113,31 @@ namespace ANovel.Core.Tests
 			register = () =>
 			{
 				registerCount++;
-				handler.RegisterBroker(broker);
-				Assert.AreEqual(0, handler.Total, "イベントに登録してもすぐには発火されない");
-				broker.Unsubscribe(broker);
-				handler.Unregister(broker);
-				broker.Publish(Handler.Event.Increment);
-				Assert.AreEqual(0, handler.Total, "イベントの実行中の箇所で登録解除しても正常に解除される");
-
-				handler.RegisterBroker(broker);
-				handler.UnregisterSum(broker);
-				broker.Publish(Handler.Event.Increment);
-
+				broker.Register(handler2);
+				broker.Register(handler3);
 			};
 
-			broker.Publisher().Subscribe(broker, Handler.Event.Increment, register);
+			broker.Register(handler1);
 
-			broker.Publish(Handler.Event.Increment);
-			Assert.AreEqual(1, handler.Total, "register内でのIncrementを受け取れている");
+			broker.Publish(Handler.Event.Action, register);
 
-			broker.Publish(Handler.Event.Increment);
-			Assert.AreEqual(2, handler.Total, "イベント中にIncrementは再登録されている");
+			Assert.AreEqual(1, registerCount, "イベント登録前に実行したイベントは発火されない");
 
-			broker.Publish(Handler.Event.Sum, 10);
-			Assert.AreEqual(2, handler.Total, "イベント中にSumは解除済み");
+			broker.Publish(Handler.Event.Action, register);
 
-			Assert.AreEqual(1, registerCount, "registerイベントは一回だけ発火されている");
+			Assert.AreEqual(1 + 3, registerCount, "両方登録されている");
+
+			register = () =>
+			{
+				registerCount++;
+				broker.Unregister(handler2);
+			};
+
+			broker.Publish(Handler.Event.Action, register);
+
+			Assert.AreEqual(1 + 3 + 2, registerCount, "イベントは発火中のUnsubscribeは即時実行される");
 
 		}
-
-		[Test]
-		public void イベント名テスト()
-		{
-			EventBroker broker = new EventBroker();
-			string name = EventNameToStrConverter.ToStr(Handler.Event.Increment);
-
-			int count = 0;
-			broker.Subscribe(broker, name).Register(() => count++);
-
-			broker.Publish(Handler.Event.Increment);
-
-			Assert.AreEqual(1, count, "Enumは文字列になるので実行される");
-		}
-
 
 		[Test]
 		public void イベント名変換()
@@ -147,10 +148,10 @@ namespace ANovel.Core.Tests
 			Assert.AreEqual("test", EventNameToStrConverter.ToStr("test"), "文字列はそのまま");
 
 
-			EventNameToStrConverter.ToStr(Handler.Event.Sum);
+			EventNameToStrConverter.ToStr(Handler.Event.Add);
 			Assert.That(() =>
 			{
-				EventNameToStrConverter.ToStr(Handler.Event.Sum);
+				EventNameToStrConverter.ToStr(Handler.Event.Add);
 			}, Is.Not.AllocatingGCMemory(), "キャッシュ済みの場合はEventのGCが発生しない");
 
 		}
@@ -160,48 +161,20 @@ namespace ANovel.Core.Tests
 			public enum Event
 			{
 				Increment,
-				Sum,
+				Add,
+				Action,
 			}
 
 			public int Total;
 
+			[EventSubscribe(Event.Increment)]
 			public void Increment() => Total++;
 
-			public void Sum(int val) => Total += val;
+			[EventSubscribe(Event.Add)]
+			public void Add(int val) => Total += val;
 
-			public void Register(IEventBroker broker)
-			{
-				broker.Publisher().Subscribe(this, Event.Increment, Increment);
-				broker.Publisher<int>().Subscribe(this, Event.Sum, Sum);
-			}
-
-			public void Register(ScopedEventBroker broker)
-			{
-				broker.Subscribe(Event.Increment).Register(Increment);
-				broker.Subscribe(Event.Sum).Register<int>(Sum);
-			}
-
-			public void RegisterBroker(EventBroker broker)
-			{
-				broker.Subscribe(this, Event.Increment).Register(Increment);
-				broker.Subscribe(this, Event.Sum).Register<int>(Sum);
-			}
-
-			public void UnregisterIncrement(EventBroker broker)
-			{
-				broker.Subscribe(this, Event.Increment).Unregister(Increment);
-			}
-
-			public void UnregisterSum(EventBroker broker)
-			{
-				broker.Subscribe(this, Event.Sum).Unregister<int>(Sum);
-			}
-
-			public void Unregister(EventBroker broker)
-			{
-				broker.Publisher().Unsubscribe(Event.Increment, Increment);
-				broker.Publisher<int>().Unsubscribe(Event.Sum, Sum);
-			}
+			[EventSubscribe(Event.Action)]
+			public void Action(Action val) => val?.Invoke();
 
 		}
 

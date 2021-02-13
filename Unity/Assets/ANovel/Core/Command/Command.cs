@@ -10,10 +10,15 @@ namespace ANovel
 
 		protected ResourceCache Cache { get; private set; }
 
+		void ICommand.UpdateEnvData(IEnvData data) => UpdateEnvData(data);
+
+		protected virtual void UpdateEnvData(IEnvData data) { }
+
 		void ICommand.Initialize(IServiceContainer container)
 		{
 			Container = container;
-			Event = container.Get<EventBroker>().Scoped(this);
+			Event = container.Get<EventBroker>().Scoped();
+			Event.Subscribe(this);
 			Cache = container.Get<ResourceCache>();
 			Initialize();
 			Preload(container.Get<IPreLoader>());

@@ -19,7 +19,7 @@ namespace ANovel.Core
 		static string GetMessage(in LineData data, string message)
 		{
 #if DEBUG || UNITY_EDITOR
-			return $"{message}\n{data.Name}:{data.Index + 1}::{data.Line}";
+			return $"{message}\n{data.FileName}:{data.Index + 1}::{data.Line}";
 #else
 			return $"{message}";
 #endif

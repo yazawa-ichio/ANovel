@@ -15,7 +15,7 @@ namespace ANovel.Core
 			m_Loader = loader;
 		}
 
-		public CacheHandle<T> Load<T>(string path) where T : UnityEngine.Object
+		public ICacheHandle<T> Load<T>(string path) where T : UnityEngine.Object
 		{
 			if (m_Dic.TryGetValue(path, out var value))
 			{
@@ -35,7 +35,7 @@ namespace ANovel.Core
 			}
 		}
 
-		public CacheHandle<T> LoadRaw<T>(string path)
+		public ICacheHandle<T> LoadRaw<T>(string path) where T : class
 		{
 			if (m_Dic.TryGetValue(path, out var value))
 			{
@@ -55,7 +55,7 @@ namespace ANovel.Core
 			}
 		}
 
-		public T Get<T>(string path)
+		public T Get<T>(string path) where T : class
 		{
 			if (m_Dic.TryGetValue(path, out var value) && value.IsLoaded)
 			{

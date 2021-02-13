@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ANovel.Commands;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ANovel.Core
 {
-
 	public class Conductor : IDisposable
 	{
-		protected bool m_EndBlock;
-		protected BlockReader m_Reader;
-		protected BlockEntry m_Current;
-		protected Queue<BlockEntry> m_PreloadQueue = new Queue<BlockEntry>();
-		protected bool m_WaitTextProcess;
-		protected bool m_IsLoad;
-
-		public int PreLoadCount { get; set; } = 3;
+		public int PreLoadCount { get => m_BlockProcessor.PreloadCount; set => m_BlockProcessor.PreloadCount = value; }
 
 		public EventBroker Event { get; private set; } = new EventBroker();
 
@@ -22,86 +15,207 @@ namespace ANovel.Core
 
 		public ServiceContainer Container { get; private set; } = new ServiceContainer();
 
-		protected ITextProcessor Text { get; private set; }
+		public ITextProcessor Text { get => m_BlockProcessor.Text; set => m_BlockProcessor.Text = value; }
 
-		public bool IsRunning => !(m_PreloadQueue.Count == 0 && m_Current == null);
+		public event Action<Exception> OnError;
 
-		public bool IsProcessing
-		{
-			get
-			{
-				if (m_Current == null)
-				{
-					return false;
-				}
-				if (Text != null && Text.IsProcessing)
-				{
-					return true;
-				}
-				return m_Current.IsProcessing;
-			}
-		}
+		public Func<IEnvDataHolder, Task> OnLoad { get; set; }
 
-		protected Conductor() { }
+		public bool IsStop => !m_Reader.CanRead && m_BlockProcessor.IsStop;
 
-		public Conductor(BlockReader reader, IResourceLoader loader, ITextProcessor text)
+		public bool IsWaitNext => !IsLock && m_BlockProcessor.IsWaitNext;
+
+		public bool IsLock => m_ErrorFlag || m_Locker.IsLock;
+
+		public bool HasError => m_ErrorFlag;
+
+		BlockReader m_Reader;
+		bool m_ErrorFlag;
+		CancellationTokenSource m_Cancellation = new CancellationTokenSource();
+		BlockProcessor m_BlockProcessor;
+		ScopeLocker m_Locker = new ScopeLocker();
+
+		public Conductor(BlockReader reader, IResourceLoader loader)
 		{
 			m_Reader = reader;
 			Cache = new ResourceCache(loader);
-			Text = text;
+			Event.Register(this);
 			Container.Set(Cache);
 			Container.Set(Event);
+			m_BlockProcessor = new BlockProcessor(Container, Cache);
 		}
 
-		public virtual void Update()
+		public void Dispose()
+		{
+			m_BlockProcessor?.Dispose();
+			m_BlockProcessor = null;
+			Cache?.Dispose();
+			Cache = null;
+			Event?.Dispose();
+			Event = null;
+			Container?.Dispose();
+			Container = null;
+			m_Cancellation?.Cancel();
+			m_Cancellation = null;
+		}
+
+		public void Update()
 		{
 			Process();
 			Cache.ReleaseUnused();
 		}
 
-		public async Task Load(string path)
+		public async Task Run(string path, string label, CancellationToken token)
 		{
-			if (m_IsLoad) throw new InvalidOperationException($"already Loading {path}");
+			using (m_Locker.ExclusiveLock())
+			{
+				m_ErrorFlag = false;
+				m_BlockProcessor.Reset();
+				if (OnLoad != null)
+				{
+					await OnLoad(m_BlockProcessor.Current);
+				}
+				await JumpImpl(new BlockLabelInfo(path, label, -1, -1), token);
+			}
+		}
+
+		[EventSubscribe(ScenarioEvent.Jump)]
+		async void Jump(ScenarioJumpEvent arg)
+		{
 			try
 			{
-				m_IsLoad = true;
-				await m_Reader.Load(path);
-				m_IsLoad = false;
+				if (m_ErrorFlag)
+				{
+					return;
+				}
+				await Task.Yield();
+				if (m_Cancellation != null)
+				{
+					await Jump(arg.Path, arg.Label, m_Cancellation.Token);
+				}
 			}
-			catch (Exception)
+			catch (Exception err)
 			{
-				m_IsLoad = false;
-				throw;
+				m_ErrorFlag = true;
+				OnError?.Invoke(err);
 			}
 		}
 
-		public virtual void Process()
+		public Task Jump(string path, string label, CancellationToken token)
 		{
-			ProcessPreload();
-			ProcessCommand();
+			return Jump(new BlockLabelInfo(path, label, -1, -1), token);
 		}
 
-		protected virtual void ProcessPreload()
+		public Task Jump(BlockLabelInfo label, CancellationToken token)
 		{
-			if (m_EndBlock || m_Reader.EndOfFile)
+			if (m_ErrorFlag) throw new InvalidOperationException("Conductor has error");
+			if (IsLock) throw new InvalidOperationException($"already Loading");
+			return JumpImpl(label, token);
+		}
+
+		async Task JumpImpl(BlockLabelInfo label, CancellationToken token)
+		{
+			using (m_Locker.Lock())
+			{
+				try
+				{
+					await m_Reader.Load(label.FileName, token);
+					m_Reader.Seek(label);
+					m_BlockProcessor.PostJump();
+				}
+				catch (Exception)
+				{
+					m_ErrorFlag = true;
+					throw;
+				}
+			}
+		}
+
+		public Task Seek(string label, CancellationToken token)
+		{
+			return Seek(block =>
+			{
+				return (block.LabelInfo.BlockIndex == 0 && block.LabelInfo.Name == label);
+			}, token);
+		}
+
+		public async Task Seek(Func<Block, bool> match, CancellationToken token)
+		{
+			using (m_Locker.ExclusiveLock())
+			{
+				m_Reader.Seek(m_BlockProcessor.CurrentLabel);
+				bool first = true;
+				TextBlock prevText = null;
+				while (m_Reader.TryRead(out var block))
+				{
+					if (!first && match(block))
+					{
+						if (Text is ITextProcessorRestoreHandler restoreHandler)
+						{
+							restoreHandler.Restore(m_BlockProcessor.Current, prevText);
+						}
+						if (OnLoad != null)
+						{
+							await OnLoad(m_BlockProcessor.Current);
+						}
+						m_BlockProcessor.PostSeek(block);
+						return;
+					}
+					else
+					{
+						first = false;
+						m_BlockProcessor.UpdateCurrent(block);
+						prevText = block.Text;
+					}
+				}
+				m_ErrorFlag = true;
+				throw new Exception($"not found seek target");
+			}
+		}
+
+		public Task Back(int num, CancellationToken token)
+		{
+			m_Locker.CheckLock();
+			var data = m_BlockProcessor.Back(num);
+			if (data != null)
+			{
+				return Restore(data, token);
+			}
+			return Task.FromResult(true);
+		}
+
+		void Process()
+		{
+			if (IsLock)
 			{
 				return;
 			}
-			while (m_PreloadQueue.Count < PreLoadCount)
+			try
 			{
-				var block = new Block();
-				if (m_Reader.TryRead(block))
+				ProcessPreload();
+				m_BlockProcessor.Process();
+			}
+			catch (Exception ex)
+			{
+				m_ErrorFlag = true;
+				if (OnError != null)
 				{
-					var container = Container.CreateChild();
-					var scope = new PreLoadScope(Cache);
-					container.Set<IPreLoader>(scope);
-					foreach (var cmd in block.Commands)
-					{
-						cmd.Initialize(container);
-					}
-					var entry = new BlockEntry(block, scope);
-					m_PreloadQueue.Enqueue(entry);
-					m_EndBlock = entry.IsEndBlock = m_Reader.EndOfFile;
+					OnError(ex);
+				}
+				else
+				{
+					throw;
+				}
+			}
+		}
+
+		void ProcessPreload()
+		{
+			while (m_Reader.CanRead && m_BlockProcessor.CanPreload)
+			{
+				if (m_Reader.TryRead(out var block))
+				{
+					m_BlockProcessor.AddPreloadBlock(block);
 				}
 				else
 				{
@@ -110,56 +224,54 @@ namespace ANovel.Core
 			}
 		}
 
-		protected virtual void ProcessCommand()
-		{
-			if (m_Current == null)
-			{
-				if (m_PreloadQueue.Count == 0 || !m_PreloadQueue.Peek().IsPrepared)
-				{
-					return;
-				}
-				m_Current = m_PreloadQueue.Dequeue();
-				ProcessPreload();
-			}
-			if (m_Current.TryProcess())
-			{
-				if (!m_WaitTextProcess)
-				{
-					Text?.Set(m_Current.Block.Text);
-					m_WaitTextProcess = true;
-				}
-			}
-		}
-
 		public bool TryNext()
 		{
-			if (!m_WaitTextProcess)
-			{
-				m_Current?.TryNext();
-				return false;
-			}
-			if (Text != null && !Text.TryNext())
+			if (IsLock)
 			{
 				return false;
 			}
-			m_WaitTextProcess = false;
-			if (m_Current != null)
+			if (m_BlockProcessor.TryNext())
 			{
-				m_Current.Finish();
-				m_Current = null;
+				Process();
+				return true;
 			}
-			Process();
-			return true;
+			return false;
 		}
 
-		public virtual void Dispose()
+		public StoreData Store()
 		{
-			Cache?.Dispose();
-			Cache = null;
-			Event?.Dispose();
-			Event = null;
-			Container?.Dispose();
-			Container = null;
+			return m_BlockProcessor.Store();
+		}
+
+		public async Task Restore(StoreData data, CancellationToken token)
+		{
+			if (data == null)
+			{
+				throw new Exception("not found data");
+			}
+			using (m_Locker.ExclusiveLock())
+			{
+				try
+				{
+					m_ErrorFlag = false;
+					await JumpImpl(data.Label, token);
+					if (!m_Reader.TryRead(out var block))
+					{
+						throw new Exception("");
+					}
+					m_BlockProcessor.Restore(data, block);
+					if (OnLoad != null)
+					{
+						await OnLoad(m_BlockProcessor.Current);
+					}
+					ProcessPreload();
+				}
+				catch (Exception)
+				{
+					m_ErrorFlag = true;
+					throw;
+				}
+			}
 		}
 
 	}

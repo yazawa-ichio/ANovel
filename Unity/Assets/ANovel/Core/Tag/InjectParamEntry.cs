@@ -12,6 +12,7 @@ namespace ANovel.Core
 		System.Type m_FieldType;
 		InjectParamTargetEntry m_TargetEntry;
 		HashSet<string> m_Targets;
+		HashSet<string> m_Ignores;
 
 		public InjectParamEntry(FieldInfo info, InjectParamAttribute attr)
 		{
@@ -31,16 +32,14 @@ namespace ANovel.Core
 		{
 			m_Attr = attr;
 			m_TargetEntry = InjectParamTargetEntry.Get(m_FieldType);
-			if (m_Attr.Keys != null)
-			{
-				m_Targets = new HashSet<string>(m_Attr.Keys);
-			}
+			m_Attr.TryGetTargetKeys(out m_Targets);
+			m_Attr.TryGetIgnoreKeys(out m_Ignores);
 		}
 
 		public void Set(Tag tag, Dictionary<string, string> param)
 		{
 			var target = GetTarget(tag) ?? SetTarget(tag);
-			m_TargetEntry.Set(tag, target, param, m_Targets);
+			m_TargetEntry.Set(tag, target, param, m_Targets, m_Ignores);
 			if (m_FieldType.IsValueType)
 			{
 				SetTarget(tag, target);

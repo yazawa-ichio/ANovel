@@ -1,28 +1,23 @@
-﻿namespace ANovel.Core
+﻿using ANovel.Commands;
+using System;
+using System.Collections.Generic;
+
+namespace ANovel.Core
 {
-	public class BlockEntry
+	public class BlockEntry : IDisposable
 	{
 		public Block Block { get; private set; }
 
 		public PreLoadScope PreLoad { get; private set; }
 
-		public bool IsPrepared => PreLoad.IsLoaded && !CheckPreparing();
-
-		public bool IsProcess => IsPrepared && (m_SyncCommand != null || m_Index >= Block.Commands.Count);
-
-		public bool IsEndBlock { get; internal set; }
-
-		ICommand m_SyncCommand;
-		int m_Index;
+		public bool HasPendingCommand => m_SyncCommand != null || m_Index < Block.Commands.Count;
 
 		public bool IsProcessing
 		{
 			get
 			{
-				var commands = Block.Commands;
-				for (int i = 0; i < m_Index; i++)
+				foreach (var cmd in m_RunCommands)
 				{
-					var cmd = commands[i];
 					if (!cmd.IsEnd())
 					{
 						return true;
@@ -32,30 +27,19 @@
 			}
 		}
 
+		ICommand m_SyncCommand;
+		int m_Index;
+		List<ICommand> m_RunCommands;
+
 		public BlockEntry(Block block, PreLoadScope preLoad)
 		{
 			Block = block;
 			PreLoad = preLoad;
+			m_RunCommands = ListPool<ICommand>.Pop();
 		}
 
-		bool CheckPreparing()
+		public void Process()
 		{
-			foreach (var cmd in Block.Commands)
-			{
-				if (!cmd.IsPrepared())
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		public bool TryProcess()
-		{
-			if (!IsPrepared)
-			{
-				return false;
-			}
 			if (m_SyncCommand != null)
 			{
 				if (!m_SyncCommand.IsSync() || m_SyncCommand.IsEnd())
@@ -64,32 +48,46 @@
 				}
 				else
 				{
-					Update();
-					return false;
+					CommandUpdate();
+					return;
 				}
 			}
 			var commands = Block.Commands;
 			while (m_Index < commands.Count)
 			{
 				var cmd = commands[m_Index++];
+				if (cmd is IScopeCommand batch)
+				{
+					bool batchEnd = false;
+					while (m_Index < commands.Count)
+					{
+						if (batch.AddScope(commands[m_Index++]))
+						{
+							batchEnd = true;
+							break;
+						}
+					}
+					if (!batchEnd)
+					{
+						throw new Exception("not found batch end");
+					}
+				}
+				m_RunCommands.Add(cmd);
 				cmd.Execute();
 				if (cmd.IsSync() && !cmd.IsEnd())
 				{
 					m_SyncCommand = cmd;
-					Update();
-					return false;
+					CommandUpdate();
+					return;
 				}
 			}
-			Update();
-			return m_Index == commands.Count;
+			CommandUpdate();
 		}
 
 		public void TryNext()
 		{
-			var commands = Block.Commands;
-			for (int i = 0; i < m_Index; i++)
+			foreach (var cmd in m_RunCommands)
 			{
-				var cmd = commands[i];
 				if (!cmd.IsEnd())
 				{
 					cmd.TryNext();
@@ -97,12 +95,10 @@
 			}
 		}
 
-		void Update()
+		void CommandUpdate()
 		{
-			var commands = Block.Commands;
-			for (int i = 0; i < m_Index; i++)
+			foreach (var cmd in m_RunCommands)
 			{
-				var cmd = commands[i];
 				if (!cmd.IsEnd())
 				{
 					cmd.Update();
@@ -110,13 +106,19 @@
 			}
 		}
 
-		public void Finish()
+		public void Dispose()
 		{
 			PreLoad?.Dispose();
 			foreach (var cmd in Block.Commands)
 			{
 				cmd.FinishBlock();
 			}
+			if (m_RunCommands != null)
+			{
+				ListPool<ICommand>.Push(m_RunCommands);
+				m_RunCommands = null;
+			}
+			Block?.Dispose();
 		}
 
 

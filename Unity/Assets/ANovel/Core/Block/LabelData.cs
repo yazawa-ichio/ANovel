@@ -9,7 +9,7 @@ namespace ANovel.Core
 
 		public string Name { get; private set; }
 
-		public int BlockCount;
+		public int BlockCount { get; private set; }
 
 		public void Set(in LineData data, List<IParamConverter> converters)
 		{
@@ -26,7 +26,7 @@ namespace ANovel.Core
 
 		public BlockLabelInfo GetInfo(in LineData data)
 		{
-			return new BlockLabelInfo(Name, BlockCount++, data.Index);
+			return new BlockLabelInfo(data.FileName, Name, BlockCount++, data.Index);
 		}
 
 	}

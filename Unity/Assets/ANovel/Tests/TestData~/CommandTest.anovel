@@ -1,0 +1,67 @@
+
+
+&async
+@test_sync
+@test_sync
+@test_trigger name="syncend"
+&end
+
+asyncを利用するとスコープ内に同期コマンドがあっても非同期実行される
+
+&async
+@test_sync
+@test_sync
+@test_trigger name="blockfinish"
+&end
+
+非同期コマンド中にブロックを終了する
+
+トリガーが実行されている
+
+&parallel
+@test_sync
+@test_sync
+@test_trigger name="parallelend"
+&end
+
+parallelを利用するとスコープ内を同時に実行できる
+
+&parallel
+@test_trigger name="parallelend"
+&end
+
+parallel内に同期命令がない場合は非同期実行される
+
+&parallel sync=false
+@test_sync
+@test_sync
+@test_trigger name="parallelend"
+&end
+
+parallel内に同期命令があってもsyncフラグをfalseにすると非同期になる
+
+&parallel sync=true
+	&async
+		@test_sync
+		@test_sync
+		@test_trigger name="blockfinish"
+	&end
+	&async
+		@test_sync
+		@test_sync
+		@test_sync
+	&end
+&end
+
+nestしたスコープ
+
+
+ジャンプ前
+
+&jump label="jump_label"
+
+スキップ
+
+*jump_label
+
+ジャンプコマンド

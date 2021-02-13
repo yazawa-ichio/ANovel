@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ANovel.Commands;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ANovel.Core
@@ -13,9 +15,13 @@ namespace ANovel.Core
 		PreProcessor.Result m_PreProcess;
 		List<Tag> m_Tags = new List<Tag>();
 		List<LineData> m_Text = new List<LineData>();
+		List<ICommand> m_Commands = new List<ICommand>();
 		LabelData m_Label = new LabelData();
+		bool m_Stop;
 
-		public bool EndOfFile => m_LineReader?.EndOfFile ?? false;
+		public int LineIndex => m_LineReader.Index;
+
+		public bool CanRead => !m_Stop && m_LineReader != null && !m_LineReader.EndOfFile;
 
 		public BlockReader(IScenarioLoader loader) : this(loader, Array.Empty<string>())
 		{
@@ -32,57 +38,105 @@ namespace ANovel.Core
 			}
 		}
 
-		public async Task Load(string path)
+		public async Task Load(string path, CancellationToken token)
 		{
+			m_Stop = false;
 			m_Label.Reset();
-			var text = await m_Loader.Load(path);
+			var text = await m_Loader.Load(path, token);
 			m_LineReader = new LineReader(path, text);
-			m_PreProcess = await m_PreProcessor.Run(path, text);
+			m_PreProcess = await m_PreProcessor.Run(path, text, token);
 			m_TagProvider.Setup(m_PreProcess);
 		}
 
-		public bool TryRead(Block block)
+		public bool TryRead(out Block block)
 		{
-			block.Clear();
-			if (EndOfFile)
+			block = null;
+			if (!CanRead)
 			{
 				return false;
 			}
-			bool first = true;
+			bool firstRead = true;
+			BlockLabelInfo label = default;
+			TextBlock text = null;
+			m_Commands.Clear();
 			LineData data = default;
 			while (TryReadLine(ref data, skipNoneAndComment: true))
 			{
+				bool endBlock = false;
 				switch (data.Type)
 				{
 					case LineType.Command:
 					case LineType.SystemCommand:
-						OnCommand(in data, block.Commands);
+						OnCommand(in data, m_Commands, out endBlock);
 						break;
 					case LineType.Label:
-						OnLabel(in data, first);
+						OnLabel(in data, firstRead);
 						break;
 				}
-				if (first)
+				if (firstRead)
 				{
-					first = false;
-					block.LabelInfo = m_Label.GetInfo(in data);
+					firstRead = false;
+					label = m_Label.GetInfo(in data);
+				}
+				if (endBlock)
+				{
+					break;
 				}
 				if (data.Type == LineType.Text)
 				{
-					OnText(in data, block.Text);
-					return true;
+					if (text == null) text = new TextBlock();
+					OnText(in data, text);
+					break;
 				}
 			}
-			return !first;
+			if (!firstRead)
+			{
+				block = new Block(m_LineReader.Path, in label, m_Commands, text);
+				m_Stop = block.StopCommand != null;
+			}
+			m_Commands.Clear();
+			return !firstRead;
 		}
 
-		void OnCommand(in LineData data, List<ICommand> list)
+		public void Seek(BlockLabelInfo info)
 		{
+			m_Stop = false;
+			if (info.LineIndex >= 0)
+			{
+				m_LineReader.SeekIndex(info.LineIndex);
+			}
+			else
+			{
+				if (!string.IsNullOrEmpty(info.Name))
+				{
+					m_LineReader.SeekLabel(info.Name);
+				}
+				else
+				{
+					m_LineReader.SeekIndex(0);
+				}
+				for (int i = 0; i < info.BlockIndex; i++)
+				{
+					if (!TryRead(out _))
+					{
+						throw new System.Exception($"not found label:{info.Name}:{info.BlockIndex}");
+					}
+				}
+			}
+		}
+
+		void OnCommand(in LineData data, List<ICommand> list, out bool endBlock)
+		{
+			endBlock = false;
 			m_Tags.Clear();
 			m_TagProvider.Provide(in data, m_Tags);
 			foreach (var tag in m_Tags)
 			{
 				list.Add((ICommand)tag);
+				if (tag is IEndBlockCommand)
+				{
+					endBlock = true;
+				}
 			}
 		}
 

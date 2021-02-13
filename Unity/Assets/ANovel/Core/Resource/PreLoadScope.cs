@@ -10,11 +10,47 @@ namespace ANovel.Core
 		ResourceCache m_Owner;
 		List<ICacheHandle> m_Handles = new List<ICacheHandle>();
 
-		public bool IsLoaded => !m_Handles.Any(x => !x.IsLoaded);
+		public bool IsLoaded
+		{
+			get
+			{
+				foreach (var h in m_Handles)
+				{
+					if (!h.IsLoaded)
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+
+		public bool IsDone
+		{
+			get
+			{
+				foreach (var h in m_Handles)
+				{
+					if (!h.IsDone)
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+		}
 
 		public PreLoadScope(ResourceCache owner)
 		{
 			m_Owner = owner;
+		}
+
+		public void CheckError()
+		{
+			foreach (var h in m_Handles)
+			{
+				h.CheckError();
+			}
 		}
 
 #if UNITY_5_3_OR_NEWER
@@ -24,7 +60,7 @@ namespace ANovel.Core
 		}
 #endif
 
-		public void LoadRaw<T>(string path)
+		public void LoadRaw<T>(string path) where T : class
 		{
 			m_Handles.Add(m_Owner.LoadRaw<T>(path));
 		}

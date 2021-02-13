@@ -10,6 +10,14 @@ namespace ANovel.Core.Tests
 			{"circleimport.anovel", CircleImport},
 			{"CircleImportTest.anovel", CircleImportTest},
 			{"circleimporttest.anovel", CircleImportTest},
+			{"CommandEndBlockTest.anovel", CommandEndBlockTest},
+			{"commandendblocktest.anovel", CommandEndBlockTest},
+			{"CommandTest.anovel", CommandTest},
+			{"commandtest.anovel", CommandTest},
+			{"ConductorErrorTest.anovel", ConductorErrorTest},
+			{"conductorerrortest.anovel", ConductorErrorTest},
+			{"ConductorJumpTest.anovel", ConductorJumpTest},
+			{"conductorjumptest.anovel", ConductorJumpTest},
 			{"ConductorTest.anovel", ConductorTest},
 			{"conductortest.anovel", ConductorTest},
 			{"ImportMacroTest.anovel", ImportMacroTest},
@@ -51,6 +59,143 @@ namespace ANovel.Core.Tests
 		@dep_macrolog
 		*/
 		public const string CircleImportTest = "\n#importmacro path=\"CircleImport.anovel\"\n\n@dep_macrolog";
+
+		/* file:CommandEndBlockTest.anovel
+		
+		エンドブロックコマンドテスト
+		
+		&endblock
+		
+		デフォルトセーブされる
+		
+		&endblock cansave=false
+		
+		ブロックは終了するがその地点でセーブは出来ない
+		*/
+		public const string CommandEndBlockTest = "\nエンドブロックコマンドテスト\n\n&endblock\n\nデフォルトセーブされる\n\n&endblock cansave=false\n\nブロックは終了するがその地点でセーブは出来ない\n";
+
+		/* file:CommandTest.anovel
+		
+		
+		&async
+		@test_sync
+		@test_sync
+		@test_trigger name="syncend"
+		&end
+		
+		asyncを利用するとスコープ内に同期コマンドがあっても非同期実行される
+		
+		&async
+		@test_sync
+		@test_sync
+		@test_trigger name="blockfinish"
+		&end
+		
+		非同期コマンド中にブロックを終了する
+		
+		トリガーが実行されている
+		
+		&parallel
+		@test_sync
+		@test_sync
+		@test_trigger name="parallelend"
+		&end
+		
+		parallelを利用するとスコープ内を同時に実行できる
+		
+		&parallel
+		@test_trigger name="parallelend"
+		&end
+		
+		parallel内に同期命令がない場合は非同期実行される
+		
+		&parallel sync=false
+		@test_sync
+		@test_sync
+		@test_trigger name="parallelend"
+		&end
+		
+		parallel内に同期命令があってもsyncフラグをfalseにすると非同期になる
+		
+		&parallel sync=true
+			&async
+				@test_sync
+				@test_sync
+				@test_trigger name="blockfinish"
+			&end
+			&async
+				@test_sync
+				@test_sync
+				@test_sync
+			&end
+		&end
+		
+		nestしたスコープ
+		
+		
+		ジャンプ前
+		
+		&jump label="jump_label"
+		
+		スキップ
+		
+		*jump_label
+		
+		ジャンプコマンド
+		*/
+		public const string CommandTest = "\n\n&async\n@test_sync\n@test_sync\n@test_trigger name=\"syncend\"\n&end\n\nasyncを利用するとスコープ内に同期コマンドがあっても非同期実行される\n\n&async\n@test_sync\n@test_sync\n@test_trigger name=\"blockfinish\"\n&end\n\n非同期コマンド中にブロックを終了する\n\nトリガーが実行されている\n\n&parallel\n@test_sync\n@test_sync\n@test_trigger name=\"parallelend\"\n&end\n\nparallelを利用するとスコープ内を同時に実行できる\n\n&parallel\n@test_trigger name=\"parallelend\"\n&end\n\nparallel内に同期命令がない場合は非同期実行される\n\n&parallel sync=false\n@test_sync\n@test_sync\n@test_trigger name=\"parallelend\"\n&end\n\nparallel内に同期命令があってもsyncフラグをfalseにすると非同期になる\n\n&parallel sync=true\n	&async\n		@test_sync\n		@test_sync\n		@test_trigger name=\"blockfinish\"\n	&end\n	&async\n		@test_sync\n		@test_sync\n		@test_sync\n	&end\n&end\n\nnestしたスコープ\n\n\nジャンプ前\n\n&jump label=\"jump_label\"\n\nスキップ\n\n*jump_label\n\nジャンプコマンド\n";
+
+		/* file:ConductorErrorTest.anovel
+		
+		
+		@test_error
+		
+		*/
+		public const string ConductorErrorTest = "\n\n@test_error\n\n";
+
+		/* file:ConductorJumpTest.anovel
+		
+		ジャンプテスト開始
+		
+		停止
+		
+		&stop
+		
+		*jump1
+		
+		ジャンプ先1
+		
+		&stop
+		
+		*jump2
+		
+		ジャンプ先2
+		
+		シーク中
+		
+		シーク中
+		
+		*jump2
+		
+		シーク先1
+		
+		シーク中
+		
+		シーク中
+		
+		*jump2
+		
+		シーク先2
+		
+		シーク中
+		
+		シーク中
+		
+		停止
+		
+		&stop
+		*/
+		public const string ConductorJumpTest = "\nジャンプテスト開始\n\n停止\n\n&stop\n\n*jump1\n\nジャンプ先1\n\n&stop\n\n*jump2\n\nジャンプ先2\n\nシーク中\n\nシーク中\n\n*jump2\n\nシーク先1\n\nシーク中\n\nシーク中\n\n*jump2\n\nシーク先2\n\nシーク中\n\nシーク中\n\n停止\n\n&stop\n";
 
 		/* file:ConductorTest.anovel
 		

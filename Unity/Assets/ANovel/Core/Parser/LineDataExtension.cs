@@ -60,7 +60,7 @@ namespace ANovel.Core
 					case State.None:
 						if (!Token.IsEmptyOrTab(c))
 						{
-							key.Append(c);
+							key.Append(ToLowerAscii(c));
 							state = State.Key;
 						}
 						break;
@@ -76,12 +76,12 @@ namespace ANovel.Core
 						}
 						else if (state == State.Key)
 						{
-							key.Append(c);
+							key.Append(ToLowerAscii(c));
 						}
 						else if (state == State.KeyEnd)
 						{
-							output[key.ToString().ToLower()] = null;
-							key.Clear().Append(c);
+							output[key.ToString()] = null;
+							key.Clear().Append(ToLowerAscii(c));
 							state = State.Key;
 						}
 						break;
@@ -113,7 +113,7 @@ namespace ANovel.Core
 						else if ((state == State.Value && Token.IsEmptyOrTab(c)) || (state == State.DoubleQuotationValue && c == Token.DoubleQuotation))
 						{
 							state = State.None;
-							output[key.ToString().ToLower()] = value.ToString();
+							output[key.ToString()] = value.ToString();
 							key.Clear();
 							value.Clear();
 						}
@@ -130,23 +130,31 @@ namespace ANovel.Core
 				case State.KeyEnd:
 					if (key.Length > 0)
 					{
-						output[key.ToString().ToLower()] = null;
+						output[key.ToString()] = null;
 						key.Clear();
 					}
 					break;
 				case State.Value:
-					output[key.ToString().ToLower()] = value.ToString();
+					output[key.ToString()] = value.ToString();
 					key.Clear();
 					value.Clear();
 					break;
 				case State.ValueStart:
 				case State.DoubleQuotationValue:
-					throw new LineDataException(data, $"({key.ToString().ToLower()}) undefine value");
+					throw new LineDataException(data, $"({key}) undefine value");
 				default:
 					break;
 			}
 		}
 
+		static char ToLowerAscii(char c)
+		{
+			if ('A' <= c && c <= 'Z')
+			{
+				c = (char)(c | 0x20);
+			}
+			return c;
+		}
 
 
 	}

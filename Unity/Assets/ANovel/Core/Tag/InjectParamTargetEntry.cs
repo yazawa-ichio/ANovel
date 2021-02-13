@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ANovel.Core
 {
@@ -20,81 +19,131 @@ namespace ANovel.Core
 		}
 
 		Type m_Type;
-		TagFieldEntry[] m_Fields;
+		Dictionary<string, TagFieldEntry[]> m_Fields;
+		string[] m_Required;
 
 		public InjectParamTargetEntry(Type type)
 		{
 			m_Type = type;
-			SetFields();
 		}
 
-		void SetFields()
+		static Dictionary<string, List<TagFieldEntry>> s_FieldsTemp = new Dictionary<string, List<TagFieldEntry>>();
+		void TrySetFields()
 		{
-			m_Fields = GetPublicFields().Concat(GetFields()).ToArray();
-		}
-
-		IEnumerable<TagFieldEntry> GetFields()
-		{
-			var type = m_Type;
-			while (type != null)
+			if (m_Fields == null)
 			{
-				foreach (var entry in TagEntry.GetFields(type))
+				try
 				{
-					yield return entry;
-				}
-				type = type.BaseType;
-			}
-		}
-
-
-		IEnumerable<TagFieldEntry> GetPublicFields()
-		{
-			foreach (var field in m_Type.GetFields())
-			{
-				if (field.IsStatic)
-				{
-					continue;
-				}
-				if (!Attribute.IsDefined(field, typeof(TagFieldAttribute)) && !Attribute.IsDefined(field, typeof(NonSerializedAttribute)))
-				{
-					yield return new TagFieldEntry(field, null);
-				}
-			}
-			foreach (var property in m_Type.GetProperties())
-			{
-				if (property.SetMethod == null)
-				{
-					continue;
-				}
-				if (!Attribute.IsDefined(property, typeof(TagFieldAttribute)) && !Attribute.IsDefined(property, typeof(NonSerializedAttribute)))
-				{
-					yield return new TagFieldEntry(property, null);
-				}
-			}
-		}
-
-		public void Set(Tag tag, object target, Dictionary<string, string> param, HashSet<string> targets)
-		{
-			foreach (var field in m_Fields)
-			{
-				if (targets != null && !targets.Contains(field.Name))
-				{
-					continue;
-				}
-				if (param.TryGetValue(field.Name, out var value))
-				{
-					try
+					var fields = GetFields();
+					using (ListPool<string>.Use(out var required))
 					{
-						field.Set(target, value);
+						foreach (var f in fields)
+						{
+							if (!s_FieldsTemp.TryGetValue(f.Name, out var list))
+							{
+								s_FieldsTemp[f.Name] = list = ListPool<TagFieldEntry>.Pop();
+							}
+							list.Add(f);
+							if (f.Required)
+							{
+								required.Add(f.Name);
+							}
+						}
+						m_Required = required.ToArray();
 					}
-					catch (Exception ex)
+					m_Fields = new Dictionary<string, TagFieldEntry[]>(s_FieldsTemp.Count);
+					foreach (var kvp in s_FieldsTemp)
 					{
-						throw new LineDataException(tag.LineData, $"{tag.TagName} {field.Name} format error : {value}", ex);
+						m_Fields[kvp.Key] = kvp.Value.ToArray();
 					}
 				}
-				else if (field.Required)
+				finally
 				{
-					throw new LineDataException(tag.LineData, $"{tag.TagName} {field.Name} required key");
+					foreach (var list in s_FieldsTemp.Values)
+					{
+						ListPool<TagFieldEntry>.Push(list);
+					}
+					s_FieldsTemp.Clear();
+				}
+			}
+		}
+
+		TagFieldEntry[] GetFields()
+		{
+			using (ListPool<TagFieldEntry>.Use(out var list))
+			{
+				var type = m_Type;
+				while (type != null)
+				{
+					foreach (var entry in TagEntry.GetFields(type))
+					{
+						list.Add(entry);
+					}
+					type = type.BaseType;
+				}
+				foreach (var field in m_Type.GetFields())
+				{
+					if (field.IsStatic)
+					{
+						continue;
+					}
+					if (!field.IsDefined(typeof(TagFieldAttribute), inherit: false) && !field.IsDefined(typeof(NonSerializedAttribute), inherit: false) && !field.IsDefined(typeof(SkipInjectParamAttribute), inherit: false))
+					{
+						list.Add(new TagFieldEntry(field, null));
+					}
+				}
+				foreach (var property in m_Type.GetProperties())
+				{
+					if (property.SetMethod == null || property.SetMethod.IsStatic)
+					{
+						continue;
+					}
+					if (!property.IsDefined(typeof(TagFieldAttribute), inherit: false) && !property.IsDefined(typeof(SkipInjectParamAttribute), inherit: false))
+					{
+						list.Add(new TagFieldEntry(property, null));
+					}
+				}
+				return list.ToArray();
+			}
+		}
+
+		public void Set(Tag tag, object target, Dictionary<string, string> param, HashSet<string> targets, HashSet<string> ignores)
+		{
+			TrySetFields();
+			foreach (var required in m_Required)
+			{
+				if (ignores != null && ignores.Contains(required))
+				{
+					continue;
+				}
+				if (!param.ContainsKey(required))
+				{
+					throw new LineDataException(tag.LineData, $"{tag.TagName} {required} required key");
+				}
+			}
+			foreach (var kvp in param)
+			{
+				if (ignores != null && ignores.Contains(kvp.Key))
+				{
+					continue;
+				}
+				if (targets != null && !targets.Contains(kvp.Key))
+				{
+					continue;
+				}
+				if (m_Fields.TryGetValue(kvp.Key, out var list))
+				{
+					foreach (var entry in list)
+					{
+						try
+						{
+							entry.Set(target, kvp.Value);
+						}
+						catch (Exception ex)
+						{
+							throw new LineDataException(tag.LineData, $"{tag.TagName} {entry.Name} format error : {kvp.Value}", ex);
+						}
+					}
 				}
 			}
 		}

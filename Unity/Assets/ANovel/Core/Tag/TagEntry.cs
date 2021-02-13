@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ANovel.Core
 {
@@ -9,6 +8,7 @@ namespace ANovel.Core
 
 		Type m_Type;
 		TagNameAttribute m_Attr;
+		bool m_Prepare;
 		TagFieldEntry[] m_Fields;
 		InjectParamEntry[] m_InjectParams;
 
@@ -20,33 +20,49 @@ namespace ANovel.Core
 		{
 			m_Type = type;
 			m_Attr = attr;
-			m_Fields = GetFields().ToArray();
-			m_InjectParams = GetInjectParams().ToArray();
 		}
 
-		IEnumerable<TagFieldEntry> GetFields()
+		public void Prepare()
 		{
-			var type = m_Type;
-			while (type != typeof(Tag))
+			if (!m_Prepare)
 			{
-				foreach (var entry in GetFields(type))
-				{
-					yield return entry;
-				}
-				type = type.BaseType;
+				m_Prepare = true;
+				m_Fields = GetFields();
+				m_InjectParams = GetInjectParams();
 			}
 		}
 
-		IEnumerable<InjectParamEntry> GetInjectParams()
+		TagFieldEntry[] GetFields()
 		{
-			var type = m_Type;
-			while (type != typeof(Tag))
+			using (ListPool<TagFieldEntry>.Use(out var list))
 			{
-				foreach (var entry in GetInjectParams(type))
+				var type = m_Type;
+				while (type != typeof(Tag))
 				{
-					yield return entry;
+					foreach (var entry in GetFields(type))
+					{
+						list.Add(entry);
+					}
+					type = type.BaseType;
 				}
-				type = type.BaseType;
+				return list.ToArray();
+			}
+		}
+
+		InjectParamEntry[] GetInjectParams()
+		{
+			using (ListPool<InjectParamEntry>.Use(out var list))
+			{
+				var type = m_Type;
+				while (type != typeof(Tag))
+				{
+					foreach (var entry in GetInjectParams(type))
+					{
+						list.Add(entry);
+					}
+					type = type.BaseType;
+				}
+				return list.ToArray();
 			}
 		}
 
@@ -61,6 +77,7 @@ namespace ANovel.Core
 
 		public Tag Create(in LineData data, Dictionary<string, string> param)
 		{
+			Prepare();
 			var tag = (Tag)Activator.CreateInstance(m_Type);
 			tag.Set(m_Attr.Name, data);
 			foreach (var field in m_Fields)

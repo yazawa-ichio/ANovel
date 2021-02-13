@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using ANovel.Serialization;
+using System;
+using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace ANovel.Core
 {
@@ -9,11 +12,11 @@ namespace ANovel.Core
 		Extension,
 	}
 
-	public class TextBlock
+	public class TextBlock : IDisposable, ICustomMapSerialization
 	{
+		static ThreadLocal<StringBuilder> s_StringBuilder = new ThreadLocal<StringBuilder>(() => new StringBuilder());
 
-		List<LineData> m_Lines = new List<LineData>();
-		StringBuilder m_StringBuilder = new StringBuilder();
+		List<string> m_Lines;
 
 		public TextBlockType Type { get; private set; }
 
@@ -21,18 +24,44 @@ namespace ANovel.Core
 
 		public int LineCount => m_Lines.Count;
 
-		public void Clear()
+		int ICustomMapSerialization.Length => Type == TextBlockType.Text ? 1 : 2;
+
+		public TextBlock()
 		{
-			m_Lines.Clear();
-			Type = TextBlockType.Text;
-			Extension = default;
+			m_Lines = ListPool<string>.Pop();
+		}
+
+		public void Dispose()
+		{
+			if (m_Lines != null)
+			{
+				ListPool<string>.Push(m_Lines);
+				m_Lines = null;
+			}
+		}
+
+		public TextBlock Clone()
+		{
+			var block = new TextBlock
+			{
+				Type = Type,
+				Extension = Extension
+			};
+			foreach (var line in m_Lines)
+			{
+				block.m_Lines.Add(line);
+			}
+			return block;
 		}
 
 		public void SetTexts(List<LineData> texts)
 		{
 			Type = TextBlockType.Text;
 			m_Lines.Clear();
-			m_Lines.AddRange(texts);
+			foreach (var text in texts)
+			{
+				m_Lines.Add(text.Line);
+			}
 		}
 
 		public void SetTexts(in ExtensionTextBlockInfo info, List<LineData> texts)
@@ -40,12 +69,15 @@ namespace ANovel.Core
 			Extension = info;
 			Type = TextBlockType.Extension;
 			m_Lines.Clear();
-			m_Lines.AddRange(texts);
+			foreach (var text in texts)
+			{
+				m_Lines.Add(text.Line);
+			}
 		}
 
 		public string GetLine(int index)
 		{
-			return m_Lines[index].Line;
+			return m_Lines[index];
 		}
 
 		public string Get()
@@ -70,22 +102,99 @@ namespace ANovel.Core
 
 		string GetImpl(string newline, int start, int count)
 		{
-			m_StringBuilder.Clear();
-			if (count < 0)
+			var sb = s_StringBuilder.Value;
+			try
 			{
-				count = m_Lines.Count - start;
-			}
-			for (int i = 0; i < count; i++)
-			{
-				var lineIndex = start + i;
-				var line = m_Lines[lineIndex].Line;
-				m_StringBuilder.Append(line);
-				if (lineIndex + 1 < count)
+				sb.Clear();
+				if (count < 0)
 				{
-					m_StringBuilder.Append(newline);
+					count = m_Lines.Count - start;
+				}
+				for (int i = 0; i < count; i++)
+				{
+					var lineIndex = start + i;
+					var line = m_Lines[lineIndex];
+					sb.Append(line);
+					if (lineIndex + 1 < count)
+					{
+						sb.Append(newline);
+					}
+				}
+				return sb.ToString();
+			}
+			finally
+			{
+				sb.Clear();
+			}
+		}
+
+		void ICustomMapSerialization.Write(Writer writer)
+		{
+			if (Type == TextBlockType.Extension)
+			{
+				writer.Write("Extension");
+				writer.WriteMapHeader(2);
+				writer.Write("Name");
+				writer.Write(Extension.Name);
+				writer.Write("Value");
+				writer.Write(Extension.Value);
+			}
+			writer.Write("Lines");
+			writer.WriteArrayHeader(m_Lines.Count);
+			for (int i = 0; i < m_Lines.Count; i++)
+			{
+				writer.Write(m_Lines[i]);
+			}
+		}
+
+		void ICustomMapSerialization.Read(int length, Reader reader)
+		{
+			Type = TextBlockType.Text;
+			m_Lines.Clear();
+			for (int i = 0; i < length; i++)
+			{
+				switch (reader.ReadString())
+				{
+					case "Extension":
+						ReadExtension(reader);
+						break;
+					case "Lines":
+						ReadLines(reader);
+						break;
+				}
+
+			}
+		}
+
+		void ReadExtension(Reader reader)
+		{
+			string name = default;
+			string value = default;
+			var length = reader.ReadMap();
+			for (int i = 0; i < length; i++)
+			{
+				switch (reader.ReadString())
+				{
+					case "Name":
+						name = reader.ReadString();
+						break;
+					case "Value":
+						value = reader.ReadString();
+						break;
 				}
 			}
-			return m_StringBuilder.ToString();
+			Type = TextBlockType.Extension;
+			Extension = new ExtensionTextBlockInfo(name, value);
+		}
+
+		void ReadLines(Reader reader)
+		{
+			m_Lines.Clear();
+			var len = reader.ReadArray();
+			for (int j = 0; j < len; j++)
+			{
+				m_Lines.Add(reader.ReadString());
+			}
 		}
 
 	}

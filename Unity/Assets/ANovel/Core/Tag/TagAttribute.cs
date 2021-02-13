@@ -1,14 +1,8 @@
 ﻿using System;
-#if UNITY_5_3_OR_NEWER
 using UnityEngine.Scripting;
-#endif
 
 namespace ANovel.Core
 {
-#if !UNITY_5_3_OR_NEWER
-	public class PreserveAttribute : Attribute { }
-#endif
-
 	[AttributeUsage(AttributeTargets.Class)]
 	public class TagNameAttribute : PreserveAttribute
 	{

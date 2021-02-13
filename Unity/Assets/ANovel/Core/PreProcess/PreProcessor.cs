@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ANovel.Core
@@ -54,11 +55,11 @@ namespace ANovel.Core
 			m_Symbols = symbols ?? Array.Empty<string>();
 		}
 
-		public Task<Result> Run(string path, string text)
+		public Task<Result> Run(string path, string text, CancellationToken token)
 		{
 			try
 			{
-				return RunImpl(path, text);
+				return RunImpl(path, text, token);
 			}
 			finally
 			{
@@ -66,7 +67,7 @@ namespace ANovel.Core
 			}
 		}
 
-		async Task<Result> RunImpl(string path, string text)
+		async Task<Result> RunImpl(string path, string text, CancellationToken token)
 		{
 			if (m_Cache.TryGetValue(path, out var result))
 			{
@@ -75,7 +76,7 @@ namespace ANovel.Core
 			result = m_Cache[path] = new Result(m_Symbols);
 			if (text == null)
 			{
-				text = await m_Loader.Load(path);
+				text = await m_Loader.Load(path, token);
 			}
 			var entry = new Entry(path, result.Symbols, text, result);
 			m_Stack.Push(entry);
@@ -95,7 +96,7 @@ namespace ANovel.Core
 				}
 				if (process is IImportPreProcess import)
 				{
-					import.Import(await RunImpl(import.Path, null));
+					import.Import(await RunImpl(import.Path, null, token));
 				}
 				if (process is MacroScope macro)
 				{
