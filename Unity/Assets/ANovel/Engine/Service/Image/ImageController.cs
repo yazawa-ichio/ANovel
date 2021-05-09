@@ -1,162 +1,81 @@
-﻿using ANovel.Core;
+using ANovel.Core;
 using System;
 
 namespace ANovel.Service
 {
-	public class PlayAnimConfig
+	public partial class ImageController
 	{
-		public Millisecond Time = Millisecond.FromSecond(0);
-		public Easing? Easing;
-	}
-
-	public class ImageController : IDisposable
-	{
-		IScreenService Screen => m_Container.Get<IScreenService>();
-		ImagePool Pool => m_Container.Get<ImagePool>();
-
-		public IScreenId Id { get; private set; }
-
 		ServiceContainer m_Container;
-		ImageObject m_Current;
-		ImageObject m_Prev;
-		IPlayHandle m_Playing;
-		string m_Level;
+		Image m_Current;
+		Image m_Prev;
+		IScreenService Screen => m_Container.Get<IScreenService>();
 
-		public ImageController(ServiceContainer container, IScreenId id)
+		public ImageController(ServiceContainer container)
 		{
 			m_Container = container;
-			Id = id;
+		}
+
+		public void OnBeginSwap(BeginSwapEvent e)
+		{
+			Delete(e.NextId);
+			m_Prev = m_Current;
+			m_Current = null;
+			if (m_Prev != null && e.Copy)
+			{
+				m_Current = m_Prev.Copy(e.NextId);
+			}
+		}
+
+		public void Delete(IScreenId id)
+		{
+			if (m_Current != null && m_Current.Id == id)
+			{
+				m_Current.Dispose();
+				m_Current = null;
+			}
+			if (m_Prev != null && m_Prev.Id == id)
+			{
+				m_Prev.Dispose();
+				m_Prev = null;
+			}
 		}
 
 		public IPlayHandle Show(ImageObjectConfig config, LayoutConfig layout)
 		{
-			m_Playing?.Dispose();
-			m_Playing = null;
-			m_Level = layout.Level;
-			var level = Screen.GetLevel(layout.Level);
-			if (Screen.Transition.IsTransition)
-			{
-				if (m_Current == null)
-				{
-					m_Current = Pool.Get(level);
-				}
-				m_Current.SetLayout(layout.GetLayout(m_Current.GetLayout(current: false), config.Texture, Screen.Size));
-				m_Current.SetTexture(config.Texture);
-				return FloatFadeHandle.Empty;
-			}
 			if (m_Current == null)
 			{
-				m_Current = Pool.Get(level);
-				m_Current.SetLevel(level);
-				m_Current.SetLayout(layout.GetLayout(m_Current.GetLayout(), config.Texture, Screen.Size));
-				return m_Playing = m_Current.Transition(config);
+				m_Current = new Image(m_Container, Screen.CurrentId);
 			}
-			var cur = m_Current.GetLayout();
-			var next = layout.GetLayout(cur, config.Texture, Screen.Size);
-			if (cur.CanTransition(in next))
-			{
-				m_Current.SetLayout(next);
-				return m_Playing = m_Current.Transition(config);
-			}
-			else
-			{
-				m_Prev = m_Current;
-				m_Current = Pool.Get(level);
-				m_Current.SetBack(m_Prev.Transform);
-				m_Current.SetLayout(next);
-				var hide = m_Prev.Transition(new ImageObjectConfig
-				{
-					Time = config.Time,
-					Vague = config.Vague,
-					RuleTexture = config.RuleTexture,
-				});
-				hide.OnComplete += () =>
-				{
-					if (m_Prev != null)
-					{
-						Pool.Return(m_Prev);
-						m_Prev = null;
-					}
-				};
-				var show = m_Current.Transition(config);
-				show.OnComplete += () =>
-				{
-					hide.Dispose();
-				};
-				return m_Playing = show;
-			}
+			return m_Current.Show(config, layout);
 		}
 
 		public IPlayHandle Change(ImageObjectConfig config)
 		{
-			m_Playing?.Dispose();
-			m_Playing = null;
-			if (Screen.Transition.IsTransition)
+			if (m_Current == null)
 			{
-				m_Current.SetTexture(config.Texture);
 				return FloatFadeHandle.Empty;
 			}
-			return m_Playing = m_Current.Transition(config);
+			return m_Current.Change(config);
 		}
 
 		public IPlayHandle Hide(ImageObjectConfig config)
 		{
-			m_Playing?.Dispose();
-			m_Playing = null;
-			if (Screen.Transition.IsTransition)
+			if (m_Current == null)
 			{
-				Pool.Return(m_Current);
-				m_Current = null;
 				return FloatFadeHandle.Empty;
 			}
-			var hide = m_Current.Transition(config);
-			hide.OnComplete += () =>
-			{
-				Pool.Return(m_Current);
-				m_Current = null;
-			};
-			return m_Playing = hide;
+			return m_Current.Hide(config);
 		}
 
 		public IPlayHandle PlayAnim(PlayAnimConfig config, LayoutConfig layout)
 		{
 			if (m_Current == null)
 			{
-				return FloatFadeHandle.Empty;
+				throw new Exception($"play target not found ");
 			}
-			var cur = m_Current.GetLayout(false);
-			var next = layout.GetLayout(cur, m_Current.TexSize, Screen.Size);
-			return m_Current.PlayAnim(cur.GetAnims(config.Time, config.Easing, next));
+			return m_Current.PlayAnim(config, layout);
 		}
 
-		public ImageController Copy(IScreenId dstId)
-		{
-			m_Playing?.Dispose();
-			m_Playing = null;
-			var dst = new ImageController(m_Container, dstId);
-			if (m_Current != null)
-			{
-				var level = Screen.GetLevel(m_Level);
-				dst.m_Current = Pool.Get(level);
-				dst.m_Current.Copy(m_Current, true);
-			}
-			return dst;
-		}
-
-		public void Dispose()
-		{
-			m_Playing?.Dispose();
-			m_Playing = null;
-			if (m_Current != null)
-			{
-				Pool.Return(m_Current);
-				m_Current = null;
-			}
-			if (m_Prev != null)
-			{
-				Pool.Return(m_Prev);
-				m_Prev = null;
-			}
-		}
 	}
+
 }

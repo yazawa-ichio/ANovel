@@ -1,11 +1,11 @@
-﻿namespace ANovel.Core
+namespace ANovel.Core
 {
 	public interface IDefineSymbol
 	{
 		void Result(PreProcessor.Result result);
 	}
 
-	[TagName("define", LineType.PreProcess)]
+	[TagName("define_symbol", LineType.PreProcess)]
 	public class DefineSymbol : PreProcess, IDefineSymbol
 	{
 		[TagField(Required = true)]

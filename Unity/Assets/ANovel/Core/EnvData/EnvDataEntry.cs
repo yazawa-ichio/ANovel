@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,10 +16,11 @@ namespace ANovel.Core
 	}
 
 	[UnityEngine.Scripting.Preserve]
-	internal class EnvDataEntry<TValue> : IEnvDataEntry where TValue : struct, IEnvDataValue<TValue>
+	internal class EnvDataEntry<TValue> : IEnvDataEntry where TValue : struct
 	{
 		Dictionary<string, TValue> m_Dic = new Dictionary<string, TValue>();
 		Dictionary<string, TValue> m_Prev = new Dictionary<string, TValue>();
+		HashSet<string> m_Ditry = new HashSet<string>();
 
 		public bool Has(string key)
 		{
@@ -29,6 +30,7 @@ namespace ANovel.Core
 		public void Set(string key, TValue value)
 		{
 			m_Dic[key] = value;
+			m_Ditry.Add(key);
 		}
 
 		public void Delete(string key)
@@ -123,7 +125,7 @@ namespace ANovel.Core
 						temp.Remove(kvp.Key);
 						if (cur.TryGetValue(kvp.Key, out var value))
 						{
-							if (!value.Equals(kvp.Value))
+							if (m_Ditry.Remove(kvp.Key) && !value.Equals(kvp.Value))
 							{
 								updataList.Add(new UpdateDiffData<TValue>(kvp.Key, kvp.Value, value));
 							}
@@ -162,6 +164,7 @@ namespace ANovel.Core
 			{
 				m_Prev[kvp.Key] = kvp.Value;
 			}
+			m_Ditry.Clear();
 		}
 
 		public void Redo(EnvDataDiff diff)
@@ -238,6 +241,7 @@ namespace ANovel.Core
 		{
 			m_Dic.Clear();
 			m_Prev.Clear();
+			m_Ditry.Clear();
 			var snashort = data.Get<TValue>();
 			if (snashort == null)
 			{
@@ -254,6 +258,7 @@ namespace ANovel.Core
 		{
 			m_Dic.Clear();
 			m_Prev.Clear();
+			m_Ditry.Clear();
 		}
 	}
 

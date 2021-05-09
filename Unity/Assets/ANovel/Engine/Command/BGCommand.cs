@@ -1,16 +1,17 @@
-﻿using ANovel.Core;
+using ANovel.Core;
 using ANovel.Service;
+using Category = ANovel.Service.ImageService.Category;
 
 namespace ANovel.Commands
 {
 
 	public class BGCommandBase : SyncCommandBase, IUseTransitionScope
 	{
-		public static readonly string EnvKey = BGService.EnvKey;
+		public static readonly string EnvKey = "BG";
 
 		protected static readonly string LayoutLevel = ANovel.Level.BG.ToString();
 
-		protected BGService Service => Get<BGService>();
+		protected ImageService Service => Get<ImageService>();
 
 		bool IUseTransitionScope.Use => true;
 
@@ -33,7 +34,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<BGService>(data);
+			data = PrefixedEnvData.Get(data, Category.Bg);
 			if (!data.Has<ImageObjectEnvData>(EnvKey))
 			{
 				data.Set(EnvKey, new ImageObjectEnvData(m_Transition));
@@ -56,7 +57,7 @@ namespace ANovel.Commands
 		{
 			m_Transition.LoadTexture(Path.BgRoot, Cache);
 			m_Transition.LoadRule(Path, Cache);
-			m_PlayHandle = Service.Show(m_Transition, m_Layout);
+			m_PlayHandle = Service.Show(Category.Bg, EnvKey, m_Transition, m_Layout);
 		}
 
 	}
@@ -72,7 +73,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<BGService>(data);
+			data = PrefixedEnvData.Get(data, Category.Bg);
 			data.Update<ImageObjectEnvData, ImageObjectConfig>(EnvKey, m_Transition);
 		}
 
@@ -86,7 +87,7 @@ namespace ANovel.Commands
 		{
 			m_Transition.LoadTexture(Path.BgRoot, Cache);
 			m_Transition.LoadRule(Path, Cache);
-			m_PlayHandle = Service.Change(m_Transition);
+			m_PlayHandle = Service.Change(Category.Bg, EnvKey, m_Transition);
 		}
 
 	}
@@ -102,7 +103,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<BGService>(data);
+			data = PrefixedEnvData.Get(data, Category.Bg);
 			data.Delete<ImageObjectEnvData>(EnvKey);
 			LayoutConfig.DeleteEvnData(EnvKey, data);
 		}
@@ -115,7 +116,7 @@ namespace ANovel.Commands
 		protected override void Execute()
 		{
 			m_Transition.LoadRule(Path, Cache);
-			m_PlayHandle = Service.Hide(m_Transition);
+			m_PlayHandle = Service.Hide(Category.Bg, EnvKey, m_Transition);
 		}
 
 	}
@@ -130,7 +131,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<BGService>(data);
+			data = PrefixedEnvData.Get(data, Category.Bg);
 			if (data.Has<ImageObjectEnvData>(EnvKey))
 			{
 				LayoutConfig.UpdateEvnData(EnvKey, data, m_Layout);
@@ -139,7 +140,7 @@ namespace ANovel.Commands
 
 		protected override void Execute()
 		{
-			m_PlayHandle = Service.PlayAnim(m_Config, m_Layout);
+			m_PlayHandle = Service.PlayAnim(Category.Bg, EnvKey, m_Config, m_Layout);
 		}
 
 	}

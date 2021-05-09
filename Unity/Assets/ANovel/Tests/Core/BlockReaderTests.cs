@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -138,7 +138,7 @@ namespace ANovel.Core.Tests
 			CacheLineDataError("```test : \n```", "値がない").Wait();
 			CacheLineDataError("#macro name=test\ntest\n#macroend", "マクロ中にテキストブロックは入れられない").Wait();
 			CacheLineDataError("#macro name=test\n*test\n#macroend", "マクロ中にラベルは入れられない").Wait();
-			CacheLineDataError("#macro name=test\n#define name=test\n#macroend", "マクロ中にif以外のPreProcess命令は入れれない").Wait();
+			CacheLineDataError("#macro name=test\n#define_symbol name=test\n#macroend", "マクロ中にif以外のPreProcess命令は入れれない").Wait();
 			CacheLineDataError("#macro name=test\n@test_log", "マクロが終わらない").Wait();
 			CacheLineDataError("#if condition=test\n@test_log", "ifが終わらない").Wait();
 			CacheLineDataError("#if condition=test not\n@test_log\n", "ifが終わらない").Wait();

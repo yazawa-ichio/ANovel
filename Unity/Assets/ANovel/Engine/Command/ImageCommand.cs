@@ -1,6 +1,7 @@
-﻿using ANovel.Core;
+using ANovel.Core;
 using ANovel.Service;
 using System.Linq;
+using Category = ANovel.Service.ImageService.Category;
 
 namespace ANovel.Commands
 {
@@ -28,7 +29,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<ImageService>(data);
+			data = PrefixedEnvData.Get(data, Category.Image);
 			if (!data.Has<ImageObjectEnvData>(m_Name))
 			{
 				data.Set(m_Name, new ImageObjectEnvData(m_Transition));
@@ -51,7 +52,7 @@ namespace ANovel.Commands
 		{
 			m_Transition.LoadTexture(Path.ImageRoot, Cache);
 			m_Transition.LoadRule(Path, Cache);
-			m_PlayHandle = Service.Show(m_Name, m_Transition, m_Layout);
+			m_PlayHandle = Service.Show(Category.Image, m_Name, m_Transition, m_Layout);
 		}
 
 	}
@@ -69,7 +70,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<ImageService>(data);
+			data = PrefixedEnvData.Get(data, Category.Image);
 			data.Update<ImageObjectEnvData, ImageObjectConfig>(m_Name, m_Transition);
 		}
 
@@ -83,13 +84,13 @@ namespace ANovel.Commands
 		{
 			m_Transition.LoadTexture(Path.ImageRoot, Cache);
 			m_Transition.LoadRule(Path, Cache);
-			m_PlayHandle = Service.Change(m_Name, m_Transition);
+			m_PlayHandle = Service.Change(Category.Image, m_Name, m_Transition);
 		}
 
 	}
 
 	[CommandName("image_hide")]
-	public class HideImageCommand : ImageCommandBase
+	public class ImageHideCommand : ImageCommandBase
 	{
 		[CommandField(Required = true)]
 		string m_Name = null;
@@ -102,7 +103,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<ImageService>(data);
+			data = PrefixedEnvData.Get(data, Category.Image);
 			data.Delete<ImageObjectEnvData>(m_Name);
 			LayoutConfig.DeleteEvnData(m_Name, data);
 		}
@@ -115,7 +116,7 @@ namespace ANovel.Commands
 		protected override void Execute()
 		{
 			m_Transition.LoadRule(Path, Cache);
-			m_PlayHandle = Service.Hide(m_Name, m_Transition);
+			m_PlayHandle = Service.Hide(Category.Image, m_Name, m_Transition);
 		}
 
 	}
@@ -140,7 +141,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<ImageService>(data);
+			data = PrefixedEnvData.Get(data, Category.Image);
 			m_Names = data.GetKeys<LayoutConfig.LayoutLevelEnvData>(x =>
 			{
 				if (string.IsNullOrEmpty(m_Level))
@@ -164,7 +165,7 @@ namespace ANovel.Commands
 		protected override void Execute()
 		{
 			m_Transition.LoadRule(Path, Cache);
-			var handles = m_Names.Select(x => Service.Hide(x, m_Transition)).ToArray();
+			var handles = m_Names.Select(x => Service.Hide(Category.Image, x, m_Transition)).ToArray();
 			m_PlayHandle = new CombinePlayHandle(handles);
 		}
 
@@ -182,7 +183,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<ImageService>(data);
+			data = PrefixedEnvData.Get(data, Category.Image);
 			if (data.Has<ImageObjectEnvData>(m_Name))
 			{
 				LayoutConfig.UpdateEvnData(m_Name, data, m_Layout);
@@ -191,7 +192,7 @@ namespace ANovel.Commands
 
 		protected override void Execute()
 		{
-			m_PlayHandle = Service.PlayAnim(m_Name, m_Config, m_Layout);
+			m_PlayHandle = Service.PlayAnim(Category.Image, m_Name, m_Config, m_Layout);
 		}
 
 	}

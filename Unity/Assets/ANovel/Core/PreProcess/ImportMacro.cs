@@ -1,4 +1,4 @@
-﻿namespace ANovel.Core
+namespace ANovel.Core
 {
 	[TagName("importmacro", LineType.PreProcess)]
 	public class ImportMacro : PreProcess, IImportPreProcess

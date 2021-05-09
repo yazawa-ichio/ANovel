@@ -1,4 +1,4 @@
-﻿using ANovel.Commands;
+using ANovel.Commands;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,9 +17,11 @@ namespace ANovel.Core
 
 		public ITextProcessor Text { get => m_BlockProcessor.Text; set => m_BlockProcessor.Text = value; }
 
+		public EnvDataHook EnvDataHook => m_BlockProcessor.EnvDataHook;
+
 		public event Action<Exception> OnError;
 
-		public Func<IEnvDataHolder, Task> OnLoad { get; set; }
+		public Func<Block, IEnvDataHolder, Task> OnLoad { get; set; }
 
 		public bool IsStop => !m_Reader.CanRead && m_BlockProcessor.IsStop;
 
@@ -73,7 +75,7 @@ namespace ANovel.Core
 				m_BlockProcessor.Reset();
 				if (OnLoad != null)
 				{
-					await OnLoad(m_BlockProcessor.Current);
+					await OnLoad(null, m_BlockProcessor.Current);
 				}
 				await JumpImpl(new BlockLabelInfo(path, label, -1, -1), token);
 			}
@@ -145,18 +147,14 @@ namespace ANovel.Core
 			{
 				m_Reader.Seek(m_BlockProcessor.CurrentLabel);
 				bool first = true;
-				TextBlock prevText = null;
+				Block prevBlock = null;
 				while (m_Reader.TryRead(out var block))
 				{
 					if (!first && match(block))
 					{
-						if (Text is ITextProcessorRestoreHandler restoreHandler)
-						{
-							restoreHandler.Restore(m_BlockProcessor.Current, prevText);
-						}
 						if (OnLoad != null)
 						{
-							await OnLoad(m_BlockProcessor.Current);
+							await OnLoad(prevBlock, m_BlockProcessor.Current);
 						}
 						m_BlockProcessor.PostSeek(block);
 						return;
@@ -165,7 +163,7 @@ namespace ANovel.Core
 					{
 						first = false;
 						m_BlockProcessor.UpdateCurrent(block);
-						prevText = block.Text;
+						prevBlock = block;
 					}
 				}
 				m_ErrorFlag = true;
@@ -262,7 +260,7 @@ namespace ANovel.Core
 					m_BlockProcessor.Restore(data, block);
 					if (OnLoad != null)
 					{
-						await OnLoad(m_BlockProcessor.Current);
+						await OnLoad(block, m_BlockProcessor.Current);
 					}
 					ProcessPreload();
 				}

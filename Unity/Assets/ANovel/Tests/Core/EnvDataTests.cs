@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,16 +12,10 @@ namespace ANovel.Core.Tests
 			int Value1 { get; }
 		}
 
-		struct TestEnvData1 : IEnvDataValue<TestEnvData1>, IEnvDataUpdate<int>, ITestEnvData
+		struct TestEnvData1 : IEnvDataUpdate<int>, ITestEnvData
 		{
 			public int Value1 { get; set; }
 			public string Value2;
-
-			public bool Equals(TestEnvData1 other)
-			{
-				return Value1 == other.Value1 &&
-					   Value2 == other.Value2;
-			}
 
 			public void Update(int arg)
 			{
@@ -29,14 +23,9 @@ namespace ANovel.Core.Tests
 			}
 		}
 
-		struct TestEnvData2 : IEnvDataValue<TestEnvData2>, ITestEnvData
+		struct TestEnvData2 : ITestEnvData
 		{
 			public int Value1 { get; set; }
-
-			public bool Equals(TestEnvData2 other)
-			{
-				return Value1 == other.Value1;
-			}
 		}
 
 		[Test]
@@ -254,6 +243,34 @@ namespace ANovel.Core.Tests
 			Assert.AreEqual(2, holder.Get<TestEnvData1>("Key").Value1);
 			Assert.IsTrue(holder.TryGet<TestEnvData1>("Key", out var tmp));
 			Assert.AreEqual(2, tmp.Value1);
+
+		}
+
+		[Test]
+		public void シングルデータ()
+		{
+			var data = new EnvData();
+			var prefix = PrefixedEnvData.Get<EnvDataTests>(data);
+			Assert.Throws<KeyNotFoundException>(() =>
+			{
+				data.GetSingle<TestEnvData1>();
+			}, "キーがないのでエラーになる");
+
+			var data1 = data.GetSingleOrCreate<TestEnvData1>();
+			Assert.IsFalse(prefix.TryGetSingle<TestEnvData1>(out _), "自動でSetはされない");
+			data1.Value1 = 50;
+			data1.Value2 = "test";
+			data.SetSingle(data1);
+			Assert.IsTrue(prefix.TryGetSingle<TestEnvData1>(out _));
+			Assert.AreEqual(data.GetSingle<TestEnvData1>(), data1, "値が更新されている");
+
+			prefix.UpdateSingle<TestEnvData1, int>(1);
+			Assert.AreNotEqual(data.GetSingle<TestEnvData1>(), data1, "Prefixつきからの更新でも同じキーで更新される");
+			Assert.AreEqual(prefix.GetSingle<TestEnvData1>(), data.GetSingle<TestEnvData1>(), "Prefixつきからの更新でも同じキーで更新される");
+
+			prefix.DeleteSingle<TestEnvData1>();
+
+			Assert.IsFalse(prefix.TryGetSingle<TestEnvData1>(out _));
 
 		}
 

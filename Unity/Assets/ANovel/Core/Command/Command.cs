@@ -1,4 +1,4 @@
-﻿using ANovel.Core;
+using ANovel.Core;
 
 namespace ANovel
 {
@@ -9,6 +9,13 @@ namespace ANovel
 		protected ScopedEventBroker Event { get; private set; }
 
 		protected ResourceCache Cache { get; private set; }
+
+		protected IMetaData Meta { get; private set; }
+
+		void ICommand.SetMetaData(IMetaData meta)
+		{
+			Meta = meta;
+		}
 
 		void ICommand.UpdateEnvData(IEnvData data) => UpdateEnvData(data);
 

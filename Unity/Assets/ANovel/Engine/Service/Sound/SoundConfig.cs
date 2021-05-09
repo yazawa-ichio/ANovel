@@ -1,4 +1,4 @@
-﻿using ANovel.Core;
+using ANovel.Core;
 using UnityEngine;
 
 namespace ANovel.Service.Sound
@@ -78,7 +78,7 @@ namespace ANovel.Service.Sound
 		public Easing? StopEasing { get; set; }
 	}
 
-	public struct PlaySoundEnvData : IEnvDataValue<PlaySoundEnvData>, IEnvDataUpdate<VolumeConfig>
+	public struct PlaySoundEnvData : IEnvDataUpdate<VolumeConfig>
 	{
 		public string Path;
 		public string Group;
@@ -95,17 +95,10 @@ namespace ANovel.Service.Sound
 			Pan = config.Pan;
 		}
 
-		public bool Equals(PlaySoundEnvData data)
-		{
-			return Path == data.Path && Volume == data.Volume && Pitch == data.Pitch && Pan == data.Pan && Group == data.Group;
-		}
-
 		public void Update(VolumeConfig arg)
 		{
 			Volume = arg.Volume;
 		}
-
-
 
 	}
 

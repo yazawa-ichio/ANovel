@@ -1,4 +1,4 @@
-﻿namespace ANovel.Commands
+namespace ANovel.Commands
 {
 
 	[CommandName("wait")]
@@ -7,7 +7,7 @@
 		IEngineTime Time => Get<IEngineTime>();
 
 		[CommandField(Required = true)]
-		float m_Time = 0;
+		Millisecond m_Time = default;
 		[CommandField]
 		protected bool m_CanSkip = false;
 
@@ -19,7 +19,7 @@
 
 		protected override void Execute()
 		{
-			m_PlayHandle = new FloatFadeHandle(1, 1f, m_Time);
+			m_PlayHandle = new FloatFadeHandle(1, 1f, m_Time.ToSecond());
 		}
 
 		public override void FinishBlock()

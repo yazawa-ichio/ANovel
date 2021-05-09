@@ -1,4 +1,4 @@
-﻿using ANovel.Core;
+using ANovel.Core;
 using ANovel.Serialization;
 using UnityEngine;
 
@@ -45,7 +45,7 @@ namespace ANovel.Service
 			return config;
 		}
 
-		public struct LayoutPosEnvData : IEnvDataValue<LayoutPosEnvData>, IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
+		public struct LayoutPosEnvData : IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
 		{
 			public bool IsDefault => Equals(default);
 
@@ -80,7 +80,7 @@ namespace ANovel.Service
 			}
 		}
 
-		public struct LayoutSizeEnvData : IEnvDataValue<LayoutSizeEnvData>, IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
+		public struct LayoutSizeEnvData : IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
 		{
 			public bool IsDefault => Equals(default);
 
@@ -161,7 +161,7 @@ namespace ANovel.Service
 			}
 		}
 
-		public struct LayoutAngleEnvData : IEnvDataValue<LayoutAngleEnvData>, IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
+		public struct LayoutAngleEnvData : IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
 		{
 			public bool IsDefault => Equals(default);
 
@@ -196,7 +196,7 @@ namespace ANovel.Service
 			}
 		}
 
-		public struct LayoutColorEnvData : IEnvDataValue<LayoutColorEnvData>, IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
+		public struct LayoutColorEnvData : IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
 		{
 			public bool IsDefault => Equals(default);
 
@@ -227,7 +227,7 @@ namespace ANovel.Service
 			}
 		}
 
-		public struct LayoutLevelEnvData : IEnvDataValue<LayoutLevelEnvData>, IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
+		public struct LayoutLevelEnvData : IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
 		{
 			public bool IsDefault => Equals(default);
 

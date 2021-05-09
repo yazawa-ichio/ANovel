@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 #if UNITY_5_3_OR_NEWER
@@ -49,7 +49,7 @@ namespace ANovel.Core
 				}
 				else
 				{
-					future.TrySetException(new FileNotFoundException("not found Asset", path));
+					future.TrySetException(new FileNotFoundException($"not found Asset: {path}", path));
 				}
 			};
 			return future.Task;

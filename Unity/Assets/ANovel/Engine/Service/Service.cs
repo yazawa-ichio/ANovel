@@ -1,4 +1,4 @@
-﻿using ANovel.Core;
+using ANovel.Core;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -12,6 +12,12 @@ namespace ANovel.Service
 		High,
 	}
 
+	public class RestoreData
+	{
+		public IMetaData Meta;
+		public IEnvDataHolder Env;
+	}
+
 	public interface IService
 	{
 		Type ServiceType { get; }
@@ -19,9 +25,9 @@ namespace ANovel.Service
 		void Initialize(ServiceContainer container);
 		void OnUpdate(IEngineTime time);
 
-		Task PreRestore(IEnvDataHolder data, IPreLoader loader);
-		Task Restore(IEnvDataHolder data, ResourceCache cache);
-		Task PostRestore(IEnvDataHolder data);
+		Task PreRestore(RestoreData data, IPreLoader loader);
+		Task Restore(RestoreData data, ResourceCache cache);
+		Task PostRestore(RestoreData data);
 	}
 
 	public abstract class Service : MonoBehaviour, IService
@@ -36,16 +42,18 @@ namespace ANovel.Service
 
 		protected PathConfig Path => Config.Path;
 
+		protected EventBroker Event => Container.Get<EventBroker>();
+
 		protected virtual void Initialize() { }
 
 		protected virtual void OnUpdate(IEngineTime time) { }
 
-		protected virtual void PreRestore(IEnvDataHolder data, IPreLoader loader) { }
-		protected virtual Task PreRestoreAsync(IEnvDataHolder data, IPreLoader loader) => Task.FromResult(true);
-		protected virtual void Restore(IEnvDataHolder data, ResourceCache cache) { }
-		protected virtual Task RestoreAync(IEnvDataHolder data, ResourceCache cache) => Task.FromResult(true);
-		protected virtual void PostRestore(IEnvDataHolder data) { }
-		protected virtual Task PostRestoreAsync(IEnvDataHolder data) => Task.FromResult(true);
+		protected virtual void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader) { }
+		protected virtual Task PreRestoreAsync(IMetaData meta, IEnvDataHolder data, IPreLoader loader) => Task.FromResult(true);
+		protected virtual void Restore(IMetaData meta, IEnvDataHolder data, ResourceCache cache) { }
+		protected virtual Task RestoreAync(IMetaData meta, IEnvDataHolder data, ResourceCache cache) => Task.FromResult(true);
+		protected virtual void PostRestore(IMetaData meta, IEnvDataHolder data) { }
+		protected virtual Task PostRestoreAsync(IMetaData meta, IEnvDataHolder data) => Task.FromResult(true);
 
 		void IService.Initialize(ServiceContainer container)
 		{
@@ -55,22 +63,22 @@ namespace ANovel.Service
 
 		void IService.OnUpdate(IEngineTime time) => OnUpdate(time);
 
-		Task IService.PreRestore(IEnvDataHolder data, IPreLoader loader)
+		Task IService.PreRestore(RestoreData data, IPreLoader loader)
 		{
-			PreRestore(data, loader);
-			return PreRestoreAsync(data, loader);
+			PreRestore(data.Meta, data.Env, loader);
+			return PreRestoreAsync(data.Meta, data.Env, loader);
 		}
 
-		Task IService.Restore(IEnvDataHolder data, ResourceCache cache)
+		Task IService.Restore(RestoreData data, ResourceCache cache)
 		{
-			Restore(data, cache);
-			return RestoreAync(data, cache);
+			Restore(data.Meta, data.Env, cache);
+			return RestoreAync(data.Meta, data.Env, cache);
 		}
 
-		Task IService.PostRestore(IEnvDataHolder data)
+		Task IService.PostRestore(RestoreData data)
 		{
-			PostRestore(data);
-			return PostRestoreAsync(data);
+			PostRestore(data.Meta, data.Env);
+			return PostRestoreAsync(data.Meta, data.Env);
 		}
 
 	}

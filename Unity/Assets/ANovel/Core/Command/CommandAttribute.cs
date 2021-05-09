@@ -1,4 +1,4 @@
-﻿using ANovel.Core;
+using ANovel.Core;
 
 namespace ANovel
 {
@@ -17,6 +17,13 @@ namespace ANovel
 	public class SystemCommandNameAttribute : TagNameAttribute
 	{
 		public SystemCommandNameAttribute(string name) : base(name, LineType.SystemCommand)
+		{
+		}
+	}
+
+	public class PreProcessNameAttribute : TagNameAttribute
+	{
+		public PreProcessNameAttribute(string name) : base(name, LineType.PreProcess)
 		{
 		}
 	}

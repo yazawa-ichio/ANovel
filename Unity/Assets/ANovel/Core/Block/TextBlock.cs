@@ -1,4 +1,4 @@
-﻿using ANovel.Serialization;
+using ANovel.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Text;

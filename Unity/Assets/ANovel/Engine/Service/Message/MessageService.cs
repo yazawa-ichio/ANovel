@@ -1,159 +1,99 @@
-﻿using ANovel.Core;
-using ANovel.Serialization;
+using ANovel.Core;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ANovel.Service
 {
-	public struct MessageEnvData : IEnvDataValue<MessageEnvData>, IDefaultValueSerialization
-	{
-		public bool IsDefault => Equals(default);
-
-		public string Name;
-		public string Message;
-
-		public bool Equals(MessageEnvData other)
-		{
-			return Name == other.Name && Message == other.Message;
-		}
-	}
-
 	public class MessageService : Service, ITextProcessor
 	{
-		public static readonly string EnvKey = "MSG";
-
 		public override Type ServiceType => typeof(MessageService);
 
 		[SerializeField]
-		Text m_NameText = default;
+		TextPrinterBase m_TextPrinter;
 		[SerializeField]
-		Text m_MessageText = default;
+		MessageFrame m_Frame;
+		public MessageFrame Frame => m_Frame;
 		[SerializeField]
-		bool m_OneFrameOneCharLimit = true;
+		FaceWindow m_FaceWindow;
 
-		Queue<char> m_Buffer = new Queue<char>();
-		float m_ShowTimer;
+		public bool IsProcessing => m_TextPrinter?.IsProcessing ?? false;
 
-		public bool IsProcessing { get; private set; }
-
-		public void PreUpdate(TextBlock text, IEnvData data)
+		protected override void Initialize()
 		{
-			if (text == null)
-			{
-				data.Delete<MessageEnvData>(EnvKey);
-				return;
-			}
-			var top = text.GetLine(0).Trim();
-			if (top.StartsWith("【") && top.EndsWith("】"))
-			{
-				data.Set(EnvKey, new MessageEnvData
-				{
-					Name = top.Substring(1, top.Length - 2),
-					Message = text.GetRange(1),
-				});
-			}
-			else
-			{
-				data.Set(EnvKey, new MessageEnvData
-				{
-					Name = "",
-					Message = text.Get(),
-				});
-			}
+			Event.Register(this);
+			m_TextPrinter?.Setup(Container);
+			m_Frame?.Init();
+			m_FaceWindow?.Init();
 		}
 
-		public void Set(TextBlock text)
+		public void Set(TextBlock text, IEnvDataHolder data)
 		{
-			m_NameText.text = "";
-			m_MessageText.text = "";
-			m_Buffer.Clear();
-
-			var top = text.GetLine(0).Trim();
-			if (top.StartsWith("【") && top.EndsWith("】"))
+			m_TextPrinter?.Set(text, data);
+			if (data.TryGetSingle<MessageEnvData>(out var _))
 			{
-				m_NameText.text = top.Substring(1, top.Length - 2);
-				foreach (var c in text.GetRange(1))
-				{
-					m_Buffer.Enqueue(c);
-				}
+				m_FaceWindow.TryShow();
 			}
-			else
-			{
-				foreach (var c in text.Get())
-				{
-					m_Buffer.Enqueue(c);
-				}
-			}
-			m_ShowTimer = 0;
-			IsProcessing = true;
 		}
 
 		protected override void OnUpdate(IEngineTime time)
 		{
-			if (m_Buffer.Count > 0)
-			{
-				m_ShowTimer += time.DeltaTime;
-			}
-			else
-			{
-				IsProcessing = false;
-			}
-			while (m_Buffer.Count > 0 && m_ShowTimer > 0)
-			{
-				m_ShowTimer -= 0.05f;
-				m_MessageText.text += m_Buffer.Dequeue();
-				if (m_OneFrameOneCharLimit)
-				{
-					break;
-				}
-			}
+			m_Frame?.Update(time);
+			m_TextPrinter?.OnUpdate(time);
 		}
 
 		public bool TryNext()
 		{
-			bool run = m_Buffer.Count > 0;
-			if (run)
-			{
-				var tmp = m_MessageText.text;
-				while (m_Buffer.Count > 0)
-				{
-					tmp += m_Buffer.Dequeue();
-				}
-				m_MessageText.text = tmp;
-				IsProcessing = false;
-			}
-			else
-			{
-				//m_NameText.text = "";
-				//m_MessageText.text = "";
-				IsProcessing = false;
-			}
-			return !run;
+			return m_TextPrinter?.TryNext() ?? true;
 		}
 
 		public void Clear()
 		{
-			m_NameText.text = "";
-			m_MessageText.text = "";
+			m_TextPrinter?.Clear();
+			ResetFace();
 		}
 
-		protected override void Restore(IEnvDataHolder data, ResourceCache cache)
+		protected override void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader)
 		{
-			if (data.TryGet<MessageEnvData>(EnvKey, out var msg))
+			m_TextPrinter?.PreRestore(meta, data, loader);
+			if (data.TryGetSingle(out FaceWindowEnvData faceWindow) && !string.IsNullOrEmpty(faceWindow.Path))
 			{
-				m_NameText.text = msg.Name;
-				m_MessageText.text = msg.Message;
+				var path = Path.CharaFaceWindowRoot + faceWindow.Path;
+				loader.Load<Texture>(path);
 			}
-			else
-			{
-				m_NameText.text = "";
-				m_MessageText.text = "";
-			}
-			m_Buffer.Clear();
-			IsProcessing = false;
 		}
+
+		protected override void Restore(IMetaData meta, IEnvDataHolder data, ResourceCache cache)
+		{
+			ResetFace();
+			m_TextPrinter?.Restore(meta, data, cache);
+			m_Frame?.Restore(data);
+			if (data.TryGetSingle(out FaceWindowEnvData faceWindow) && !string.IsNullOrEmpty(faceWindow.Path))
+			{
+				var config = faceWindow.CreateConfig();
+				config.LoadTexture(Path.CharaFaceWindowRoot, cache);
+				m_FaceWindow.ShowImmediate(config);
+			}
+		}
+
+		[EventSubscribe(FaceWindowEvent.Show)]
+		void FaceWindowShow(FaceWindowConfig args)
+		{
+			m_FaceWindow.Show(args);
+		}
+
+		[EventSubscribe(FaceWindowEvent.Update)]
+		void FaceWindowUpdate(FaceWindowConfig args)
+		{
+			m_FaceWindow.Update(args);
+		}
+
+		[EventSubscribe(FaceWindowEvent.Hide)]
+		void ResetFace()
+		{
+			m_FaceWindow.Reset();
+		}
+
 
 	}
+
 }

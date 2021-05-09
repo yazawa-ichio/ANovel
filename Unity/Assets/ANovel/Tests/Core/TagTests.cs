@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -291,6 +291,8 @@ namespace ANovel.Core.Tests
 
 		class ReplaceTagConverter : IParamConverter
 		{
+			public int Priority => 0;
+
 			public void Convert(TagParam param)
 			{
 				if (param.Name.StartsWith("replace_"))

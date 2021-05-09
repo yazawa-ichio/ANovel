@@ -1,21 +1,29 @@
-﻿using ANovel.Core;
+using ANovel.Core;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ANovel.Service
 {
-	public class ImageService : Service
+	public partial class ImageService : Service
 	{
+		public enum Category
+		{
+			Image,
+			Bg,
+			Chara,
+		}
 
 		public override Type ServiceType => typeof(ImageService);
 
 		IScreenService Screen => Container.Get<IScreenService>();
 
-		Dictionary<string, ImageBuffer> m_Images = new Dictionary<string, ImageBuffer>();
+		Dictionary<Category, Controllers> m_Images = new Dictionary<Category, Controllers>();
 
 		protected override void Initialize()
 		{
+			m_Images[Category.Bg] = new Controllers(Container, Category.Bg);
+			m_Images[Category.Image] = new Controllers(Container, Category.Image);
+			m_Images[Category.Chara] = new Controllers(Container, Category.Chara);
 			Screen.OnDeleteChild += OnDeleteChild;
 			Screen.OnBeginSwap += OnBeginSwap;
 		}
@@ -32,63 +40,43 @@ namespace ANovel.Service
 		{
 			foreach (var image in m_Images.Values)
 			{
-				image.Delete(e.TargetId);
+				image.OnDeleteChild(e);
 			}
 		}
 
-		public IPlayHandle Show(string name, ImageObjectConfig config, LayoutConfig layout)
+		public IPlayHandle Show(Category category, string name, ImageObjectConfig config, LayoutConfig layout)
 		{
-			if (!m_Images.TryGetValue(name, out var buffer))
-			{
-				m_Images[name] = buffer = new ImageBuffer(Container);
-			}
-			return buffer.Show(config, layout);
+			return m_Images[category].Show(name, config, layout);
 		}
 
-		public IPlayHandle Change(string name, ImageObjectConfig config)
+		public IPlayHandle Change(Category category, string name, ImageObjectConfig config)
 		{
-			if (!m_Images.TryGetValue(name, out var buffer))
-			{
-				m_Images[name] = buffer = new ImageBuffer(Container);
-			}
-			return buffer.Change(config);
+			return m_Images[category].Change(name, config);
 		}
 
-		public IPlayHandle Hide(string name, ImageObjectConfig config)
+		public IPlayHandle Hide(Category category, string name, ImageObjectConfig config)
 		{
-			if (!m_Images.TryGetValue(name, out var buffer))
-			{
-				m_Images[name] = buffer = new ImageBuffer(Container);
-			}
-			return buffer.Hide(config);
+			return m_Images[category].Hide(name, config);
 		}
 
-		public IPlayHandle PlayAnim(string name, PlayAnimConfig config, LayoutConfig layout)
+		public IPlayHandle PlayAnim(Category category, string name, PlayAnimConfig config, LayoutConfig layout)
 		{
-			if (m_Images.TryGetValue(name, out var buffer))
-			{
-				return buffer.PlayAnim(config, layout);
-			}
-			throw new Exception($"image not found {name}");
+			return m_Images[category].PlayAnim(name, config, layout);
 		}
 
-		protected override void PreRestore(IEnvDataHolder data, IPreLoader loader)
+		protected override void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader)
 		{
-			data = PrefixedEnvData.Get<ImageService>(data);
-			foreach (var kvp in data.GetAll<ImageObjectEnvData>())
+			foreach (var image in m_Images.Values)
 			{
-				loader.Load<Texture>(Path.GetImage(kvp.Value.Path));
+				image.PreRestore(meta, data, loader);
 			}
 		}
 
-		protected override void Restore(IEnvDataHolder data, ResourceCache cache)
+		protected override void Restore(IMetaData meta, IEnvDataHolder data, ResourceCache cache)
 		{
-			data = PrefixedEnvData.Get<ImageService>(data);
-			foreach (var kvp in data.GetAll<ImageObjectEnvData>())
+			foreach (var image in m_Images.Values)
 			{
-				var config = ImageObjectConfig.Restore(kvp.Value, Path.ImageRoot, cache);
-				var layout = LayoutConfig.Restore(kvp.Key, data);
-				Show(kvp.Key, config, layout);
+				image.Restore(meta, data, cache);
 			}
 		}
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ANovel.Core
 {
@@ -25,7 +26,7 @@ namespace ANovel.Core
 			Converters.Clear();
 			Macros.Clear();
 			Symbols.AddRange(result.Symbols);
-			Converters.AddRange(result.Converters);
+			Converters.AddRange(result.Converters.OrderByDescending(x => x.Priority));
 			Macros.Add(result.MacroDefine);
 		}
 
