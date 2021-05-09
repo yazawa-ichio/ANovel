@@ -1,4 +1,4 @@
-﻿namespace ANovel.Commands
+namespace ANovel.Commands
 {
 
 	public enum ScenarioEvent

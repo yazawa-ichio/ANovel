@@ -1,4 +1,4 @@
-﻿using ANovel.Core;
+using ANovel.Core;
 using UnityEngine.Scripting;
 
 namespace ANovel

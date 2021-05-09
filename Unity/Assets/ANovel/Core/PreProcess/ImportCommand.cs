@@ -1,4 +1,4 @@
-﻿namespace ANovel.Core
+namespace ANovel.Core
 {
 	[TagName("import", LineType.PreProcess)]
 	public class ImportCommand : PreProcess, IImportPreProcess

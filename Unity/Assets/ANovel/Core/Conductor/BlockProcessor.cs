@@ -1,4 +1,4 @@
-﻿using ANovel.Commands;
+using ANovel.Commands;
 using System.Collections.Generic;
 
 namespace ANovel.Core

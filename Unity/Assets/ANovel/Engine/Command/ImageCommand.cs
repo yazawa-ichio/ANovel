@@ -1,4 +1,4 @@
-﻿using ANovel.Core;
+using ANovel.Core;
 using ANovel.Service;
 using System.Linq;
 using Category = ANovel.Service.ImageService.Category;

@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using Assert = UnityEngine.Assertions.Assert;
 
 namespace ANovel.Core.Tests

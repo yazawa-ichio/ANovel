@@ -1,4 +1,4 @@
-﻿#if ANOVEL_LOCAL_FILE_TEST
+#if ANOVEL_LOCAL_FILE_TEST
 using NUnit.Framework;
 using System.IO;
 using System.Threading;

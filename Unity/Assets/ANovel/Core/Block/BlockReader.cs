@@ -1,4 +1,4 @@
-﻿using ANovel.Commands;
+using ANovel.Commands;
 using System;
 using System.Collections.Generic;
 using System.Threading;

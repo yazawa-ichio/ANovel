@@ -1,4 +1,4 @@
-﻿using ANovel.Core;
+using ANovel.Core;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;

@@ -1,4 +1,4 @@
-﻿namespace ANovel.Service
+namespace ANovel.Service
 {
 	public enum ImageParamType
 	{
