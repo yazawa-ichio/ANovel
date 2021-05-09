@@ -176,7 +176,7 @@ namespace ANovel.Service.Sound
 			m_Playing.Clear();
 		}
 
-		protected override void PreRestore(IEnvDataHolder data, IPreLoader loader)
+		protected override void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader)
 		{
 			foreach (var kvp in PrefixedEnvData.Get<BgmConfig>(data).GetAll<PlaySoundEnvData>())
 			{
@@ -188,7 +188,7 @@ namespace ANovel.Service.Sound
 			}
 		}
 
-		protected override void Restore(IEnvDataHolder data, ResourceCache cache)
+		protected override void Restore(IMetaData meta, IEnvDataHolder data, ResourceCache cache)
 		{
 			StopAll();
 			foreach (var kvp in PrefixedEnvData.Get<BgmConfig>(data).GetAll<PlaySoundEnvData>())

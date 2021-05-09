@@ -20,12 +20,16 @@ namespace ANovel.Core.Tests
 			{"conductorjumptest.anovel", ConductorJumpTest},
 			{"ConductorTest.anovel", ConductorTest},
 			{"conductortest.anovel", ConductorTest},
+			{"EnvDataHookTest.anovel", EnvDataHookTest},
+			{"envdatahooktest.anovel", EnvDataHookTest},
 			{"ImportMacroTest.anovel", ImportMacroTest},
 			{"importmacrotest.anovel", ImportMacroTest},
 			{"KeyValueTest.anovel", KeyValueTest},
 			{"keyvaluetest.anovel", KeyValueTest},
 			{"MacroSet.anovel", MacroSet},
 			{"macroset.anovel", MacroSet},
+			{"MetaDataDefineTest.anovel", MetaDataDefineTest},
+			{"metadatadefinetest.anovel", MetaDataDefineTest},
 			{"ReaderTest.anovel", ReaderTest},
 			{"readertest.anovel", ReaderTest},
 			{"TagTest.anovel", TagTest},
@@ -41,8 +45,8 @@ namespace ANovel.Core.Tests
 		#importmacro path="MacroSet.anovel"
 		
 		#if condition="IMMEDIATE_DEFINE" not
-			;defineは即時反映される
-			#define name="IMMEDIATE_DEFINE"
+			;define_symbolは即時反映される
+			#define_symbol name="IMMEDIATE_DEFINE"
 			#if condition="IMMEDIATE_DEFINE"
 				#macro name="dep_macrolog"
 				@macrolog2 m="dep"
@@ -50,7 +54,7 @@ namespace ANovel.Core.Tests
 			#endif
 		#endif
 		*/
-		public const string CircleImport = "\n#importmacro path=\"MacroSet.anovel\"\n\n#if condition=\"IMMEDIATE_DEFINE\" not\n	;defineは即時反映される\n	#define name=\"IMMEDIATE_DEFINE\"\n	#if condition=\"IMMEDIATE_DEFINE\"\n		#macro name=\"dep_macrolog\"\n		@macrolog2 m=\"dep\"\n		#endmacro\n	#endif\n#endif\n";
+		public const string CircleImport = "\n#importmacro path=\"MacroSet.anovel\"\n\n#if condition=\"IMMEDIATE_DEFINE\" not\n	;define_symbolは即時反映される\n	#define_symbol name=\"IMMEDIATE_DEFINE\"\n	#if condition=\"IMMEDIATE_DEFINE\"\n		#macro name=\"dep_macrolog\"\n		@macrolog2 m=\"dep\"\n		#endmacro\n	#endif\n#endif\n";
 
 		/* file:CircleImportTest.anovel
 		
@@ -215,9 +219,19 @@ namespace ANovel.Core.Tests
 		*/
 		public const string ConductorTest = "\n\nテキスト表示\n\n@test_prepare_wait time=0.5\n@test_preload path=\"test1\"\n@test_preload path=\"test2\"\n\n【名前】\n名前付きテキスト表示\n\n@test_sync\n\n同期が終わるまでテキストまで進まない\n";
 
+		/* file:EnvDataHookTest.anovel
+		
+		#import path="MetaDataDefineTest.anovel"
+		
+		Test1
+		
+		Test2
+		*/
+		public const string EnvDataHookTest = "\n#import path=\"MetaDataDefineTest.anovel\"\n\nTest1\n\nTest2\n";
+
 		/* file:ImportMacroTest.anovel
 		;ローカルのシンボルはインポート先には影響しない
-		#define name="SKIP_MACRO_LOG"
+		#define_symbol name="SKIP_MACRO_LOG"
 		
 		#importmacro path="MacroSet.anovel"
 		
@@ -230,7 +244,7 @@ namespace ANovel.Core.Tests
 		@definelog
 		
 		*/
-		public const string ImportMacroTest = ";ローカルのシンボルはインポート先には影響しない\n#define name=\"SKIP_MACRO_LOG\"\n\n#importmacro path=\"MacroSet.anovel\"\n\n#if condition=\"SKIP_MACRO_LOG_DEFINE\" not\n@macrolog m=\"tt\"\n#endif\n\n@macrolog2 m=\"bb\"\n\n@definelog\n\n";
+		public const string ImportMacroTest = ";ローカルのシンボルはインポート先には影響しない\n#define_symbol name=\"SKIP_MACRO_LOG\"\n\n#importmacro path=\"MacroSet.anovel\"\n\n#if condition=\"SKIP_MACRO_LOG_DEFINE\" not\n@macrolog m=\"tt\"\n#endif\n\n@macrolog2 m=\"bb\"\n\n@definelog\n\n";
 
 		/* file:KeyValueTest.anovel
 		@command1
@@ -286,6 +300,19 @@ namespace ANovel.Core.Tests
 		#endmacro
 		*/
 		public const string MacroSet = "\n#importmacro path=\"CircleImport.anovel\"\n\n#if condition=\"SKIP_MACRO_LOG_DEFINE\" not\n\n#macro name=\"macrolog\"\n#if condition=\"SKIP_MACRO_LOG\" not\n@test_log message=\"%m%\"\n#endif\n#endmacro\n\n#endif\n\n#macro name=\"macrolog2\"\n#if condition=\"SKIP_MACRO_LOG\" not\n@test_log message=\"%m%\"\n#endif\n#endmacro\n\n#macro name=\"definelog\"\n#if condition=\"MACRO_LOG\"\n@test_macro_define message=\"Define MACRO_LOG\"\n#elseif condition=\"SKIP_MACRO_LOG_DEFINE\"\n@test_macro_define message=\"Define SKIP_MACRO_LOG_DEFINE\"\n#elseif condition=\"SKIP_MACRO_LOG\"\n@test_macro_define message=\"Define SKIP_MACRO_LOG\"\n#else\n@test_macro_define message=\"No Define\"\n#endif\n#endmacro\n";
+
+		/* file:MetaDataDefineTest.anovel
+		
+		
+		#test_meta_deine name="key1" value="value1" first
+		#test_meta_deine name="key2" value="value2" first
+		#test_meta_deine name="key3" value="value3" first
+		#test_meta_deine name="key3" value="value3update"
+		
+		#test_meta_deine value="single1" first
+		#test_meta_deine value="single2"
+		*/
+		public const string MetaDataDefineTest = "\n\n#test_meta_deine name=\"key1\" value=\"value1\" first\n#test_meta_deine name=\"key2\" value=\"value2\" first\n#test_meta_deine name=\"key3\" value=\"value3\" first\n#test_meta_deine name=\"key3\" value=\"value3update\"\n\n#test_meta_deine value=\"single1\" first\n#test_meta_deine value=\"single2\"\n";
 
 		/* file:ReaderTest.anovel
 		#preprocess

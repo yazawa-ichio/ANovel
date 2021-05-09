@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace ANovel.Service
 {
-
 	public partial class ImageObjectConfig
 	{
 		[CommandField(Required = true)]
@@ -70,7 +69,7 @@ namespace ANovel.Service
 
 	}
 
-	public struct ImageObjectEnvData : IEnvDataValue<ImageObjectEnvData>, IEnvDataUpdate<ImageObjectConfig>, IScreenChildEnvData
+	public struct ImageObjectEnvData : IEnvDataUpdate<ImageObjectConfig>, IEnvDataUpdate<string>, IScreenChildEnvData
 	{
 
 		public string Path;
@@ -85,14 +84,14 @@ namespace ANovel.Service
 			Path = path;
 		}
 
-		public bool Equals(ImageObjectEnvData other)
-		{
-			return Path == other.Path;
-		}
-
 		public void Update(ImageObjectConfig arg)
 		{
 			Path = arg.Path;
+		}
+
+		public void Update(string arg)
+		{
+			Path = arg;
 		}
 
 	}

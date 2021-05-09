@@ -15,6 +15,10 @@ namespace ANovel
 	public class PathConfig
 	{
 		[SerializeField]
+		string m_CharaRoot = "Chara";
+		[SerializeField]
+		string m_CharaFaceRoot = "Chara";
+		[SerializeField]
 		string m_BgRoot = "Image/Bg";
 		[SerializeField]
 		string m_ImageRoot = "Image";
@@ -33,9 +37,13 @@ namespace ANovel
 
 		public string BgmRoot => GetBgm("");
 
+		public string CharaRoot => GetChara("");
+
+		public string CharaFaceWindowRoot => GetCharaFace("");
+
 		public string SeRoot => GetSe("");
 
-		string GetPath(string root, string path)
+		public string GetPath(string root, string path)
 		{
 			if (string.IsNullOrEmpty(root))
 			{
@@ -49,6 +57,16 @@ namespace ANovel
 			{
 				return root + "/" + path;
 			}
+		}
+
+		public string GetChara(string path)
+		{
+			return GetPath(m_CharaRoot, path);
+		}
+
+		public string GetCharaFace(string path)
+		{
+			return GetPath(m_CharaFaceRoot, path);
 		}
 
 		public string GetBg(string path)

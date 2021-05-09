@@ -15,6 +15,7 @@ namespace ANovel.Core
 			public readonly List<MacroDefine> DependMacros;
 			public readonly List<IParamConverter> Converters;
 			public readonly List<SkipScope> SkipScopes;
+			public readonly MetaData Meta;
 			public Result(string[] symbols)
 			{
 				Symbols = new List<string>(symbols);
@@ -22,6 +23,7 @@ namespace ANovel.Core
 				Converters = new List<IParamConverter>();
 				MacroDefine = new MacroDefine(Converters, DependMacros);
 				SkipScopes = new List<SkipScope>();
+				Meta = new MetaData();
 			}
 		}
 
@@ -101,6 +103,10 @@ namespace ANovel.Core
 				if (process is MacroScope macro)
 				{
 					ProcessMacroScope(data, macro);
+				}
+				if (process is IImportText importText && importText.Enabled)
+				{
+					importText.Import(await m_Loader.Load(importText.Path, token));
 				}
 				process.Result(result);
 			}

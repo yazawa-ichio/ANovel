@@ -6,8 +6,8 @@ namespace ANovel.Commands
 	[TagName("async", LineType.SystemCommand)]
 	public class AsyncScopeCommand : ScopeCommand
 	{
-		List<ICommand> m_BatchCommands = new List<ICommand>();
-		List<ICommand> m_RunCommands = new List<ICommand>();
+		List<ICommand> m_BatchCommands;
+		List<ICommand> m_RunCommands;
 		ICommand m_SyncCommand;
 
 		protected override void Initialize()

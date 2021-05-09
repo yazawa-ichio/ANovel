@@ -4,6 +4,7 @@ namespace ANovel
 {
 	public interface ICommand
 	{
+		void SetMetaData(IMetaData meta);
 		void UpdateEnvData(IEnvData data);
 		bool IsPrepared();
 		void Initialize(IServiceContainer container);

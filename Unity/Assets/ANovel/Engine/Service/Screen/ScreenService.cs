@@ -132,7 +132,7 @@ namespace ANovel.Service
 #if UNITY_EDITOR
 		void OnValidate()
 		{
-			if (m_Shader != null)
+			if (m_Shader == null)
 			{
 				m_Shader = ShaderCache.Get(UIImageMaterial.ShaderName);
 			}
@@ -144,7 +144,7 @@ namespace ANovel.Service
 			return m_ScreenController.GetLevel(level);
 		}
 
-		protected override void PreRestore(IEnvDataHolder data, IPreLoader loader)
+		protected override void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader)
 		{
 			Transition.Prepare(new ScreenTransitionConfig
 			{
@@ -153,7 +153,7 @@ namespace ANovel.Service
 			});
 		}
 
-		protected override void PostRestore(IEnvDataHolder data)
+		protected override void PostRestore(IMetaData meta, IEnvDataHolder data)
 		{
 			Transition.Start().Dispose();
 		}

@@ -49,7 +49,7 @@ namespace ANovel.Core
 				}
 				else
 				{
-					future.TrySetException(new FileNotFoundException("not found Asset", path));
+					future.TrySetException(new FileNotFoundException($"not found Asset: {path}", path));
 				}
 			};
 			return future.Task;

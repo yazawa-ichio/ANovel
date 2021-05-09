@@ -91,7 +91,7 @@ namespace ANovel.Core
 			}
 			if (!firstRead)
 			{
-				block = new Block(m_LineReader.Path, in label, m_Commands, text);
+				block = new Block(m_LineReader.Path, in label, m_Commands, text, m_PreProcess.Meta);
 				m_Stop = block.StopCommand != null;
 			}
 			m_Commands.Clear();

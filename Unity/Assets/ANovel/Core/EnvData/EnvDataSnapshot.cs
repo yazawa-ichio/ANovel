@@ -16,12 +16,12 @@ namespace ANovel.Core
 			return m_Dic.Keys;
 		}
 
-		public void Set<TValue>(Dictionary<string, TValue> data) where TValue : struct, IEnvDataValue<TValue>
+		public void Set<TValue>(Dictionary<string, TValue> data) where TValue : struct
 		{
 			m_Dic[typeof(TValue)] = data;
 		}
 
-		public Dictionary<string, TValue> Get<TValue>() where TValue : struct, IEnvDataValue<TValue>
+		public Dictionary<string, TValue> Get<TValue>() where TValue : struct
 		{
 			if (m_Dic.TryGetValue(typeof(TValue), out var obj))
 			{

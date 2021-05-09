@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 #if UNITY_5_3_OR_NEWER
 using UnityEngine.Scripting;
 #endif
@@ -29,11 +30,11 @@ namespace ANovel
 			keys = new HashSet<string>();
 			if (TargetKeys != null)
 			{
-				keys.UnionWith(TargetKeys);
+				keys.UnionWith(TargetKeys.Select(x => x.ToLower()));
 			}
 			if (!string.IsNullOrEmpty(TargetKey))
 			{
-				keys.Add(TargetKey);
+				keys.Add(TargetKey.ToLower());
 			}
 			return true;
 		}
@@ -48,11 +49,11 @@ namespace ANovel
 			keys = new HashSet<string>();
 			if (IgnoreKeys != null)
 			{
-				keys.UnionWith(IgnoreKeys);
+				keys.UnionWith(IgnoreKeys.Select(x => x.ToLower()));
 			}
 			if (!string.IsNullOrEmpty(IgnoreKey))
 			{
-				keys.Add(IgnoreKey);
+				keys.Add(IgnoreKey.ToLower());
 			}
 			return true;
 		}

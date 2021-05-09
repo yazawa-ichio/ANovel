@@ -10,6 +10,7 @@ using Object = UnityEngine.Object;
 
 namespace ANovel.Core.Tests
 {
+
 	public class ConductorTests
 	{
 		[UnityTest]
@@ -22,6 +23,7 @@ namespace ANovel.Core.Tests
 			{
 				Text = text
 			};
+			conductor.OnLoad = text.OnLoad;
 			conductor.Run("ConductorTest.anovel", null, CancellationToken.None).Wait();
 			conductor.Update();
 			Assert.AreEqual("テキスト表示", text.TextBlock.Get());
@@ -81,6 +83,7 @@ namespace ANovel.Core.Tests
 			{
 				Text = text
 			};
+			conductor.OnLoad = text.OnLoad;
 			Exception error = null; ;
 			conductor.OnError += (e) => error = e;
 			try
@@ -144,6 +147,7 @@ namespace ANovel.Core.Tests
 			{
 				Text = text
 			};
+			conductor.OnLoad = text.OnLoad;
 			StoreData store;
 			conductor.Run("ConductorJumpTest.anovel", "", CancellationToken.None).Wait();
 			{
@@ -264,6 +268,7 @@ namespace ANovel.Core.Tests
 			{
 				Text = text
 			};
+			conductor.OnLoad = text.OnLoad;
 			conductor.Run("CommandTest.anovel", "", CancellationToken.None).Wait();
 			conductor.Update();
 			{
@@ -349,6 +354,7 @@ namespace ANovel.Core.Tests
 			{
 				Text = text
 			};
+			conductor.OnLoad = text.OnLoad;
 			conductor.Run("CommandEndBlockTest.anovel", "", CancellationToken.None).Wait();
 			conductor.Update();
 
@@ -373,6 +379,45 @@ namespace ANovel.Core.Tests
 			Assert.AreEqual("デフォルトセーブされる", text.TextBlock.Get());
 		}
 
+		[Test]
+		public void フックテスト()
+		{
+			TestCountCommand.Count = 0;
+			TestTrigger.Trigger = null;
+
+			var reader = new BlockReader(new TestDataLoader());
+			var loader = new Loader();
+			var text = new Text();
+			var conductor = new Conductor(reader, loader)
+			{
+				Text = text
+			};
+			conductor.EnvDataHook.Add(new TestEnvDataProcessor
+			{
+				Priority = 0,
+			});
+			conductor.EnvDataHook.Add(new TestEnvDataProcessor
+			{
+				Priority = 10,
+			});
+			conductor.OnLoad = text.OnLoad;
+			conductor.Run("EnvDataHookTest.anovel", "", CancellationToken.None).Wait();
+			conductor.Update();
+
+			Assert.AreEqual("Test1", text.TextBlock.Get());
+			Assert.AreEqual(TestCountCommand.Count, 2, "Hookで二つカウントコマンドが詰まれる");
+			Assert.AreEqual(TestTrigger.Trigger, "value1", "MetaData経由からデータを取り出せる");
+			Assert.IsTrue(conductor.TryNext(), "シナリオを進める");
+
+			Assert.AreEqual("Test2", text.TextBlock.Get());
+			Assert.AreEqual(TestCountCommand.Count, 4, "Hookで二つカウントコマンドが詰まれる");
+			Assert.IsTrue(conductor.TryNext(), "シナリオを進める");
+
+			TestCountCommand.Count = 0;
+			TestTrigger.Trigger = null;
+
+		}
+
 		class Loader : IResourceLoader
 		{
 			public int LoadCount;
@@ -395,7 +440,7 @@ namespace ANovel.Core.Tests
 
 		}
 
-		class Text : ITextProcessor, ITextProcessorRestoreHandler
+		class Text : ITextProcessor
 		{
 			public ServiceContainer Container { get; private set; }
 
@@ -410,16 +455,15 @@ namespace ANovel.Core.Tests
 				Container = container;
 			}
 
-			public void PreUpdate(TextBlock text, IEnvData data) { }
-
-			public void Set(TextBlock text)
+			public void Set(TextBlock text, IEnvDataHolder data)
 			{
 				TextBlock = text?.Clone();
 			}
 
-			public void Restore(IEnvDataHolder data, TextBlock text)
+			public Task OnLoad(Block block, IEnvDataHolder data)
 			{
-				TextBlock = text?.Clone();
+				TextBlock = block?.Text?.Clone();
+				return Task.FromResult(true);
 			}
 
 			public bool TryNext()
@@ -498,11 +542,11 @@ namespace ANovel.Core.Tests
 			public static string Trigger;
 
 			[CommandField(Required = true)]
-			string m_Name = default;
+			public string Name = default;
 
 			protected override void Execute()
 			{
-				Trigger = m_Name;
+				Trigger = Name;
 			}
 
 		}
@@ -513,6 +557,51 @@ namespace ANovel.Core.Tests
 			protected override void Execute()
 			{
 				throw new Exception("Error");
+			}
+		}
+
+		public class TestCountCommand : Command
+		{
+			public static int Count;
+
+			protected override void Execute()
+			{
+				Count++;
+			}
+		}
+
+		public class TestEnvDataProcessor : IEnvDataCustomProcessor
+		{
+			public struct PriorityEnvData
+			{
+				public int Priority;
+			}
+
+			public int Priority { get; set; }
+
+			public void PreUpdate(EnvDataUpdateParam param)
+			{
+				if (param.Data.TryGetSingle<PriorityEnvData>(out var data))
+				{
+					Assert.IsTrue(data.Priority > Priority, "優先順になっている");
+				}
+				param.Data.SetSingle(new PriorityEnvData
+				{
+					Priority = Priority,
+				});
+				param.AddCommand(new TestCountCommand());
+			}
+
+			public void PostUpdate(EnvDataUpdateParam param)
+			{
+				if (param.Data.TryGetSingle<PriorityEnvData>(out var data) && data.Priority == Priority)
+				{
+					param.AddCommand(new TestTrigger
+					{
+						Name = param.Meta.Get<TestMetaData>("key1").Value,
+					});
+					param.Data.DeleteSingle<PriorityEnvData>();
+				}
 			}
 		}
 

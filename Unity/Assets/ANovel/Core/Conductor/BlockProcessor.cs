@@ -30,6 +30,8 @@ namespace ANovel.Core
 
 		public IEnvDataHolder Current => m_CurrentEnvData;
 
+		public EnvDataHook EnvDataHook { get; private set; } = new EnvDataHook();
+
 		public bool IsStop => m_StopCommand != null || (m_PreloadQueue.Count == 0 && m_CurrentBlock == null);
 
 		public bool IsWaitNext => m_State == State.Finished;
@@ -84,14 +86,13 @@ namespace ANovel.Core
 
 		public void UpdateCurrent(Block block)
 		{
+			EnvDataHook.PreUpdate(m_CurrentEnvData, block);
 			foreach (var cmd in block.Commands)
 			{
+				cmd.SetMetaData(block.Meta);
 				cmd.UpdateEnvData(m_CurrentEnvData);
 			}
-			if (block.ClearCurrentText)
-			{
-				Text?.PreUpdate(block.Text, m_CurrentEnvData);
-			}
+			EnvDataHook.PostUpdate(m_CurrentEnvData, block);
 			History.Add(m_CurrentEnvData, block, m_CurrentEnvData.Diff());
 		}
 
@@ -132,14 +133,13 @@ namespace ANovel.Core
 
 		public void AddPreloadBlock(Block block)
 		{
+			EnvDataHook.PreUpdate(m_PreUpdateEnvData, block);
 			foreach (var cmd in block.Commands)
 			{
+				cmd.SetMetaData(block.Meta);
 				cmd.UpdateEnvData(m_PreUpdateEnvData);
 			}
-			if (block.ClearCurrentText)
-			{
-				Text?.PreUpdate(block.Text, m_PreUpdateEnvData);
-			}
+			EnvDataHook.PostUpdate(m_PreUpdateEnvData, block);
 			var diff = !block.SkipHistory ? m_PreUpdateEnvData.Diff() : new EnvDataDiff();
 			var container = Container.CreateChild();
 			var scope = new PreLoadScope(Cache);
@@ -189,7 +189,7 @@ namespace ANovel.Core
 				if (Text != null && m_CurrentBlock.Block.Text != null)
 				{
 					m_State = State.ProcessText;
-					Text.Set(m_CurrentBlock.Block.Text);
+					Text.Set(m_CurrentBlock.Block.Text, m_CurrentEnvData);
 				}
 				else
 				{
@@ -243,10 +243,6 @@ namespace ANovel.Core
 			m_PreUpdateEnvData.Load(data.Snapshot);
 			History.Load(data.Logs);
 			m_State = State.Finished;
-			if (Text is ITextProcessorRestoreHandler restoreHandler)
-			{
-				restoreHandler.Restore(m_CurrentEnvData, block.Text);
-			}
 		}
 
 	}

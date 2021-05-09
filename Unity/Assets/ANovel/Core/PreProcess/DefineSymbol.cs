@@ -5,7 +5,7 @@
 		void Result(PreProcessor.Result result);
 	}
 
-	[TagName("define", LineType.PreProcess)]
+	[TagName("define_symbol", LineType.PreProcess)]
 	public class DefineSymbol : PreProcess, IDefineSymbol
 	{
 		[TagField(Required = true)]

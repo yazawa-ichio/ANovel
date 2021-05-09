@@ -20,7 +20,9 @@ namespace ANovel.Core
 
 		public bool ClearCurrentText => StopCommand == null || StopCommand.ClearText;
 
-		public Block(string filePath, in BlockLabelInfo label, List<ICommand> commands, TextBlock text)
+		public IMetaData Meta { get; private set; }
+
+		public Block(string filePath, in BlockLabelInfo label, List<ICommand> commands, TextBlock text, IMetaData meta)
 		{
 			FilePath = filePath;
 			LabelInfo = label;
@@ -38,6 +40,7 @@ namespace ANovel.Core
 				}
 			}
 			Text = text;
+			Meta = meta;
 		}
 
 		public void Dispose()
@@ -47,7 +50,6 @@ namespace ANovel.Core
 			Commands = null;
 			Text?.Dispose();
 			Text = null;
-			GC.SuppressFinalize(this);
 		}
 
 	}

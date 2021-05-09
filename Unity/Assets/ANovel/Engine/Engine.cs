@@ -67,8 +67,7 @@ namespace ANovel
 		{
 			m_Initialized = true;
 			m_Setting = setting;
-			var reader = new BlockReader(setting.ScenarioLoader);
-			m_Conductor = new Conductor(reader, setting.ResourceLoader);
+			m_Conductor = setting.CreateConductor();
 			m_Conductor.Text = GetComponentInChildren<ITextProcessor>(true);
 			m_Conductor.OnError += HandleError;
 			m_Conductor.OnLoad = Load;
@@ -77,7 +76,6 @@ namespace ANovel
 				m_Config = ScriptableObject.CreateInstance<EngineConfig>();
 			}
 			m_Conductor.Container.Set(m_Config);
-			m_Conductor.Container.Set(m_Setting.Time);
 			m_Conductor.Event.Register(this);
 			m_Services = GetComponentsInChildren<IService>(true).OrderBy(x => -(int)x.Priority).ToArray();
 			foreach (var service in m_Services)
@@ -139,22 +137,26 @@ namespace ANovel
 			return m_Conductor.Restore(data, m_Cancellation.Token);
 		}
 
-		async Task Load(IEnvDataHolder data)
+		async Task Load(Block block, IEnvDataHolder data)
 		{
-
+			var restoreData = new RestoreData
+			{
+				Meta = block?.Meta,
+				Env = data
+			};
 			var cache = m_Conductor.Container.Get<ResourceCache>();
 			using (var loader = new PreLoadScope(cache))
 			{
-				await Task.WhenAll(m_Services.Select(x => x.PreRestore(data, loader)));
+				await Task.WhenAll(m_Services.Select(x => x.PreRestore(restoreData, loader)));
 
 				if (!loader.IsLoaded)
 				{
 					await loader.WaitComplete();
 				}
 
-				await Task.WhenAll(m_Services.Select(x => x.Restore(data, cache)));
+				await Task.WhenAll(m_Services.Select(x => x.Restore(restoreData, cache)));
 
-				await Task.WhenAll(m_Services.Select(x => x.PostRestore(data)));
+				await Task.WhenAll(m_Services.Select(x => x.PostRestore(restoreData)));
 
 			}
 		}

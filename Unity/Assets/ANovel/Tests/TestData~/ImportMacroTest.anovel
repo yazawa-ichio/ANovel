@@ -1,5 +1,5 @@
 ;ローカルのシンボルはインポート先には影響しない
-#define name="SKIP_MACRO_LOG"
+#define_symbol name="SKIP_MACRO_LOG"
 
 #importmacro path="MacroSet.anovel"
 

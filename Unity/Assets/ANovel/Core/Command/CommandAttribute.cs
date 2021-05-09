@@ -20,4 +20,11 @@ namespace ANovel
 		{
 		}
 	}
+
+	public class PreProcessNameAttribute : TagNameAttribute
+	{
+		public PreProcessNameAttribute(string name) : base(name, LineType.PreProcess)
+		{
+		}
+	}
 }
