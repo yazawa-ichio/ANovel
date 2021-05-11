@@ -64,6 +64,11 @@ namespace ANovel.Service
 			return m_Images[category].PlayAnim(name, config, layout);
 		}
 
+		public void SetOrder(Category category, string name, long autoOrder)
+		{
+			m_Images[category].SetOrder(name, autoOrder);
+		}
+
 		protected override void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader)
 		{
 			foreach (var image in m_Images.Values)

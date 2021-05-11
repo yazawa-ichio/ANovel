@@ -37,6 +37,8 @@ namespace ANovel.Commands
 			data = PrefixedEnvData.Get(data, Category.Bg);
 			if (!data.Has<ImageObjectEnvData>(EnvKey))
 			{
+				// 現在の仕様ではBGは最背面固定
+				//m_Transition.AutoOrder = ScreenOrderEnvData.GenOrder(data);
 				data.Set(EnvKey, new ImageObjectEnvData(m_Transition));
 				LayoutConfig.SetEvnData(EnvKey, data, m_Layout);
 			}

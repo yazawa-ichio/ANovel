@@ -74,6 +74,14 @@ namespace ANovel.Service
 				throw new Exception($"image not found {name}");
 			}
 
+			public void SetOrder(string name, long autoOrder)
+			{
+				if (m_Images.TryGetValue(name, out var image))
+				{
+					image.SetOrder(autoOrder);
+				}
+			}
+
 			string GetRootPath()
 			{
 				switch (m_Category)

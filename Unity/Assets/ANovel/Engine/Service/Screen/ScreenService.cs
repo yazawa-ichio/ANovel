@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 namespace ANovel.Service
 {
-	public interface IScreenChildEnvData
-	{
-	}
 
 	public interface IScreenService
 	{
@@ -120,6 +117,7 @@ namespace ANovel.Service
 
 		void LateUpdate()
 		{
+			m_Pool?.TrySort();
 			m_ScreenController?.LateUpdate();
 		}
 

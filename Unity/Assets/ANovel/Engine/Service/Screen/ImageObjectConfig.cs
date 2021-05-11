@@ -10,7 +10,8 @@ namespace ANovel.Service
 		public Millisecond Time = Millisecond.FromSecond(0.2f);
 		public float Vague = 0.2f;
 		public string Rule;
-
+		[SkipInjectParam]
+		public long? AutoOrder;
 		[SkipInjectParam]
 		public ICacheHandle<Texture> Texture;
 
@@ -63,6 +64,7 @@ namespace ANovel.Service
 		{
 			var config = new ImageObjectConfig();
 			config.Path = data.Path;
+			config.AutoOrder = data.AutoOrder;
 			config.LoadTexture(prefix, cache);
 			return config;
 		}
@@ -73,20 +75,24 @@ namespace ANovel.Service
 	{
 
 		public string Path;
+		public long AutoOrder;
 
 		public ImageObjectEnvData(ImageObjectConfig conf)
 		{
 			Path = conf.Path;
+			AutoOrder = conf.AutoOrder.GetValueOrDefault();
 		}
 
-		public ImageObjectEnvData(string path)
+		public ImageObjectEnvData(string path, int order)
 		{
 			Path = path;
+			AutoOrder = order;
 		}
 
 		public void Update(ImageObjectConfig arg)
 		{
 			Path = arg.Path;
+			arg.AutoOrder = AutoOrder = arg.AutoOrder.GetValueOrDefault(AutoOrder);
 		}
 
 		public void Update(string arg)

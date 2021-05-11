@@ -37,7 +37,7 @@ namespace ANovel.Service
 						m_Current = Pool.Get(level);
 					}
 					m_Current.SetLayout(layout.GetLayout(m_Current.GetLayout(current: false), config.Texture, Screen.Size));
-					m_Current.SetTexture(config.Texture);
+					m_Current.SetConfig(config);
 					return FloatFadeHandle.Empty;
 				}
 				if (m_Current == null)
@@ -58,13 +58,13 @@ namespace ANovel.Service
 				{
 					m_Prev = m_Current;
 					m_Current = Pool.Get(level);
-					m_Current.SetBack(m_Prev.Transform);
 					m_Current.SetLayout(next);
 					var hide = m_Prev.Transition(new ImageObjectConfig
 					{
 						Time = config.Time,
 						Vague = config.Vague,
 						RuleTexture = config.RuleTexture,
+						AutoOrder = config.AutoOrder.GetValueOrDefault() + 1,
 					});
 					hide.OnComplete += () =>
 					{
@@ -89,7 +89,7 @@ namespace ANovel.Service
 				m_Playing = null;
 				if (Screen.Transition.IsTransition)
 				{
-					m_Current.SetTexture(config.Texture);
+					m_Current.SetConfig(config);
 					return FloatFadeHandle.Empty;
 				}
 				return m_Playing = m_Current.Transition(config);
@@ -123,6 +123,12 @@ namespace ANovel.Service
 				var cur = m_Current.GetLayout(false);
 				var next = layout.GetLayout(cur, m_Current.TexSize, Screen.Size);
 				return m_Current.PlayAnim(cur.GetAnims(config.Time, config.Easing, next));
+			}
+
+			public void SetOrder(long autoOrder)
+			{
+				if (m_Current == null) return;
+				m_Current.SetOrder(autoOrder);
 			}
 
 			public Image Copy(IScreenId dstId)

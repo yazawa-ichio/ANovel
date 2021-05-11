@@ -76,6 +76,12 @@ namespace ANovel.Service
 			return m_Current.PlayAnim(config, layout);
 		}
 
+		public void SetOrder(long autoOrder)
+		{
+			if (m_Current == null) return;
+			m_Current.SetOrder(autoOrder);
+		}
+
 	}
 
 }

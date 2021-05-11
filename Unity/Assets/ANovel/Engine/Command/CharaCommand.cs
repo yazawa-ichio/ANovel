@@ -36,6 +36,8 @@ namespace ANovel.Commands
 		};
 		[InjectParam]
 		LayoutConfig m_Layout = new LayoutConfig();
+		[CommandField]
+		bool m_Front = false;
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
@@ -45,11 +47,16 @@ namespace ANovel.Commands
 			m_Transition.Path = m_Config.ImagePath;
 			if (!data.Has<ImageObjectEnvData>(m_Name))
 			{
+				m_Transition.AutoOrder = ScreenOrderEnvData.GenOrder(data);
 				data.Set(m_Name, new ImageObjectEnvData(m_Transition));
 				LayoutConfig.SetEvnData(m_Name, data, m_Layout);
 			}
 			else
 			{
+				if (m_Front)
+				{
+					m_Transition.AutoOrder = ScreenOrderEnvData.GenOrder(data);
+				}
 				data.Update<ImageObjectEnvData, ImageObjectConfig>(m_Name, m_Transition);
 				LayoutConfig.UpdateEvnData(m_Name, data, m_Layout);
 			}
@@ -118,12 +125,18 @@ namespace ANovel.Commands
 		{
 			Time = Millisecond.FromSecond(0.1f)
 		};
+		[CommandField]
+		bool m_Front = false;
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
 			data = PrefixedEnvData.Get(data, Category.Chara);
 			m_Config.Init(m_Name, GetMetaData(m_Name), data);
 			m_Transition.Path = m_Config.ImagePath;
+			if (m_Front)
+			{
+				m_Transition.AutoOrder = ScreenOrderEnvData.GenOrder(data);
+			}
 			data.Update<ImageObjectEnvData, ImageObjectConfig>(m_Name, m_Transition);
 		}
 
@@ -250,20 +263,32 @@ namespace ANovel.Commands
 		PlayAnimConfig m_Config = new PlayAnimConfig();
 		[InjectParam(IgnoreKey = "level")]
 		LayoutConfig m_Layout = new LayoutConfig();
+		[CommandField]
+		bool m_Front = false;
+		long m_AutoOrder;
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
 			data = PrefixedEnvData.Get(data, ImageService.Category.Chara);
-			if (data.Has<ImageObjectEnvData>(m_Name))
+			if (data.TryGet<ImageObjectEnvData>(m_Name, out var image))
 			{
 				LayoutConfig.UpdateEvnData(m_Name, data, m_Layout);
 				var meta = GetMetaData(m_Name);
 				meta.UpdateLayout(data.Get<CharaObjectEnvData>(m_Name), m_Layout);
+				if (m_Front)
+				{
+					image.AutoOrder = m_AutoOrder = ScreenOrderEnvData.GenOrder(data);
+					data.Set(m_Name, image);
+				}
 			}
 		}
 
 		protected override void Execute()
 		{
+			if (m_Front)
+			{
+				Service.SetOrder(Category.Image, m_Name, m_AutoOrder);
+			}
 			m_PlayHandle = Service.PlayAnim(Category.Chara, m_Name, m_Config, m_Layout);
 		}
 
