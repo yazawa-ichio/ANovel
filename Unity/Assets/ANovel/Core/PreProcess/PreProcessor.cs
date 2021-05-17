@@ -10,6 +10,7 @@ namespace ANovel.Core
 	{
 		public class Result
 		{
+			public bool Header { get; internal set; } = true;
 			public readonly List<string> Symbols;
 			public readonly MacroDefine MacroDefine;
 			public readonly List<MacroDefine> DependMacros;
@@ -87,10 +88,11 @@ namespace ANovel.Core
 			{
 				if (data.Type != LineType.PreProcess)
 				{
+					result.Header = false;
 					continue;
 				}
 				var process = ReadTag(in data);
-				CheckStartIfScope(in data, process);
+				CheckStart(in data, process, result);
 				if (process.GetType() == typeof(IfScope))
 				{
 					ProcessIfScope(data, (IfScope)process);
@@ -132,8 +134,12 @@ namespace ANovel.Core
 			return (PreProcess)m_Tags[0];
 		}
 
-		void CheckStartIfScope(in LineData data, PreProcess process)
+		void CheckStart(in LineData data, PreProcess process, Result result)
 		{
+			if (!result.Header && process.HeaderOnly)
+			{
+				throw new LineDataException(in data, $"{process} is header only");
+			}
 			if (process is ElseIfScope || process is EndIfScope || process is ElseScope)
 			{
 				throw new LineDataException(in data, $"not start if scope");

@@ -94,6 +94,13 @@ namespace ANovel.Service.Sound
 			return handle;
 		}
 
+		public FloatFadeHandle Stop()
+		{
+			m_IsStop = true;
+			Dispose();
+			return FloatFadeHandle.Empty;
+		}
+
 		public void Update(float deltaTime)
 		{
 			if (m_Source == null)

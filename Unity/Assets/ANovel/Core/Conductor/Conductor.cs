@@ -121,9 +121,9 @@ namespace ANovel.Core
 			{
 				try
 				{
-					await m_Reader.Load(label.FileName, token);
+					var result = await m_Reader.Load(label.FileName, token);
 					m_Reader.Seek(label);
-					m_BlockProcessor.PostJump();
+					m_BlockProcessor.PostJump(result);
 				}
 				catch (Exception)
 				{

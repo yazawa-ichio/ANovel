@@ -5,9 +5,7 @@ namespace ANovel.Commands
 {
 	public abstract class SoundCommand : SyncCommandBase
 	{
-
 		protected ISoundService Sound => Get<ISoundService>();
-
 	}
 
 	[CommandName("se")]
@@ -27,7 +25,7 @@ namespace ANovel.Commands
 			data = PrefixedEnvData.Get<SeConfig>(data);
 			if (m_PlayConfig.Loop)
 			{
-				data.Set(m_Config.Slot, new PlaySoundEnvData(m_PlayConfig.Path, m_Config.Group, m_PlayConfig));
+				data.Set(m_Config.Slot, new PlaySoundEnvData(m_Config.Group, m_PlayConfig));
 			}
 			else
 			{
@@ -115,8 +113,6 @@ namespace ANovel.Commands
 	[CommandName("bgm")]
 	public class BgmPlayCommand : SoundCommand
 	{
-		[CommandField(Required = true)]
-		string m_Path = default;
 		[InjectParam]
 		BgmConfig m_Config = new BgmConfig();
 		[InjectParam]
@@ -127,7 +123,7 @@ namespace ANovel.Commands
 			data = PrefixedEnvData.Get<BgmConfig>(data);
 			if (m_PlayConfig.Loop)
 			{
-				data.Set(m_Config.Slot, new PlaySoundEnvData(m_Path, m_Config.Group, m_PlayConfig));
+				data.Set(m_Config.Slot, new PlaySoundEnvData(m_Config.Group, m_PlayConfig));
 			}
 			else
 			{

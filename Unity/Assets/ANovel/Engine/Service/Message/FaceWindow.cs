@@ -69,6 +69,7 @@ namespace ANovel.Service
 			else
 			{
 				m_RawImage.texture = null;
+				m_RawImage.canvasRenderer.SetAlpha(0);
 			}
 		}
 

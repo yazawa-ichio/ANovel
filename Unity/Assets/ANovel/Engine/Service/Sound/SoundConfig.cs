@@ -13,6 +13,9 @@ namespace ANovel.Service.Sound
 			Time = Millisecond.FromSecond(0.5f),
 			Loop = true,
 		};
+		public static PlayConfig Voice => new PlayConfig
+		{
+		};
 
 		[CommandField(Required = true)]
 		public string Path;
@@ -78,6 +81,12 @@ namespace ANovel.Service.Sound
 		public Easing? StopEasing { get; set; }
 	}
 
+	public class VoiceConfig
+	{
+		public string Slot { get; set; } = "default";
+		public string Group = "Voice";
+	}
+
 	public struct PlaySoundEnvData : IEnvDataUpdate<VolumeConfig>
 	{
 		public string Path;
@@ -86,9 +95,9 @@ namespace ANovel.Service.Sound
 		public float Pitch;
 		public float Pan;
 
-		public PlaySoundEnvData(string path, string group, PlayConfig config)
+		public PlaySoundEnvData(string group, PlayConfig config)
 		{
-			Path = path;
+			Path = config.Path;
 			Group = group;
 			Volume = config.Volume;
 			Pitch = config.Pitch;
@@ -101,5 +110,40 @@ namespace ANovel.Service.Sound
 		}
 
 	}
+
+	public struct PlayVoiceEnvData : IPreProcessDelete
+	{
+		public string Path;
+		public string Group;
+		public float Volume;
+		public float Pitch;
+		public float Pan;
+
+		public PlayVoiceEnvData(string group, PlayConfig config)
+		{
+			Path = config.Path;
+			Group = group;
+			Volume = config.Volume;
+			Pitch = config.Pitch;
+			Pan = config.Pan;
+		}
+
+	}
+
+	public struct AutoVoiceEnvData
+	{
+		public bool Enabled;
+		public int Index;
+	}
+
+	public struct CharaAutoVoiceEnvData
+	{
+		public int Index;
+	}
+
+	public struct SkipAutoVoiceEnvData : IPreProcessDelete
+	{
+	}
+
 
 }

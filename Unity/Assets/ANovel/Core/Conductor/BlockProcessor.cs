@@ -77,10 +77,11 @@ namespace ANovel.Core
 			}
 		}
 
-		public void PostJump()
+		public void PostJump(PreProcessor.Result result)
 		{
 			m_StopCommand = null;
 			ClearPreload();
+			EnvDataHook.PostJump(result.Meta, m_PreUpdateEnvData);
 			m_State = State.StartNext;
 		}
 

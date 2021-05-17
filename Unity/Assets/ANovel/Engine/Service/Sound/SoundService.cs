@@ -16,6 +16,10 @@ namespace ANovel.Service.Sound
 		IPlayHandle StopSe(string slot, StopConfig config);
 		IPlayHandle StopAllSe(StopConfig config);
 		IPlayHandle ChangeSeVolume(string slot, VolumeConfig config);
+
+		IPlayHandle PlayVoice(VoiceConfig config, PlayConfig playConfig);
+		IPlayHandle StopVoice(string slot, StopConfig config);
+		IPlayHandle StopAllVoice(StopConfig config);
 	}
 
 	public class SoundService : Service, ISoundService
@@ -27,6 +31,7 @@ namespace ANovel.Service.Sound
 		ComponentPool<AudioSource> m_Pool;
 		Dictionary<string, SoundPlayer> m_Bgm = new Dictionary<string, SoundPlayer>();
 		Dictionary<string, SoundPlayer> m_Se = new Dictionary<string, SoundPlayer>();
+		Dictionary<string, SoundPlayer> m_Voice = new Dictionary<string, SoundPlayer>();
 		List<SoundPlayer> m_Playing = new List<SoundPlayer>();
 		Transform m_Root;
 
@@ -138,6 +143,34 @@ namespace ANovel.Service.Sound
 			return new CombinePlayHandle(handles);
 		}
 
+		public IPlayHandle PlayVoice(VoiceConfig config, PlayConfig playConfig)
+		{
+			if (m_Voice.TryGetValue(config.Slot, out var player))
+			{
+				player.Dispose();
+			}
+			m_Voice[config.Slot] = player = new SoundPlayer();
+			m_Playing.Add(player);
+			return player.Play(m_Pool, playConfig, GetMixerGroup(SoundPlayerType.Voice, config.Group));
+		}
+
+		public IPlayHandle StopVoice(string slot, StopConfig config)
+		{
+			if (m_Voice.TryGetValue(slot, out var player))
+			{
+				m_Voice.Remove(slot);
+				return player.Stop(config);
+			}
+			return FloatFadeHandle.Empty;
+		}
+
+		public IPlayHandle StopAllVoice(StopConfig config)
+		{
+			var handles = m_Voice.Values.Select(x => x.Stop(config) as IPlayHandle).ToArray();
+			m_Voice.Clear();
+			return new CombinePlayHandle(handles);
+		}
+
 		public IPlayHandle ChangeBgmVolume(string slot, VolumeConfig config)
 		{
 			if (m_Bgm.TryGetValue(slot, out var player))
@@ -169,6 +202,11 @@ namespace ANovel.Service.Sound
 				se.Dispose();
 			}
 			m_Se.Clear();
+			foreach (var voice in m_Voice.Values)
+			{
+				voice.Dispose();
+			}
+			m_Voice.Clear();
 			foreach (var se in m_Playing)
 			{
 				se.Dispose();

@@ -603,6 +603,10 @@ namespace ANovel.Core.Tests
 					param.Data.DeleteSingle<PriorityEnvData>();
 				}
 			}
+
+			public void PostJump(IMetaData meta, IEnvData data)
+			{
+			}
 		}
 
 	}

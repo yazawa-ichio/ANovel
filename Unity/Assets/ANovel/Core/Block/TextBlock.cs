@@ -115,7 +115,7 @@ namespace ANovel.Core
 					var lineIndex = start + i;
 					var line = m_Lines[lineIndex];
 					sb.Append(line);
-					if (lineIndex + 1 < count)
+					if (i + 1 < count)
 					{
 						sb.Append(newline);
 					}

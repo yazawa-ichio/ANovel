@@ -46,6 +46,14 @@ namespace ANovel.Core
 			}
 		}
 
+		public void PostJump(IMetaData meta, IEnvData data)
+		{
+			foreach (var processor in m_List)
+			{
+				processor.PostJump(meta, data);
+			}
+		}
+
 	}
 
 }

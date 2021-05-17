@@ -5,5 +5,6 @@ namespace ANovel.Core
 		int Priority { get; }
 		void PreUpdate(EnvDataUpdateParam param);
 		void PostUpdate(EnvDataUpdateParam param);
+		void PostJump(IMetaData meta, IEnvData data);
 	}
 }

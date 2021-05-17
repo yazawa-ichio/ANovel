@@ -5,6 +5,7 @@ namespace ANovel.Core
 	public readonly struct EnvDataUpdateParam
 	{
 		public readonly IEnvData Data;
+		public BlockLabelInfo LabelInfo => m_Block.LabelInfo;
 		public TextBlock Text => m_Block.Text;
 		public IMetaData Meta => m_Block.Meta;
 		public bool HasStopCommand => m_Block.StopCommand != null;

@@ -1,9 +1,14 @@
 using ANovel.Commands;
 using ANovel.Core;
 using ANovel.Service;
+using ANovel.Service.Sound;
 
 namespace ANovel
 {
+	public interface IPreProcessDelete
+	{
+	}
+
 	public class EngineEnvDataProcessor : IEnvDataCustomProcessor
 	{
 		public int Priority => 0;
@@ -27,6 +32,10 @@ namespace ANovel
 			{
 				param.AddCommand(new MessageShowCommand());
 			}
+			if (!string.IsNullOrEmpty(message.Chara) && param.Meta.TryGetSingle<AutoVoiceMetaData>(out var autovoice))
+			{
+				autovoice.TryAutoSet(message, param);
+			}
 		}
 
 		public void PreUpdate(EnvDataUpdateParam param)
@@ -37,6 +46,7 @@ namespace ANovel
 			}
 			var text = param.Text;
 			var data = param.Data;
+			data.DeleteAllByInterface<IPreProcessDelete>();
 			data.DeleteSingle<FaceWindowEnvData>();
 			if (text == null)
 			{
@@ -100,6 +110,25 @@ namespace ANovel
 			}
 			param.AddCommand(cmd);
 		}
+
+		public void PostJump(IMetaData meta, IEnvData data)
+		{
+			if (meta.TryGetSingle(out AutoVoiceMetaData voice) && voice.ResetOnJump)
+			{
+				TryResetVoice(meta, data);
+			}
+		}
+
+		void TryResetVoice(IMetaData meta, IEnvData data)
+		{
+			if (data.TryGetSingle<AutoVoiceEnvData>(out var autovoice))
+			{
+				autovoice.Index = 0;
+				data.SetSingle(autovoice);
+			}
+			data.DeleteAll<CharaAutoVoiceEnvData>();
+		}
+
 
 	}
 }

@@ -7,6 +7,8 @@ namespace ANovel.Core
 #endif
 	public class IfScope : PreProcess
 	{
+		public override bool HeaderOnly => false;
+
 		[TagField(Required = true)]
 		string m_Condition = default;
 		[TagField]
@@ -29,6 +31,7 @@ namespace ANovel.Core
 #endif
 	public class ElseIfScope : IfScope
 	{
+		public override bool HeaderOnly => false;
 	}
 
 #if ANOVEL_ALLOW_IF_SCOPE
@@ -36,6 +39,7 @@ namespace ANovel.Core
 #endif
 	public class ElseScope : PreProcess
 	{
+		public override bool HeaderOnly => false;
 	}
 
 #if ANOVEL_ALLOW_IF_SCOPE
@@ -43,5 +47,6 @@ namespace ANovel.Core
 #endif
 	public class EndIfScope : PreProcess
 	{
+		public override bool HeaderOnly => false;
 	}
 }
