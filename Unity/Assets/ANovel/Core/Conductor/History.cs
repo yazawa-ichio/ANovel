@@ -5,15 +5,16 @@ using System.Linq;
 
 namespace ANovel.Core
 {
+	public interface IHistorySaveEnvData { }
 
 	public class HistoryAddEvent
 	{
 		public readonly TextBlock Text;
 		public readonly BlockLabelInfo LabelInfo;
 		public readonly IEnvDataHolder EnvData;
-		public readonly List<string> Extension;
+		public readonly IEnvData Extension;
 
-		public HistoryAddEvent(TextBlock text, BlockLabelInfo labelInfo, IEnvDataHolder envData, List<string> extension)
+		public HistoryAddEvent(TextBlock text, BlockLabelInfo labelInfo, IEnvDataHolder envData, IEnvData extension)
 		{
 			Text = text;
 			LabelInfo = labelInfo;
@@ -22,29 +23,23 @@ namespace ANovel.Core
 		}
 	}
 
-	public class HistoryLog
+
+	public interface IHistory
 	{
-		public string FilePath;
-		public BlockLabelInfo LabelInfo;
-		public TextBlock Text;
-		public EnvDataDiff Diff;
-		public string[] Attribute;
+		int MaxLogCount { get; set; }
 
-		[UnityEngine.Scripting.Preserve]
-		public HistoryLog() { }
+		bool CanRollback { get; set; }
 
-		public HistoryLog(Block block, EnvDataDiff diff, string[] attribute)
-		{
-			FilePath = block.FilePath;
-			Text = block.Text?.Clone();
-			LabelInfo = block.LabelInfo;
-			Diff = diff;
-			Attribute = attribute;
-		}
+		BlockLabelInfo CurrentLabel { get; }
 
+		event Action<HistoryAddEvent> OnAdd;
+
+		IEnumerable<IHistoryLog> GetLogs();
+
+		IHistoryLog GetCurrentLog();
 	}
 
-	public class History
+	public class History : IHistory
 	{
 		public int MaxLogCount { get; set; } = 128;
 
@@ -66,27 +61,25 @@ namespace ANovel.Core
 			}
 		}
 
-		public void Add(IEnvDataHolder envData, Block block, EnvDataDiff diff)
+		public void Add(EnvData envData, Block block, EnvDataDiff diff)
 		{
 			if (block.SkipHistory)
 			{
 				return;
 			}
-			using (ListPool<string>.Use(out var extension))
-			{
-				var e = new HistoryAddEvent(block.Text, block.LabelInfo, envData, extension);
-				// 必要であればExtensionに情報を入れる
-				OnAdd?.Invoke(e);
-				var _extension = extension.Count == 0 ? Array.Empty<string>() : extension.ToArray();
-				var _diff = CanRollback ? diff : null;
-				var log = new HistoryLog(block, _diff, _extension);
+			var extension = new EnvData();
+			extension.Load(envData.SaveByInterface<IHistorySaveEnvData>());
+			var e = new HistoryAddEvent(block.Text, block.LabelInfo, envData, extension);
+			// 必要であればExtensionに情報を入れる
+			OnAdd?.Invoke(e);
+			var _diff = CanRollback ? diff : null;
+			var log = new HistoryLog(block, _diff, extension);
 
-				if (m_LogList.Count >= MaxLogCount)
-				{
-					m_LogList.RemoveFirst();
-				}
-				m_LogList.AddLast(log);
+			if (m_LogList.Count >= MaxLogCount)
+			{
+				m_LogList.RemoveFirst();
 			}
+			m_LogList.AddLast(log);
 		}
 
 		public bool TryBack(int num, out EnvDataDiff[] diff)
@@ -124,5 +117,33 @@ namespace ANovel.Core
 			return m_LogList.ToArray();
 		}
 
+		public IEnumerable<IHistoryLog> GetLogs()
+		{
+			return m_LogList;
+		}
+
+
+		public IHistoryLog GetCurrentLog()
+		{
+			if (m_LogList.Count == 0)
+			{
+				return null;
+			}
+			return m_LogList.Last.Value;
+		}
+
+		public int GetBackNum(IHistoryLog log)
+		{
+			int i = 0;
+			foreach (var item in m_LogList.Reverse())
+			{
+				if (item == log)
+				{
+					return i;
+				}
+				i++;
+			}
+			return 0;
+		}
 	}
 }

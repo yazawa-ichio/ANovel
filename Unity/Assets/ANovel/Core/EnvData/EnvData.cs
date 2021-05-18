@@ -151,6 +151,19 @@ namespace ANovel.Core
 			}
 		}
 
+		public EnvDataSnapshot SaveByInterface<TInterface>()
+		{
+			var data = new EnvDataSnapshot();
+			foreach (var kvp in m_Dic)
+			{
+				if (typeof(TInterface).IsAssignableFrom(kvp.Key))
+				{
+					kvp.Value.Save(data);
+				}
+			}
+			return data;
+		}
+
 		public void Clear()
 		{
 			foreach (var kvp in m_Dic)

@@ -1,8 +1,9 @@
+using ANovel.Core;
 using ANovel.Serialization;
 
 namespace ANovel.Service
 {
-	public struct MessageEnvData : IDefaultValueSerialization
+	public struct MessageEnvData : IDefaultValueSerialization, IHistorySaveEnvData
 	{
 		public bool IsDefault => Equals(default);
 

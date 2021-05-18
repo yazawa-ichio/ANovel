@@ -19,6 +19,8 @@ namespace ANovel.Core
 
 		public EnvDataHook EnvDataHook => m_BlockProcessor.EnvDataHook;
 
+		public IHistory History => m_BlockProcessor.History;
+
 		public event Action<Exception> OnError;
 
 		public Func<Block, IEnvDataHolder, Task> OnLoad { get; set; }
@@ -180,6 +182,12 @@ namespace ANovel.Core
 				return Restore(data, token);
 			}
 			return Task.FromResult(true);
+		}
+
+		public Task Back(IHistoryLog log, CancellationToken token)
+		{
+			var num = m_BlockProcessor.History.GetBackNum(log);
+			return Back(num, token);
 		}
 
 		void Process()

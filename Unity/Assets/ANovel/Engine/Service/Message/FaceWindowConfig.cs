@@ -37,7 +37,7 @@ namespace ANovel.Service
 
 	}
 
-	public struct FaceWindowEnvData : IEnvDataUpdate<FaceWindowConfig>
+	public struct FaceWindowEnvData : IEnvDataUpdate<FaceWindowConfig>, IHistorySaveEnvData
 	{
 		public string Name;
 		public string Path;

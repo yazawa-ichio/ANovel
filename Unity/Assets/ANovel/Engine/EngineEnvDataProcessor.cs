@@ -13,30 +13,6 @@ namespace ANovel
 	{
 		public int Priority => 0;
 
-		public void PostUpdate(EnvDataUpdateParam param)
-		{
-			if (!param.ClearCurrentText)
-			{
-				return;
-			}
-			if (param.Text == null)
-			{
-				return;
-			}
-			var data = param.Data;
-			if (!data.TryGetSingle(out MessageEnvData message))
-			{
-				return;
-			}
-			if (data.TryGetSingle<MessageStatusEnvData>(out var status) && status.Hide)
-			{
-				param.AddCommand(new MessageShowCommand());
-			}
-			if (!string.IsNullOrEmpty(message.Chara) && param.Meta.TryGetSingle<AutoVoiceMetaData>(out var autovoice))
-			{
-				autovoice.TryAutoSet(message, param);
-			}
-		}
 
 		public void PreUpdate(EnvDataUpdateParam param)
 		{
@@ -111,6 +87,31 @@ namespace ANovel
 			param.AddCommand(cmd);
 		}
 
+		public void PostUpdate(EnvDataUpdateParam param)
+		{
+			if (!param.ClearCurrentText)
+			{
+				return;
+			}
+			if (param.Text == null)
+			{
+				return;
+			}
+			var data = param.Data;
+			if (!data.TryGetSingle(out MessageEnvData message))
+			{
+				return;
+			}
+			if (data.TryGetSingle<MessageStatusEnvData>(out var status) && status.Hide)
+			{
+				param.AddCommand(new MessageShowCommand());
+			}
+			if (!string.IsNullOrEmpty(message.Chara) && param.Meta.TryGetSingle<AutoVoiceMetaData>(out var autovoice))
+			{
+				autovoice.TryAutoSet(message, param);
+			}
+		}
+
 		public void PostJump(IMetaData meta, IEnvData data)
 		{
 			if (meta.TryGetSingle(out AutoVoiceMetaData voice) && voice.ResetOnJump)
@@ -128,7 +129,6 @@ namespace ANovel
 			}
 			data.DeleteAll<CharaAutoVoiceEnvData>();
 		}
-
 
 	}
 }

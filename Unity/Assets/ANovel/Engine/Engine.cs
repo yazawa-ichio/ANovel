@@ -21,14 +21,21 @@ namespace ANovel
 		Setting m_Setting;
 		Conductor m_Conductor;
 		IService[] m_Services;
+		ScopeLocker m_Locker = new ScopeLocker();
 
 		public EventBroker Event => m_Conductor.Event;
 
 		public ServiceContainer Container => m_Conductor.Container;
 
+		public IHistory History => m_Conductor.History;
+
 		public event Action<Exception> OnError;
 
 		public event Action OnStopCommand;
+
+		public bool IsWaitNext => m_Conductor.IsWaitNext;
+
+		public bool IsBusy => m_Locker.IsLock || !IsWaitNext;
 
 		void OnDestroy()
 		{
@@ -85,7 +92,7 @@ namespace ANovel
 			}
 		}
 
-		void HandleError(Exception ex)
+		public void HandleError(Exception ex)
 		{
 			if (OnError == null)
 			{
@@ -97,69 +104,121 @@ namespace ANovel
 			}
 		}
 
-		public Task Run(string path, string label = null)
+		public async void Handle(Func<Task> task)
 		{
-			return m_Conductor.Run(path, label, m_Cancellation.Token);
+			try
+			{
+				await task();
+			}
+			catch (Exception ex)
+			{
+				HandleError(ex);
+			}
 		}
 
-		public Task Jump(string path, string label = null)
+		public async Task Run(string path, string label = null)
 		{
-			return m_Conductor.Jump(path, label, m_Cancellation.Token);
+			using (m_Locker.ExclusiveLock())
+			{
+				await m_Conductor.Run(path, label, m_Cancellation.Token);
+			}
 		}
 
-		public Task Seek(string label)
+		public async Task Jump(string path, string label = null)
 		{
-			return m_Conductor.Seek(label, m_Cancellation.Token);
+			using (m_Locker.ExclusiveLock())
+			{
+				await m_Conductor.Jump(path, label, m_Cancellation.Token);
+			}
 		}
 
-		public Task Seek(Func<Block, bool> match)
+		public async Task Seek(string label)
 		{
-			return m_Conductor.Seek(match, m_Cancellation.Token);
+			using (m_Locker.ExclusiveLock())
+			{
+				await m_Conductor.Seek(label, m_Cancellation.Token);
+			}
+		}
+
+		public async Task Seek(Func<Block, bool> match)
+		{
+			using (m_Locker.ExclusiveLock())
+			{
+				await m_Conductor.Seek(match, m_Cancellation.Token);
+			}
 		}
 
 		public bool TryNext()
 		{
+			if (m_Locker.IsLock)
+			{
+				return false;
+			}
 			return m_Conductor?.TryNext() ?? false;
 		}
 
-		public void Trigger(string name)
+		public bool Trigger(string name)
 		{
+			if (m_Locker.IsLock)
+			{
+				return false;
+			}
 			m_Conductor?.Event.Publish(EngineEvent.Trigger, name);
+			return true;
 		}
 
-		public Task Back()
+		public async Task Back()
 		{
-			return m_Conductor.Back(1, m_Cancellation.Token);
+			using (m_Locker.ExclusiveLock())
+			{
+				await m_Conductor.Back(1, m_Cancellation.Token);
+			}
 		}
 
-		public Task Restore(StoreData data)
+		public async Task Back(IHistoryLog log)
 		{
-			return m_Conductor.Restore(data, m_Cancellation.Token);
+			using (m_Locker.ExclusiveLock())
+			{
+				await m_Conductor.Back(log, m_Cancellation.Token);
+			}
+		}
+
+		public async Task Restore(StoreData data)
+		{
+			using (m_Locker.ExclusiveLock())
+			{
+				await m_Conductor.Restore(data, m_Cancellation.Token);
+			}
 		}
 
 		async Task Load(Block block, IEnvDataHolder data)
 		{
-			var restoreData = new RestoreData
+			using (m_Locker.Lock())
 			{
-				Meta = block?.Meta,
-				Env = data
-			};
-			var cache = m_Conductor.Container.Get<ResourceCache>();
-			using (var loader = new PreLoadScope(cache))
-			{
-				await Task.WhenAll(m_Services.Select(x => x.PreRestore(restoreData, loader)));
-
-				if (!loader.IsLoaded)
+				var restoreData = new RestoreData
 				{
-					await loader.WaitComplete();
+					Meta = block?.Meta,
+					Env = data
+				};
+				var cache = m_Conductor.Container.Get<ResourceCache>();
+				using (var loader = new PreLoadScope(cache))
+				{
+					await Task.WhenAll(m_Services.Select(x => x.PreRestore(restoreData, loader)));
+
+					if (!loader.IsLoaded)
+					{
+						await loader.WaitComplete();
+					}
+
+					await Task.WhenAll(m_Services.Select(x => x.Restore(restoreData, cache)));
+
+					await Task.WhenAll(m_Services.Select(x => x.PostRestore(restoreData)));
+
 				}
-
-				await Task.WhenAll(m_Services.Select(x => x.Restore(restoreData, cache)));
-
-				await Task.WhenAll(m_Services.Select(x => x.PostRestore(restoreData)));
-
 			}
 		}
+
+		public IDisposable Lock() => m_Locker.Lock();
 
 		[EventSubscribe(ScenarioEvent.Stop)]
 		void OnStopEvent()

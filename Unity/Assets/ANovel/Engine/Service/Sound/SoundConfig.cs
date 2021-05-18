@@ -51,6 +51,16 @@ namespace ANovel.Service.Sound
 			};
 		}
 
+		public static PlayConfig Restore(PlayVoiceEnvData data, string prefix, ResourceCache cache)
+		{
+			return new PlayConfig()
+			{
+				Pitch = data.Pitch,
+				Pan = data.Pan,
+				Volume = data.Volume,
+				Clip = cache.Load<AudioClip>(prefix + data.Path),
+			};
+		}
 	}
 
 	public class VolumeConfig
@@ -111,7 +121,7 @@ namespace ANovel.Service.Sound
 
 	}
 
-	public struct PlayVoiceEnvData : IPreProcessDelete
+	public struct PlayVoiceEnvData : IPreProcessDelete, IHistorySaveEnvData
 	{
 		public string Path;
 		public string Group;

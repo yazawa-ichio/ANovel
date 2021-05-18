@@ -2,6 +2,7 @@ using ANovel.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -20,9 +21,16 @@ namespace ANovel.Service.Sound
 		IPlayHandle PlayVoice(VoiceConfig config, PlayConfig playConfig);
 		IPlayHandle StopVoice(string slot, StopConfig config);
 		IPlayHandle StopAllVoice(StopConfig config);
+
+
 	}
 
-	public class SoundService : Service, ISoundService
+	public interface IReplayVoiceService
+	{
+		Task ReplayVoice(IHistoryLog log);
+	}
+
+	public class SoundService : Service, ISoundService, IReplayVoiceService
 	{
 		public override Type ServiceType => typeof(ISoundService);
 
@@ -37,12 +45,14 @@ namespace ANovel.Service.Sound
 
 		protected override void Initialize()
 		{
+			Container.Set<IReplayVoiceService>(this);
 			var obj = new GameObject(typeof(SoundService).Name);
 			m_Root = obj.transform;
 			m_Root.SetParent(transform);
 
 			m_Pool = new ComponentPool<AudioSource>(m_Root);
 			Mixer = GetComponent<IAudioMixerProvider>();
+			Event.Register(this);
 		}
 
 
@@ -238,6 +248,22 @@ namespace ANovel.Service.Sound
 			{
 				var config = PlayConfig.Restore(kvp.Value, Path.SeRoot, cache);
 				PlaySe(new SeConfig { Slot = kvp.Key, Group = kvp.Value.Group }, config);
+			}
+		}
+
+		public async Task ReplayVoice(IHistoryLog log)
+		{
+			var cache = Container.Get<ResourceCache>();
+			var configs = new Dictionary<string, PlayConfig>();
+			foreach (var kvp in log.Extension.GetAll<PlayVoiceEnvData>())
+			{
+				configs.Add(kvp.Key, PlayConfig.Restore(kvp.Value, Path.VoiceRoot, cache));
+			}
+			await Task.WhenAll(configs.Values.Select(x => x.Clip.GetAsync()));
+			foreach (var kvp in configs)
+			{
+				var voice = log.Extension.Get<PlayVoiceEnvData>(kvp.Key);
+				PlayVoice(new VoiceConfig { Slot = kvp.Key, Group = voice.Group }, kvp.Value);
 			}
 		}
 
