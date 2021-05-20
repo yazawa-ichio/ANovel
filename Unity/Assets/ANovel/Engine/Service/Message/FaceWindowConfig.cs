@@ -1,7 +1,6 @@
-using ANovel.Core;
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public class FaceWindowConfig
 	{
@@ -11,7 +10,7 @@ namespace ANovel.Service
 		public float? Y;
 		public float? Z;
 		public float? Scale;
-		[SkipInjectParam]
+		[SkipArgument]
 		public ICacheHandle<Texture> Texture;
 
 		public void PreloadTexture(string prefix, IPreLoader loader)
@@ -22,7 +21,7 @@ namespace ANovel.Service
 			}
 		}
 
-		public void LoadTexture(string prefix, ResourceCache cache)
+		public void LoadTexture(string prefix, IResourceCache cache)
 		{
 			if (!string.IsNullOrEmpty(Path))
 			{
@@ -37,7 +36,7 @@ namespace ANovel.Service
 
 	}
 
-	public struct FaceWindowEnvData : IEnvDataUpdate<FaceWindowConfig>
+	public struct FaceWindowEnvData : IEnvDataUpdate<FaceWindowConfig>, IHistorySaveEnvData
 	{
 		public string Name;
 		public string Path;

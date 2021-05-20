@@ -1,6 +1,5 @@
-namespace ANovel.Core
+namespace ANovel
 {
-
 	public interface ITextProcessor
 	{
 		bool IsProcessing { get; }

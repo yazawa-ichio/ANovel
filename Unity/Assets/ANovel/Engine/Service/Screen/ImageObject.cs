@@ -1,10 +1,9 @@
-using ANovel.Core;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 
 
@@ -16,6 +15,7 @@ namespace ANovel.Service
 			public FloatFadeHandle Handle;
 		}
 
+		ImagePool m_Owner;
 		RawImage m_Image;
 		UIImageMaterial m_Material;
 		RectTransform m_Transform;
@@ -43,6 +43,8 @@ namespace ANovel.Service
 		ImageLayout m_Layout = new ImageLayout();
 		bool m_LayoutDirty = false;
 
+		public long AutoOrder { get; private set; }
+
 		void Awake()
 		{
 			m_Image = gameObject.AddComponent<RawImage>();
@@ -64,31 +66,14 @@ namespace ANovel.Service
 			ApplyLayout();
 		}
 
+		public void SetOwner(ImagePool owner)
+		{
+			m_Owner = owner;
+		}
+
 		public void SetTime(IEngineTime time)
 		{
 			m_Time = time;
-		}
-
-		public void SetFront()
-		{
-			m_Transform.SetAsLastSibling();
-		}
-
-		public void SetBack()
-		{
-			m_Transform.SetAsFirstSibling();
-		}
-
-		public void SetBack(Transform transform)
-		{
-			var index = transform.GetSiblingIndex();
-			m_Transform.SetSiblingIndex(index);
-		}
-
-		public void SetFront(Transform transform)
-		{
-			var index = transform.GetSiblingIndex();
-			m_Transform.SetSiblingIndex(index + 1);
 		}
 
 		public void SetLevel(ILevel level)
@@ -98,8 +83,10 @@ namespace ANovel.Service
 			m_Transform.localScale = Vector3.one;
 		}
 
-		public void SetTexture(ICacheHandle<Texture> texture)
+		public void SetConfig(ImageObjectConfig config)
 		{
+			SetOrder(config.AutoOrder);
+			var texture = config.Texture;
 			m_TransitionHandle?.Dispose();
 			m_MainTexHandle?.Dispose();
 			m_MainTexHandle = texture;
@@ -117,6 +104,7 @@ namespace ANovel.Service
 
 		public FloatFadeHandle Transition(ImageObjectConfig config)
 		{
+			SetOrder(config.AutoOrder);
 			m_TransitionHandle?.Dispose();
 			m_Material.BackTex = config.Texture?.Value;
 			m_Material.RuleTex = config.RuleTexture?.Value;
@@ -168,6 +156,15 @@ namespace ANovel.Service
 				layout.Set(playing.ParamType, playing.Handle.To);
 			}
 			return layout;
+		}
+
+		public void SetOrder(long? order)
+		{
+			if (order.HasValue)
+			{
+				AutoOrder = order.Value;
+				m_Owner.SetOrderDitry();
+			}
 		}
 
 		public void SetLayout(ImageLayout layout)

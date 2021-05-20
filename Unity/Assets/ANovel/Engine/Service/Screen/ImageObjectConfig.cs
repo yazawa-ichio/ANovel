@@ -1,20 +1,20 @@
-using ANovel.Core;
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public partial class ImageObjectConfig
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		public string Path;
 		public Millisecond Time = Millisecond.FromSecond(0.2f);
 		public float Vague = 0.2f;
 		public string Rule;
-
-		[SkipInjectParam]
+		[SkipArgument]
+		public long? AutoOrder;
+		[SkipArgument]
 		public ICacheHandle<Texture> Texture;
 
-		[SkipInjectParam]
+		[SkipArgument]
 		public ICacheHandle<Texture> RuleTexture;
 
 		public void PreloadTexture(string prefix, IPreLoader loader)
@@ -25,7 +25,7 @@ namespace ANovel.Service
 			}
 		}
 
-		public void LoadTexture(string prefix, ResourceCache cache)
+		public void LoadTexture(string prefix, IResourceCache cache)
 		{
 			if (!string.IsNullOrEmpty(Path))
 			{
@@ -46,12 +46,12 @@ namespace ANovel.Service
 			}
 		}
 
-		public void LoadRule(PathConfig path, ResourceCache cache)
+		public void LoadRule(PathConfig path, IResourceCache cache)
 		{
 			LoadRule(path.GetRule(""), cache);
 		}
 
-		public void LoadRule(string prefix, ResourceCache cache)
+		public void LoadRule(string prefix, IResourceCache cache)
 		{
 			if (!string.IsNullOrEmpty(Rule))
 			{
@@ -59,10 +59,11 @@ namespace ANovel.Service
 			}
 		}
 
-		public static ImageObjectConfig Restore(ImageObjectEnvData data, string prefix, ResourceCache cache)
+		public static ImageObjectConfig Restore(ImageObjectEnvData data, string prefix, IResourceCache cache)
 		{
 			var config = new ImageObjectConfig();
 			config.Path = data.Path;
+			config.AutoOrder = data.AutoOrder;
 			config.LoadTexture(prefix, cache);
 			return config;
 		}
@@ -73,20 +74,24 @@ namespace ANovel.Service
 	{
 
 		public string Path;
+		public long AutoOrder;
 
 		public ImageObjectEnvData(ImageObjectConfig conf)
 		{
 			Path = conf.Path;
+			AutoOrder = conf.AutoOrder.GetValueOrDefault();
 		}
 
-		public ImageObjectEnvData(string path)
+		public ImageObjectEnvData(string path, int order)
 		{
 			Path = path;
+			AutoOrder = order;
 		}
 
 		public void Update(ImageObjectConfig arg)
 		{
 			Path = arg.Path;
+			arg.AutoOrder = AutoOrder = arg.AutoOrder.GetValueOrDefault(AutoOrder);
 		}
 
 		public void Update(string arg)

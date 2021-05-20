@@ -3,31 +3,8 @@ using System.Collections.Generic;
 
 namespace ANovel.Core
 {
-	public class PrefixedEnvData : IEnvData
+	internal class PrefixedEnvData : IEnvData
 	{
-		public static IEnvData Get<TType>(IEnvData data)
-		{
-			var prefix = EvnDataTypePrefix<TType>.Prefix;
-			return new PrefixedEnvData(prefix, data);
-		}
-
-		public static IEnvDataHolder Get<TType>(IEnvDataHolder data)
-		{
-			var prefix = EvnDataTypePrefix<TType>.Prefix;
-			return new PrefixedEnvDataHolder(prefix, data);
-		}
-
-		public static IEnvData Get<T>(IEnvData data, T key)
-		{
-			var prefix = EventNameToStrConverter.ToStr(key);
-			return new PrefixedEnvData(prefix, data);
-		}
-
-		public static IEnvDataHolder Get<T>(IEnvDataHolder data, T key)
-		{
-			var prefix = EventNameToStrConverter.ToStr(key);
-			return new PrefixedEnvDataHolder(prefix, data);
-		}
 
 		string m_Prefix;
 		IEnvData m_Data;

@@ -1,9 +1,7 @@
-using ANovel.Core;
-using ANovel.Service;
 using System.Linq;
-using Category = ANovel.Service.ImageService.Category;
+using Category = ANovel.Engine.ImageService.Category;
 
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 
 	public class ImageCommandBase : SyncCommandBase, IUseTransitionScope
@@ -14,29 +12,36 @@ namespace ANovel.Commands
 
 	}
 
-	[CommandName("image")]
+	[TagName("image")]
 	public class ImageShowCommand : ImageCommandBase
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = null;
-		[InjectParam]
+		[InjectArgument]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.15f)
 		};
-		[InjectParam]
+		[InjectArgument]
 		LayoutConfig m_Layout = new LayoutConfig();
+		[Argument]
+		bool m_Front = false;
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Image);
+			data = data.Prefixed(Category.Image);
 			if (!data.Has<ImageObjectEnvData>(m_Name))
 			{
+				m_Transition.AutoOrder = ScreenOrderEnvData.GenOrder(data);
 				data.Set(m_Name, new ImageObjectEnvData(m_Transition));
 				LayoutConfig.SetEvnData(m_Name, data, m_Layout);
 			}
 			else
 			{
+				if (m_Front)
+				{
+					m_Transition.AutoOrder = ScreenOrderEnvData.GenOrder(data);
+				}
 				data.Update<ImageObjectEnvData, ImageObjectConfig>(m_Name, m_Transition);
 				LayoutConfig.UpdateEvnData(m_Name, data, m_Layout);
 			}
@@ -57,20 +62,26 @@ namespace ANovel.Commands
 
 	}
 
-	[CommandName("image_change")]
+	[TagName("image_change")]
 	public class ImageChangeCommand : ImageCommandBase
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = null;
-		[InjectParam]
+		[InjectArgument]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.1f)
 		};
+		[Argument]
+		bool m_Front = false;
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Image);
+			data = data.Prefixed(Category.Image);
+			if (m_Front)
+			{
+				m_Transition.AutoOrder = ScreenOrderEnvData.GenOrder(data);
+			}
 			data.Update<ImageObjectEnvData, ImageObjectConfig>(m_Name, m_Transition);
 		}
 
@@ -89,13 +100,13 @@ namespace ANovel.Commands
 
 	}
 
-	[CommandName("image_hide")]
+	[TagName("image_hide")]
 	public class ImageHideCommand : ImageCommandBase
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = null;
 
-		[InjectParam(IgnoreKey = "path")]
+		[InjectArgument(IgnoreKey = "path")]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.15f)
@@ -103,7 +114,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Image);
+			data = data.Prefixed(Category.Image);
 			data.Delete<ImageObjectEnvData>(m_Name);
 			LayoutConfig.DeleteEvnData(m_Name, data);
 		}
@@ -121,15 +132,15 @@ namespace ANovel.Commands
 
 	}
 
-	[CommandName("image_hide_all")]
+	[TagName("image_hide_all")]
 	public class ImageHideAllCommand : ImageCommandBase
 	{
-		[InjectParam(IgnoreKey = "path")]
+		[InjectArgument(IgnoreKey = "path")]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.15f)
 		};
-		[CommandField]
+		[Argument]
 		string m_Level = null;
 
 		string[] m_Names;
@@ -141,7 +152,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Image);
+			data = data.Prefixed(Category.Image);
 			m_Names = data.GetKeys<LayoutConfig.LayoutLevelEnvData>(x =>
 			{
 				if (string.IsNullOrEmpty(m_Level))
@@ -171,27 +182,39 @@ namespace ANovel.Commands
 
 	}
 
-	[CommandName("image_control")]
+	[TagName("image_control")]
 	public class ImageControlCommand : ImageCommandBase
 	{
-		[CommandField]
+		[Argument]
 		string m_Name = null;
-		[InjectParam]
+		[InjectArgument]
 		PlayAnimConfig m_Config = new PlayAnimConfig();
-		[InjectParam(IgnoreKey = "level")]
+		[InjectArgument(IgnoreKey = "level")]
 		LayoutConfig m_Layout = new LayoutConfig();
+		[Argument]
+		bool m_Front = false;
+		long m_AutoOrder;
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Image);
-			if (data.Has<ImageObjectEnvData>(m_Name))
+			data = data.Prefixed(Category.Image);
+			if (data.TryGet<ImageObjectEnvData>(m_Name, out var image))
 			{
 				LayoutConfig.UpdateEvnData(m_Name, data, m_Layout);
+				if (m_Front)
+				{
+					image.AutoOrder = m_AutoOrder = ScreenOrderEnvData.GenOrder(data);
+					data.Set(m_Name, image);
+				}
 			}
 		}
 
 		protected override void Execute()
 		{
+			if (m_Front)
+			{
+				Service.SetOrder(Category.Image, m_Name, m_AutoOrder);
+			}
 			m_PlayHandle = Service.PlayAnim(Category.Image, m_Name, m_Config, m_Layout);
 		}
 

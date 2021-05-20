@@ -1,7 +1,6 @@
-using ANovel.Core;
 using System;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public partial class ImageController
 	{
@@ -74,6 +73,12 @@ namespace ANovel.Service
 				throw new Exception($"play target not found ");
 			}
 			return m_Current.PlayAnim(config, layout);
+		}
+
+		public void SetOrder(long autoOrder)
+		{
+			if (m_Current == null) return;
+			m_Current.SetOrder(autoOrder);
 		}
 
 	}

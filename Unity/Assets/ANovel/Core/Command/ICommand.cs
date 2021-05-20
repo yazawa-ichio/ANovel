@@ -1,5 +1,3 @@
-using ANovel.Core;
-
 namespace ANovel
 {
 	public interface ICommand
@@ -15,4 +13,9 @@ namespace ANovel
 		void TryNext();
 		void FinishBlock();
 	}
+
+	public interface ISystemCommand : ICommand
+	{
+	}
+
 }

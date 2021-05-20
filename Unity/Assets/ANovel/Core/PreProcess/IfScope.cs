@@ -3,13 +3,15 @@ using System.Collections.Generic;
 namespace ANovel.Core
 {
 #if ANOVEL_ALLOW_IF_SCOPE
-	[TagName("if", LineType.PreProcess)]
+	[TagName("if")]
 #endif
 	public class IfScope : PreProcess
 	{
-		[TagField(Required = true)]
+		public override bool HeaderOnly => false;
+
+		[Argument(Required = true)]
 		string m_Condition = default;
-		[TagField]
+		[Argument]
 		bool m_Not = default;
 
 		public bool IsCondition(List<string> symbols)
@@ -25,23 +27,26 @@ namespace ANovel.Core
 	}
 
 #if ANOVEL_ALLOW_IF_SCOPE
-	[TagName("elseif", LineType.PreProcess)]
+	[TagName("elseif")]
 #endif
 	public class ElseIfScope : IfScope
 	{
+		public override bool HeaderOnly => false;
 	}
 
 #if ANOVEL_ALLOW_IF_SCOPE
-	[TagName("else", LineType.PreProcess)]
+	[TagName("else")]
 #endif
 	public class ElseScope : PreProcess
 	{
+		public override bool HeaderOnly => false;
 	}
 
 #if ANOVEL_ALLOW_IF_SCOPE
-	[TagName("endif", LineType.PreProcess)]
+	[TagName("endif")]
 #endif
 	public class EndIfScope : PreProcess
 	{
+		public override bool HeaderOnly => false;
 	}
 }

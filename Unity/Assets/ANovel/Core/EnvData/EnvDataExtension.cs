@@ -1,12 +1,37 @@
+using ANovel.Core;
 using System;
 using System.Collections.Generic;
 
-namespace ANovel.Core
+namespace ANovel
 {
 	public delegate void UpdateEnvDataDelegate<TValue>(ref TValue arg);
 
 	public static class EnvDataExtension
 	{
+		public static IEnvData Prefixed<TType>(this IEnvData data)
+		{
+			var prefix = EvnDataTypePrefix<TType>.Prefix;
+			return new PrefixedEnvData(prefix, data);
+		}
+
+		public static IEnvDataHolder Prefixed<TType>(this IEnvDataHolder data)
+		{
+			var prefix = EvnDataTypePrefix<TType>.Prefix;
+			return new PrefixedEnvDataHolder(prefix, data);
+		}
+
+		public static IEnvData Prefixed<T>(this IEnvData data, T key)
+		{
+			var prefix = EventNameToStrConverter.ToStr(key);
+			return new PrefixedEnvData(prefix, data);
+		}
+
+		public static IEnvDataHolder Prefixed<T>(this IEnvDataHolder data, T key)
+		{
+			var prefix = EventNameToStrConverter.ToStr(key);
+			return new PrefixedEnvDataHolder(prefix, data);
+		}
+
 		public static IEnumerable<string> GetKeys<TValue>(this IEnvData self, Func<TValue, bool> func = null) where TValue : struct
 		{
 			foreach (var kvp in self.GetAll<TValue>())

@@ -3,23 +3,6 @@ using System.Collections.Generic;
 
 namespace ANovel.Core
 {
-	public interface IEnvDataHolder
-	{
-		IEnvDataHolder GetParent();
-		bool Has<TValue>(string key) where TValue : struct;
-		TValue Get<TValue>(string key) where TValue : struct;
-		bool TryGet<TValue>(string key, out TValue value) where TValue : struct;
-		IEnumerable<KeyValuePair<string, TValue>> GetAll<TValue>() where TValue : struct;
-	}
-
-	public interface IEnvData : IEnvDataHolder
-	{
-		new IEnvData GetParent();
-		void Set<TValue>(string key, TValue value) where TValue : struct;
-		void Delete<TValue>(string key) where TValue : struct;
-		void DeleteAll<TValue>(Func<string, TValue, bool> func) where TValue : struct;
-		void DeleteAllByInterface<TInterface>(Func<string, TInterface, bool> func) where TInterface : class;
-	}
 
 	public class EnvData : IEnvData
 	{
@@ -149,6 +132,19 @@ namespace ANovel.Core
 			{
 				entry.Load(data);
 			}
+		}
+
+		public EnvDataSnapshot SaveByInterface<TInterface>()
+		{
+			var data = new EnvDataSnapshot();
+			foreach (var kvp in m_Dic)
+			{
+				if (typeof(TInterface).IsAssignableFrom(kvp.Key))
+				{
+					kvp.Value.Save(data);
+				}
+			}
+			return data;
 		}
 
 		public void Clear()

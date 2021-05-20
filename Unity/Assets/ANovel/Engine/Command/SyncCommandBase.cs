@@ -1,4 +1,4 @@
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 	public class SyncCommandBase : Command
 	{
@@ -6,9 +6,9 @@ namespace ANovel.Commands
 
 		protected IEngineTime Time => Get<IEngineTime>();
 
-		[CommandField]
+		[Argument]
 		protected bool m_Sync = false;
-		[CommandField]
+		[Argument]
 		protected bool m_CanSkip = true;
 
 		protected IPlayHandle m_PlayHandle;

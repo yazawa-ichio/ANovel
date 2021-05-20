@@ -1,33 +1,15 @@
-using ANovel.Commands;
 using ANovel.Core;
-using ANovel.Service;
 
-namespace ANovel
+namespace ANovel.Engine
 {
+	public interface IPreProcessDelete
+	{
+	}
+
 	public class EngineEnvDataProcessor : IEnvDataCustomProcessor
 	{
 		public int Priority => 0;
 
-		public void PostUpdate(EnvDataUpdateParam param)
-		{
-			if (!param.ClearCurrentText)
-			{
-				return;
-			}
-			if (param.Text == null)
-			{
-				return;
-			}
-			var data = param.Data;
-			if (!data.TryGetSingle(out MessageEnvData message))
-			{
-				return;
-			}
-			if (data.TryGetSingle<MessageStatusEnvData>(out var status) && status.Hide)
-			{
-				param.AddCommand(new MessageShowCommand());
-			}
-		}
 
 		public void PreUpdate(EnvDataUpdateParam param)
 		{
@@ -37,6 +19,7 @@ namespace ANovel
 			}
 			var text = param.Text;
 			var data = param.Data;
+			data.DeleteAllByInterface<IPreProcessDelete>();
 			data.DeleteSingle<FaceWindowEnvData>();
 			if (text == null)
 			{
@@ -88,7 +71,7 @@ namespace ANovel
 			}
 			key = CharaMetaData.GetKey(param.Meta, key);
 			var cmd = new FaceWindowShowCommand();
-			var data = PrefixedEnvData.Get(param.Data, ImageService.Category.Chara);
+			var data = param.Data.Prefixed(ImageService.Category.Chara);
 			if (data.TryGet<CharaObjectEnvData>(key, out var chara))
 			{
 				var meta = CharaMetaData.Get(param.Meta, key);
@@ -99,6 +82,49 @@ namespace ANovel
 				cmd.Config.Name = key;
 			}
 			param.AddCommand(cmd);
+		}
+
+		public void PostUpdate(EnvDataUpdateParam param)
+		{
+			if (!param.ClearCurrentText)
+			{
+				return;
+			}
+			if (param.Text == null)
+			{
+				return;
+			}
+			var data = param.Data;
+			if (!data.TryGetSingle(out MessageEnvData message))
+			{
+				return;
+			}
+			if (data.TryGetSingle<MessageStatusEnvData>(out var status) && status.Hide)
+			{
+				param.AddCommand(new MessageShowCommand());
+			}
+			if (!string.IsNullOrEmpty(message.Chara) && param.Meta.TryGetSingle<AutoVoiceMetaData>(out var autovoice))
+			{
+				autovoice.TryAutoSet(message, param);
+			}
+		}
+
+		public void PostJump(IMetaData meta, IEnvData data)
+		{
+			if (meta.TryGetSingle(out AutoVoiceMetaData voice) && voice.ResetOnJump)
+			{
+				TryResetVoice(meta, data);
+			}
+		}
+
+		void TryResetVoice(IMetaData meta, IEnvData data)
+		{
+			if (data.TryGetSingle<AutoVoiceEnvData>(out var autovoice))
+			{
+				autovoice.Index = 0;
+				data.SetSingle(autovoice);
+			}
+			data.DeleteAll<CharaAutoVoiceEnvData>();
 		}
 
 	}

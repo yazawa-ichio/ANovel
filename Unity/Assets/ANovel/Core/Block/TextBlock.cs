@@ -1,10 +1,11 @@
+using ANovel.Core;
 using ANovel.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace ANovel.Core
+namespace ANovel
 {
 	public enum TextBlockType
 	{
@@ -115,7 +116,7 @@ namespace ANovel.Core
 					var lineIndex = start + i;
 					var line = m_Lines[lineIndex];
 					sb.Append(line);
-					if (lineIndex + 1 < count)
+					if (i + 1 < count)
 					{
 						sb.Append(newline);
 					}

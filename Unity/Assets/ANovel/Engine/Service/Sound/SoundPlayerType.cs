@@ -1,4 +1,4 @@
-namespace ANovel.Service.Sound
+namespace ANovel.Engine
 {
 	public enum SoundPlayerType
 	{

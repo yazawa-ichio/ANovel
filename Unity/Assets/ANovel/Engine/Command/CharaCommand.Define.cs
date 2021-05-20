@@ -1,20 +1,19 @@
 using ANovel.Core;
-using ANovel.Service;
 using System.Collections.Generic;
 
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 
-	[PreProcessName("define_chara")]
+	[TagName("define_chara")]
 	public class DefineCharaCommand : PreProcess, IImportText, IParamConverter
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = default;
-		[CommandField]
+		[Argument]
 		string m_DispName = default;
-		[InjectParam]
+		[InjectArgument]
 		CharaMetaData m_Param = default;
-		[CommandField]
+		[Argument]
 		string m_Import = default;
 
 		MetaData m_Meta;
@@ -125,12 +124,12 @@ namespace ANovel.Commands
 
 	}
 
-	[PreProcessName("define_chara_face")]
+	[TagName("define_chara_face")]
 	public class DefineCharaFaceCommand : PreProcess
 	{
-		[CommandField]
+		[Argument]
 		string m_Name = default;
-		[InjectParam]
+		[InjectArgument]
 		DefineCharaParam m_Param = new DefineCharaParam();
 
 		public override void Result(PreProcessor.Result result)
@@ -152,12 +151,12 @@ namespace ANovel.Commands
 		}
 	}
 
-	[PreProcessName("define_chara_pose")]
+	[TagName("define_chara_pose")]
 	public class DefineCharaPoseCommand : PreProcess
 	{
-		[CommandField]
+		[Argument]
 		string m_Name = default;
-		[InjectParam]
+		[InjectArgument]
 		DefineCharaPoseParam m_Param = new DefineCharaPoseParam();
 
 		public override void Result(PreProcessor.Result result)
@@ -179,12 +178,12 @@ namespace ANovel.Commands
 		}
 	}
 
-	[PreProcessName("define_chara_level")]
+	[TagName("define_chara_level")]
 	public class DefineCharaLevelCommand : PreProcess
 	{
-		[CommandField]
+		[Argument]
 		string m_Name = default;
-		[InjectParam]
+		[InjectArgument]
 		DefineCharaLevelParam m_Param = new DefineCharaLevelParam();
 
 		public override void Result(PreProcessor.Result result)
@@ -206,7 +205,7 @@ namespace ANovel.Commands
 		}
 	}
 
-	[PreProcessName("define_chara_common")]
+	[TagName("define_chara_common")]
 	public class DefineCharaCommonCommand : PreProcess, IImportText
 	{
 		public static DefineCharaLevelCommand Get(IMetaData meta)
@@ -214,9 +213,9 @@ namespace ANovel.Commands
 			return meta.Get<DefineCharaLevelCommand>(nameof(DefineCharaCommonCommand));
 		}
 
-		[InjectParam]
+		[InjectArgument]
 		CharaCommonMetaData m_Param = default;
-		[CommandField]
+		[Argument]
 		string m_Import = default;
 
 		bool IImportText.Enabled => !string.IsNullOrEmpty(m_Import);

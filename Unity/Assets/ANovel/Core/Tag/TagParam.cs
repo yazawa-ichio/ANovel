@@ -50,6 +50,23 @@ namespace ANovel.Core
 			}
 		}
 
+		public void TrySetNewValue(string key, string value)
+		{
+			key = key.ToLower();
+			if (!string.IsNullOrEmpty(value) && !ContainsKey(key))
+			{
+				this[key] = value;
+			}
+		}
+
+		public void TrySetNewValue<T>(string key, T? value) where T : struct
+		{
+			key = key.ToLower();
+			if (value.HasValue && !ContainsKey(key))
+			{
+				this[key] = value.ToString();
+			}
+		}
 	}
 
 }

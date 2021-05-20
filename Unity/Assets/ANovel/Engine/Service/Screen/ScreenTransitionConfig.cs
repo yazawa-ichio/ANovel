@@ -1,7 +1,6 @@
-using ANovel.Core;
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public class ScreenTransitionConfig
 	{
@@ -9,7 +8,7 @@ namespace ANovel.Service
 		public float Vague = 0.2f;
 		public bool Capture = true;
 		public bool Copy = true;
-		[SkipInjectParam]
+		[SkipArgument]
 		public ICacheHandle<Texture> Rule;
 	}
 }

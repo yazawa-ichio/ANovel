@@ -1,8 +1,6 @@
-using ANovel.Core;
-using ANovel.Service;
-using Category = ANovel.Service.ImageService.Category;
+using Category = ANovel.Engine.ImageService.Category;
 
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 
 	public class BGCommandBase : SyncCommandBase, IUseTransitionScope
@@ -17,15 +15,15 @@ namespace ANovel.Commands
 
 	}
 
-	[CommandName("bg")]
+	[TagName("bg")]
 	public class BGShowCommand : BGCommandBase
 	{
-		[InjectParam]
+		[InjectArgument]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.4f)
 		};
-		[InjectParam(IgnoreKey = "level")]
+		[InjectArgument(IgnoreKey = "level")]
 		LayoutConfig m_Layout = new LayoutConfig()
 		{
 			ScreenMatch = ScreenMatchMode.Shrink,
@@ -34,9 +32,11 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Bg);
+			data = data.Prefixed(Category.Bg);
 			if (!data.Has<ImageObjectEnvData>(EnvKey))
 			{
+				// 現在の仕様ではBGは最背面固定
+				//m_Transition.AutoOrder = ScreenOrderEnvData.GenOrder(data);
 				data.Set(EnvKey, new ImageObjectEnvData(m_Transition));
 				LayoutConfig.SetEvnData(EnvKey, data, m_Layout);
 			}
@@ -62,10 +62,10 @@ namespace ANovel.Commands
 
 	}
 
-	[CommandName("bg_change")]
+	[TagName("bg_change")]
 	public class BGChangeCommand : BGCommandBase
 	{
-		[InjectParam]
+		[InjectArgument]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.4f)
@@ -73,7 +73,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Bg);
+			data = data.Prefixed(Category.Bg);
 			data.Update<ImageObjectEnvData, ImageObjectConfig>(EnvKey, m_Transition);
 		}
 
@@ -92,10 +92,10 @@ namespace ANovel.Commands
 
 	}
 
-	[CommandName("bg_hide")]
+	[TagName("bg_hide")]
 	public class BGHideCommand : BGCommandBase
 	{
-		[InjectParam(IgnoreKey = "path")]
+		[InjectArgument(IgnoreKey = "path")]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.4f)
@@ -103,7 +103,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Bg);
+			data = data.Prefixed(Category.Bg);
 			data.Delete<ImageObjectEnvData>(EnvKey);
 			LayoutConfig.DeleteEvnData(EnvKey, data);
 		}
@@ -121,17 +121,17 @@ namespace ANovel.Commands
 
 	}
 
-	[CommandName("bg_control")]
+	[TagName("bg_control")]
 	public class BGControlCommand : BGCommandBase
 	{
-		[InjectParam]
+		[InjectArgument]
 		PlayAnimConfig m_Config = new PlayAnimConfig();
-		[InjectParam(IgnoreKey = "level")]
+		[InjectArgument(IgnoreKey = "level")]
 		LayoutConfig m_Layout = new LayoutConfig();
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Bg);
+			data = data.Prefixed(Category.Bg);
 			if (data.Has<ImageObjectEnvData>(EnvKey))
 			{
 				LayoutConfig.UpdateEvnData(EnvKey, data, m_Layout);

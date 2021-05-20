@@ -4,13 +4,13 @@ namespace ANovel.Core.Tests
 {
 	public class TestMetaData
 	{
-		[CommandField]
+		[Argument]
 		string m_Name;
 		public string Name => m_Name;
-		[CommandField]
+		[Argument]
 		string m_Value;
 		public string Value => m_Value;
-		[CommandField]
+		[Argument]
 		public bool First;
 	}
 
@@ -19,10 +19,10 @@ namespace ANovel.Core.Tests
 		public string Value;
 	}
 
-	[PreProcessName("test_meta_deine")]
+	[TagName("test_meta_deine")]
 	public class TestMetaDefineTest : PreProcess
 	{
-		[InjectParam]
+		[InjectArgument]
 		TestMetaData m_Data = new TestMetaData();
 
 		public override void Result(PreProcessor.Result result)

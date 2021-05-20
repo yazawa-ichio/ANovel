@@ -8,7 +8,7 @@ using UnityEngine.Scripting;
 namespace ANovel
 {
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-	public class InjectParamAttribute : PreserveAttribute
+	public class InjectArgumentAttribute : PreserveAttribute
 	{
 		public string TargetKey { get; set; }
 
@@ -18,7 +18,7 @@ namespace ANovel
 
 		public string[] IgnoreKeys { get; set; }
 
-		public InjectParamAttribute() { }
+		public InjectArgumentAttribute() { }
 
 		public bool TryGetTargetKeys(out HashSet<string> keys)
 		{
@@ -58,11 +58,6 @@ namespace ANovel
 			return true;
 		}
 
-	}
-
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-	public class SkipInjectParamAttribute : PreserveAttribute
-	{
 	}
 
 }

@@ -10,14 +10,26 @@ namespace ANovel.Core
 		TagNameAttribute m_Attr;
 		bool m_Prepare;
 		TagFieldEntry[] m_Fields;
-		InjectParamEntry[] m_InjectParams;
+		InjectEntry[] m_Injects;
 
 		public string Name => m_Attr.Name;
 
-		public LineType Type => m_Attr.Type;
+		public LineType Type { get; private set; }
 
 		public TagEntry(Type type, TagNameAttribute attr)
 		{
+			if (typeof(PreProcess).IsAssignableFrom(type))
+			{
+				Type = LineType.PreProcess;
+			}
+			else if (typeof(ISystemCommand).IsAssignableFrom(type))
+			{
+				Type = LineType.SystemCommand;
+			}
+			else
+			{
+				Type = LineType.Command;
+			}
 			m_Type = type;
 			m_Attr = attr;
 		}
@@ -28,7 +40,7 @@ namespace ANovel.Core
 			{
 				m_Prepare = true;
 				m_Fields = GetFields();
-				m_InjectParams = GetInjectParams();
+				m_Injects = GetInjects();
 			}
 		}
 
@@ -49,14 +61,14 @@ namespace ANovel.Core
 			}
 		}
 
-		InjectParamEntry[] GetInjectParams()
+		InjectEntry[] GetInjects()
 		{
-			using (ListPool<InjectParamEntry>.Use(out var list))
+			using (ListPool<InjectEntry>.Use(out var list))
 			{
 				var type = m_Type;
 				while (type != typeof(Tag))
 				{
-					foreach (var entry in GetInjectParams(type))
+					foreach (var entry in GetInjects(type))
 					{
 						list.Add(entry);
 					}
@@ -98,9 +110,9 @@ namespace ANovel.Core
 					throw new LineDataException(in data, $"{Name} {field.Name} required key");
 				}
 			}
-			foreach (var injectParam in m_InjectParams)
+			foreach (var inject in m_Injects)
 			{
-				injectParam.Set(tag, param);
+				inject.Set(tag, param);
 			}
 			return tag;
 		}

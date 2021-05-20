@@ -25,10 +25,10 @@ namespace ANovel.Commands
 		bool SkipHistory { get; }
 	}
 
-	[SystemCommandName("stop")]
+	[TagName("stop")]
 	public class StopCommand : SystemCommand, IStopCommand, ICanAddScopeCommand, ISkipHistoryCommand
 	{
-		[CommandField]
+		[Argument]
 		bool m_ClearText = false;
 
 		public bool ClearText => m_ClearText;
@@ -44,12 +44,12 @@ namespace ANovel.Commands
 
 	}
 
-	[SystemCommandName("jump")]
+	[TagName("jump")]
 	public class ScenarioJumpCommand : SystemCommand, IStopCommand, ISkipHistoryCommand, ICanAddScopeCommand
 	{
-		[CommandField]
+		[Argument]
 		bool m_ClearText = true;
-		[InjectParam]
+		[InjectArgument]
 		ScenarioJumpEvent m_JumpEvent = new ScenarioJumpEvent();
 
 		public bool ClearText => m_ClearText;
@@ -69,10 +69,10 @@ namespace ANovel.Commands
 
 	}
 
-	[SystemCommandName("endblock")]
+	[TagName("endblock")]
 	public class EndBlockCommand : SystemCommand, ISkipHistoryCommand, ICanAddScopeCommand, IEndBlockCommand
 	{
-		[CommandField(KeyName = "cansave")]
+		[Argument(KeyName = "cansave")]
 		bool m_CanSave = true;
 
 		public bool SkipHistory => !m_CanSave;

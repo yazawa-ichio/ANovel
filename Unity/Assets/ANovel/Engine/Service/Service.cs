@@ -1,9 +1,9 @@
-using ANovel.Core;
+//using ANovel.Core;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public enum RegisterPriority
 	{
@@ -26,7 +26,7 @@ namespace ANovel.Service
 		void OnUpdate(IEngineTime time);
 
 		Task PreRestore(RestoreData data, IPreLoader loader);
-		Task Restore(RestoreData data, ResourceCache cache);
+		Task Restore(RestoreData data, IResourceCache cache);
 		Task PostRestore(RestoreData data);
 	}
 
@@ -50,8 +50,8 @@ namespace ANovel.Service
 
 		protected virtual void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader) { }
 		protected virtual Task PreRestoreAsync(IMetaData meta, IEnvDataHolder data, IPreLoader loader) => Task.FromResult(true);
-		protected virtual void Restore(IMetaData meta, IEnvDataHolder data, ResourceCache cache) { }
-		protected virtual Task RestoreAync(IMetaData meta, IEnvDataHolder data, ResourceCache cache) => Task.FromResult(true);
+		protected virtual void Restore(IMetaData meta, IEnvDataHolder data, IResourceCache cache) { }
+		protected virtual Task RestoreAync(IMetaData meta, IEnvDataHolder data, IResourceCache cache) => Task.FromResult(true);
 		protected virtual void PostRestore(IMetaData meta, IEnvDataHolder data) { }
 		protected virtual Task PostRestoreAsync(IMetaData meta, IEnvDataHolder data) => Task.FromResult(true);
 
@@ -69,7 +69,7 @@ namespace ANovel.Service
 			return PreRestoreAsync(data.Meta, data.Env, loader);
 		}
 
-		Task IService.Restore(RestoreData data, ResourceCache cache)
+		Task IService.Restore(RestoreData data, IResourceCache cache)
 		{
 			Restore(data.Meta, data.Env, cache);
 			return RestoreAync(data.Meta, data.Env, cache);

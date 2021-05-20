@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	[System.Serializable]
 	public class FaceWindow
@@ -61,6 +61,7 @@ namespace ANovel.Service
 			m_FaceWindowConfig = args;
 			if (args.Texture != null)
 			{
+				m_RawImage.enabled = true;
 				m_RawImage.texture = args.Texture.Value;
 				m_RawImage.SetNativeSize();
 				m_RawImage.transform.localScale = Vector3.one * args.Scale.GetValueOrDefault(1f);
@@ -69,6 +70,7 @@ namespace ANovel.Service
 			else
 			{
 				m_RawImage.texture = null;
+				m_RawImage.enabled = false;
 			}
 		}
 

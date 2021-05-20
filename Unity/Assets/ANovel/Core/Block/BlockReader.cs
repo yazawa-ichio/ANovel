@@ -38,7 +38,7 @@ namespace ANovel.Core
 			}
 		}
 
-		public async Task Load(string path, CancellationToken token)
+		public async Task<PreProcessor.Result> Load(string path, CancellationToken token)
 		{
 			m_Stop = false;
 			m_Label.Reset();
@@ -46,6 +46,7 @@ namespace ANovel.Core
 			m_LineReader = new LineReader(path, text);
 			m_PreProcess = await m_PreProcessor.Run(path, text, token);
 			m_TagProvider.Setup(m_PreProcess);
+			return m_PreProcess;
 		}
 
 		public bool TryRead(out Block block)

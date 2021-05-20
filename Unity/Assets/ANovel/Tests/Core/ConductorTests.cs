@@ -482,10 +482,10 @@ namespace ANovel.Core.Tests
 
 		class DummyData { }
 
-		[CommandName("test_preload")]
+		[TagName("test_preload")]
 		class TestPreLoad : Command
 		{
-			[CommandField(Required = true)]
+			[Argument(Required = true)]
 			string m_Path = default;
 
 			protected override void Preload(IPreLoader loader)
@@ -494,7 +494,7 @@ namespace ANovel.Core.Tests
 			}
 		}
 
-		[CommandName("test_sync")]
+		[TagName("test_sync")]
 		public class TestSync : Command
 		{
 			public static bool EndFlag = false;
@@ -516,10 +516,10 @@ namespace ANovel.Core.Tests
 
 		}
 
-		[CommandName("test_prepare_wait")]
+		[TagName("test_prepare_wait")]
 		public class TestPrepareWaitTime : Command
 		{
-			[CommandField(Required = true)]
+			[Argument(Required = true)]
 			float m_Time = default;
 
 			float m_Start;
@@ -536,12 +536,12 @@ namespace ANovel.Core.Tests
 
 		}
 
-		[CommandName("test_trigger")]
+		[TagName("test_trigger")]
 		public class TestTrigger : Command
 		{
 			public static string Trigger;
 
-			[CommandField(Required = true)]
+			[Argument(Required = true)]
 			public string Name = default;
 
 			protected override void Execute()
@@ -551,7 +551,7 @@ namespace ANovel.Core.Tests
 
 		}
 
-		[CommandName("test_error")]
+		[TagName("test_error")]
 		public class TestError : Command
 		{
 			protected override void Execute()
@@ -602,6 +602,10 @@ namespace ANovel.Core.Tests
 					});
 					param.Data.DeleteSingle<PriorityEnvData>();
 				}
+			}
+
+			public void PostJump(IMetaData meta, IEnvData data)
+			{
 			}
 		}
 

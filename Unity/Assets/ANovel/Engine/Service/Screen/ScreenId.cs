@@ -1,6 +1,6 @@
 using System;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public interface IScreenId : IEquatable<IScreenId>
 	{

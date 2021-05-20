@@ -4,34 +4,34 @@ using System.Reflection;
 
 namespace ANovel.Core
 {
-	public class InjectParamEntry
+	public class InjectEntry
 	{
 		FieldInfo m_FieldInfo;
 		PropertyInfo m_PropertyInfo;
-		InjectParamAttribute m_Attr;
+		InjectArgumentAttribute m_Attr;
 		System.Type m_FieldType;
-		InjectParamTargetEntry m_TargetEntry;
+		InjectTargetEntry m_TargetEntry;
 		HashSet<string> m_Targets;
 		HashSet<string> m_Ignores;
 
-		public InjectParamEntry(FieldInfo info, InjectParamAttribute attr)
+		public InjectEntry(FieldInfo info, InjectArgumentAttribute attr)
 		{
 			m_FieldInfo = info;
 			m_FieldType = info.FieldType;
 			SetAttr(attr);
 		}
 
-		public InjectParamEntry(PropertyInfo info, InjectParamAttribute attr)
+		public InjectEntry(PropertyInfo info, InjectArgumentAttribute attr)
 		{
 			m_PropertyInfo = info;
 			m_FieldType = info.PropertyType;
 			SetAttr(attr);
 		}
 
-		void SetAttr(InjectParamAttribute attr)
+		void SetAttr(InjectArgumentAttribute attr)
 		{
 			m_Attr = attr;
-			m_TargetEntry = InjectParamTargetEntry.Get(m_FieldType);
+			m_TargetEntry = InjectTargetEntry.Get(m_FieldType);
 			m_Attr.TryGetTargetKeys(out m_Targets);
 			m_Attr.TryGetIgnoreKeys(out m_Ignores);
 		}

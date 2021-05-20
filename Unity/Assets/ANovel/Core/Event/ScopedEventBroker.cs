@@ -1,7 +1,8 @@
+using ANovel.Core;
 using System;
 using System.Collections.Generic;
 
-namespace ANovel.Core
+namespace ANovel
 {
 	public class ScopedEventBroker : IDisposable
 	{

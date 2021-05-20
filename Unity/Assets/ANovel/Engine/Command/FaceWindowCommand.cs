@@ -1,14 +1,11 @@
-using ANovel.Core;
-using ANovel.Service;
-
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
-	[CommandName("face_window_show")]
+	[TagName("face_window_show")]
 	public class FaceWindowShowCommand : Command
 	{
 		PathConfig Path => Get<EngineConfig>().Path;
 
-		[InjectParam]
+		[InjectArgument]
 		public FaceWindowConfig Config = new FaceWindowConfig();
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -29,7 +26,7 @@ namespace ANovel.Commands
 
 	}
 
-	[CommandName("face_window_hide")]
+	[TagName("face_window_hide")]
 	public class FaceWindowHideCommand : Command
 	{
 		protected override void UpdateEnvData(IEnvData data)

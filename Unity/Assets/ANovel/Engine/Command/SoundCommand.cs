@@ -1,21 +1,17 @@
-using ANovel.Core;
-using ANovel.Service.Sound;
 
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 	public abstract class SoundCommand : SyncCommandBase
 	{
-
 		protected ISoundService Sound => Get<ISoundService>();
-
 	}
 
-	[CommandName("se")]
+	[TagName("se")]
 	public class SePlayCommand : SoundCommand
 	{
-		[InjectParam]
+		[InjectArgument]
 		SeConfig m_Config = new SeConfig();
-		[InjectParam]
+		[InjectArgument]
 		PlayConfig m_PlayConfig = PlayConfig.Se;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -24,10 +20,10 @@ namespace ANovel.Commands
 			{
 				return;
 			}
-			data = PrefixedEnvData.Get<SeConfig>(data);
+			data = data.Prefixed<SeConfig>();
 			if (m_PlayConfig.Loop)
 			{
-				data.Set(m_Config.Slot, new PlaySoundEnvData(m_PlayConfig.Path, m_Config.Group, m_PlayConfig));
+				data.Set(m_Config.Slot, new PlaySoundEnvData(m_Config.Group, m_PlayConfig));
 			}
 			else
 			{
@@ -47,12 +43,12 @@ namespace ANovel.Commands
 		}
 	}
 
-	[CommandName("se_stop")]
+	[TagName("se_stop")]
 	public class SeStopCommand : SoundCommand
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Slot = null;
-		[InjectParam]
+		[InjectArgument]
 		StopConfig m_Config = new StopConfig();
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -61,7 +57,7 @@ namespace ANovel.Commands
 			{
 				return;
 			}
-			data = PrefixedEnvData.Get<SeConfig>(data);
+			data = data.Prefixed<SeConfig>();
 			data.Delete<PlaySoundEnvData>(m_Slot);
 		}
 
@@ -71,15 +67,15 @@ namespace ANovel.Commands
 		}
 	}
 
-	[CommandName("se_stop_all")]
+	[TagName("se_stop_all")]
 	public class SeStopAllCommand : SoundCommand
 	{
-		[InjectParam]
+		[InjectArgument]
 		StopConfig m_Config = new StopConfig();
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<SeConfig>(data);
+			data = data.Prefixed<SeConfig>();
 			data.DeleteAll<PlaySoundEnvData>();
 		}
 
@@ -90,17 +86,17 @@ namespace ANovel.Commands
 	}
 
 
-	[CommandName("se_volume")]
+	[TagName("se_volume")]
 	public class SeVolumeCommand : SoundCommand
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Slot = null;
-		[InjectParam]
+		[InjectArgument]
 		VolumeConfig m_Config = new VolumeConfig();
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<SeConfig>(data);
+			data = data.Prefixed<SeConfig>();
 			data.Update<PlaySoundEnvData, VolumeConfig>(m_Slot, m_Config);
 		}
 
@@ -112,22 +108,20 @@ namespace ANovel.Commands
 	}
 
 
-	[CommandName("bgm")]
+	[TagName("bgm")]
 	public class BgmPlayCommand : SoundCommand
 	{
-		[CommandField(Required = true)]
-		string m_Path = default;
-		[InjectParam]
+		[InjectArgument]
 		BgmConfig m_Config = new BgmConfig();
-		[InjectParam]
+		[InjectArgument]
 		PlayConfig m_PlayConfig = PlayConfig.Bgm;
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<BgmConfig>(data);
+			data = data.Prefixed<BgmConfig>();
 			if (m_PlayConfig.Loop)
 			{
-				data.Set(m_Config.Slot, new PlaySoundEnvData(m_Path, m_Config.Group, m_PlayConfig));
+				data.Set(m_Config.Slot, new PlaySoundEnvData(m_Config.Group, m_PlayConfig));
 			}
 			else
 			{
@@ -148,17 +142,17 @@ namespace ANovel.Commands
 
 	}
 
-	[CommandName("bgm_volume")]
+	[TagName("bgm_volume")]
 	public class BgmVolumeCommand : SoundCommand
 	{
-		[CommandField]
+		[Argument]
 		string m_Slot = "default";
-		[InjectParam]
+		[InjectArgument]
 		VolumeConfig m_Config = new VolumeConfig();
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<BgmConfig>(data);
+			data = data.Prefixed<BgmConfig>();
 			data.Update<PlaySoundEnvData, VolumeConfig>(m_Slot, m_Config);
 		}
 		protected override void Execute()
@@ -167,17 +161,17 @@ namespace ANovel.Commands
 		}
 	}
 
-	[CommandName("bgm_stop")]
+	[TagName("bgm_stop")]
 	public class BgmStopCommand : SoundCommand
 	{
-		[CommandField]
+		[Argument]
 		string m_Slot = "default";
-		[InjectParam]
+		[InjectArgument]
 		StopConfig m_Config = new StopConfig();
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<BgmConfig>(data);
+			data = data.Prefixed<BgmConfig>();
 			data.Delete<PlaySoundEnvData>(m_Slot);
 		}
 

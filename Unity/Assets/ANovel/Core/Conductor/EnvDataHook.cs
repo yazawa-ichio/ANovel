@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace ANovel.Core
 {
+
 	public class EnvDataHook
 	{
 		List<IEnvDataCustomProcessor> m_List = new List<IEnvDataCustomProcessor>();
@@ -43,6 +44,14 @@ namespace ANovel.Core
 						cmd.UpdateEnvData(data);
 					}
 				}
+			}
+		}
+
+		public void PostJump(IMetaData meta, IEnvData data)
+		{
+			foreach (var processor in m_List)
+			{
+				processor.PostJump(meta, data);
 			}
 		}
 

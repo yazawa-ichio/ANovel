@@ -9,6 +9,9 @@ namespace ANovel
 		Transform m_Root;
 		Queue<T> m_Pool = new Queue<T>();
 		List<T> m_List = new List<T>();
+		List<T> m_Active = new List<T>();
+
+		public IReadOnlyList<T> Active => m_Active;
 
 		public ComponentPool(Transform root)
 		{
@@ -20,6 +23,7 @@ namespace ANovel
 			if (m_Pool.Count > 0)
 			{
 				var source = m_Pool.Dequeue();
+				m_Active.Add(source);
 				source.gameObject.SetActive(true);
 				return source;
 			}
@@ -28,6 +32,7 @@ namespace ANovel
 				var source = new GameObject(typeof(T).Name).AddComponent<T>();
 				source.transform.SetParent(m_Root);
 				m_List.Add(source);
+				m_Active.Add(source);
 				OnCreate(source);
 				return source;
 			}
@@ -43,6 +48,7 @@ namespace ANovel
 			}
 			item.gameObject.SetActive(false);
 			m_Pool.Enqueue(item);
+			m_Active.Remove(item);
 		}
 
 		public void Dispose()

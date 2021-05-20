@@ -32,7 +32,7 @@ namespace ANovel.Core.Tests
 		public void 基本機能テスト()
 		{
 			EnvDataTest(new EnvData());
-			var prefix = PrefixedEnvData.Get<EnvDataTests>(new EnvData());
+			var prefix = new EnvData().Prefixed<EnvDataTests>();
 			EnvDataTest(prefix);
 		}
 
@@ -100,7 +100,7 @@ namespace ANovel.Core.Tests
 		public void 複数操作テスト()
 		{
 			EnvDataTest2(new EnvData());
-			var prefix = PrefixedEnvData.Get<EnvDataTests>(new EnvData());
+			var prefix = new EnvData().Prefixed<EnvDataTests>();
 			EnvDataTest2(prefix);
 		}
 
@@ -224,7 +224,7 @@ namespace ANovel.Core.Tests
 		public void プレフィックス()
 		{
 			var data = new EnvData();
-			var prefix = PrefixedEnvData.Get<EnvDataTests>(data);
+			var prefix = data.Prefixed<EnvDataTests>();
 
 			data.Set("Key", new TestEnvData1());
 			prefix.Set("Key", new TestEnvData1
@@ -235,7 +235,7 @@ namespace ANovel.Core.Tests
 			Assert.AreEqual(2, data.GetKeys<TestEnvData1>().Count(), "全体から見ると二つ");
 			Assert.AreEqual(1, prefix.GetKeys<TestEnvData1>().Count(), "プレフィックス付から見ると一つ");
 
-			var holder = PrefixedEnvData.Get<EnvDataTests>((IEnvDataHolder)data);
+			var holder = ((IEnvDataHolder)data).Prefixed<EnvDataTests>();
 
 			Assert.AreEqual(1, holder.GetAll<TestEnvData1>().Count(), "ホルダー経緯で受け取る");
 
@@ -250,7 +250,7 @@ namespace ANovel.Core.Tests
 		public void シングルデータ()
 		{
 			var data = new EnvData();
-			var prefix = PrefixedEnvData.Get<EnvDataTests>(data);
+			var prefix = data.Prefixed<EnvDataTests>();
 			Assert.Throws<KeyNotFoundException>(() =>
 			{
 				data.GetSingle<TestEnvData1>();

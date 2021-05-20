@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public interface ILevel
 	{

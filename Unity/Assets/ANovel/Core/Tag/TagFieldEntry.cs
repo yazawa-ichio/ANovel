@@ -8,7 +8,7 @@ namespace ANovel.Core
 		FieldInfo m_FieldInfo;
 		PropertyInfo m_PropertyInfo;
 		IFormatter m_Formatter;
-		TagFieldAttribute m_Attr;
+		ArgumentAttribute m_Attr;
 		Type m_FieldType;
 		bool m_InitFormatter;
 
@@ -16,7 +16,7 @@ namespace ANovel.Core
 
 		public string Name { get; private set; }
 
-		public TagFieldEntry(FieldInfo info, TagFieldAttribute attr)
+		public TagFieldEntry(FieldInfo info, ArgumentAttribute attr)
 		{
 			m_FieldInfo = info;
 			m_FieldType = info.FieldType;
@@ -24,7 +24,7 @@ namespace ANovel.Core
 			SetAttr(attr);
 		}
 
-		public TagFieldEntry(PropertyInfo info, TagFieldAttribute attr)
+		public TagFieldEntry(PropertyInfo info, ArgumentAttribute attr)
 		{
 			m_PropertyInfo = info;
 			m_FieldType = info.PropertyType;
@@ -45,7 +45,7 @@ namespace ANovel.Core
 			return name.ToLower();
 		}
 
-		void SetAttr(TagFieldAttribute attr)
+		void SetAttr(ArgumentAttribute attr)
 		{
 			if (attr == null)
 			{

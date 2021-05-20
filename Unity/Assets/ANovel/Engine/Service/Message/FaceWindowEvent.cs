@@ -1,4 +1,4 @@
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public enum FaceWindowEvent
 	{

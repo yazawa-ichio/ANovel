@@ -24,7 +24,7 @@ namespace ANovel.Core
 
 		public ServiceContainer Container { get; private set; }
 
-		public ResourceCache Cache { get; private set; }
+		public IResourceCache Cache { get; private set; }
 
 		public ITextProcessor Text { get; set; }
 
@@ -34,7 +34,17 @@ namespace ANovel.Core
 
 		public bool IsStop => m_StopCommand != null || (m_PreloadQueue.Count == 0 && m_CurrentBlock == null);
 
-		public bool IsWaitNext => m_State == State.Finished;
+		public bool IsWaitNext
+		{
+			get
+			{
+				if (m_State == State.ProcessText)
+				{
+					return !Text?.IsProcessing ?? true;
+				}
+				return m_State == State.Finished;
+			}
+		}
 
 		State m_State = State.StartNext;
 		Queue<BlockPreloadEntry> m_PreloadQueue = new Queue<BlockPreloadEntry>();
@@ -47,6 +57,7 @@ namespace ANovel.Core
 		{
 			Container = container;
 			Cache = cache;
+			Container.Set<IHistory>(History);
 		}
 
 		public void Reset()
@@ -77,10 +88,11 @@ namespace ANovel.Core
 			}
 		}
 
-		public void PostJump()
+		public void PostJump(PreProcessor.Result result)
 		{
 			m_StopCommand = null;
 			ClearPreload();
+			EnvDataHook.PostJump(result.Meta, m_PreUpdateEnvData);
 			m_State = State.StartNext;
 		}
 

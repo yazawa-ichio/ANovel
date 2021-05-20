@@ -28,6 +28,8 @@ namespace ANovel
 		string m_BgmRoot = "Sound/BGM";
 		[SerializeField]
 		string m_SeRoot = "Sound/SE";
+		[SerializeField]
+		string m_VoiceRoot = "Sound/Voice";
 
 		public string BgRoot => GetBg("");
 
@@ -36,6 +38,8 @@ namespace ANovel
 		public string RuleRoot => GetRule("");
 
 		public string BgmRoot => GetBgm("");
+
+		public string VoiceRoot => GetVoice("");
 
 		public string CharaRoot => GetChara("");
 
@@ -94,5 +98,9 @@ namespace ANovel
 			return GetPath(m_BgmRoot, path);
 		}
 
+		public string GetVoice(string path)
+		{
+			return GetPath(m_VoiceRoot, path);
+		}
 	}
 }

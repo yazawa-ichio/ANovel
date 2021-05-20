@@ -1,7 +1,6 @@
-using ANovel.Core;
 using UnityEngine;
 
-namespace ANovel.Service.Sound
+namespace ANovel.Engine
 {
 	public class PlayConfig
 	{
@@ -13,8 +12,11 @@ namespace ANovel.Service.Sound
 			Time = Millisecond.FromSecond(0.5f),
 			Loop = true,
 		};
+		public static PlayConfig Voice => new PlayConfig
+		{
+		};
 
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		public string Path;
 		public float Volume = 1f;
 		public Millisecond Time;
@@ -22,7 +24,7 @@ namespace ANovel.Service.Sound
 		public Easing? Easing;
 		public float Pitch = 1f;
 		public float Pan;
-		[SkipInjectParam]
+		[SkipArgument]
 		public ICacheHandle<AudioClip> Clip { get; set; }
 
 		public void Preload(string prefix, IPreLoader loader)
@@ -30,12 +32,12 @@ namespace ANovel.Service.Sound
 			loader.Load<AudioClip>(prefix + Path);
 		}
 
-		public void Load(string prefix, ResourceCache cache)
+		public void Load(string prefix, IResourceCache cache)
 		{
 			Clip = cache.Load<AudioClip>(prefix + Path);
 		}
 
-		public static PlayConfig Restore(PlaySoundEnvData data, string prefix, ResourceCache cache)
+		public static PlayConfig Restore(PlaySoundEnvData data, string prefix, IResourceCache cache)
 		{
 			return new PlayConfig()
 			{
@@ -48,11 +50,21 @@ namespace ANovel.Service.Sound
 			};
 		}
 
+		public static PlayConfig Restore(PlayVoiceEnvData data, string prefix, IResourceCache cache)
+		{
+			return new PlayConfig()
+			{
+				Pitch = data.Pitch,
+				Pan = data.Pan,
+				Volume = data.Volume,
+				Clip = cache.Load<AudioClip>(prefix + data.Path),
+			};
+		}
 	}
 
 	public class VolumeConfig
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		public float Volume = 1f;
 		public Millisecond Time = Millisecond.FromSecond(0.5f);
 		public Easing? Easing;
@@ -78,6 +90,12 @@ namespace ANovel.Service.Sound
 		public Easing? StopEasing { get; set; }
 	}
 
+	public class VoiceConfig
+	{
+		public string Slot { get; set; } = "default";
+		public string Group = "Voice";
+	}
+
 	public struct PlaySoundEnvData : IEnvDataUpdate<VolumeConfig>
 	{
 		public string Path;
@@ -86,9 +104,9 @@ namespace ANovel.Service.Sound
 		public float Pitch;
 		public float Pan;
 
-		public PlaySoundEnvData(string path, string group, PlayConfig config)
+		public PlaySoundEnvData(string group, PlayConfig config)
 		{
-			Path = path;
+			Path = config.Path;
 			Group = group;
 			Volume = config.Volume;
 			Pitch = config.Pitch;
@@ -101,5 +119,40 @@ namespace ANovel.Service.Sound
 		}
 
 	}
+
+	public struct PlayVoiceEnvData : IPreProcessDelete, IHistorySaveEnvData
+	{
+		public string Path;
+		public string Group;
+		public float Volume;
+		public float Pitch;
+		public float Pan;
+
+		public PlayVoiceEnvData(string group, PlayConfig config)
+		{
+			Path = config.Path;
+			Group = group;
+			Volume = config.Volume;
+			Pitch = config.Pitch;
+			Pan = config.Pan;
+		}
+
+	}
+
+	public struct AutoVoiceEnvData
+	{
+		public bool Enabled;
+		public int Index;
+	}
+
+	public struct CharaAutoVoiceEnvData
+	{
+		public int Index;
+	}
+
+	public struct SkipAutoVoiceEnvData : IPreProcessDelete
+	{
+	}
+
 
 }

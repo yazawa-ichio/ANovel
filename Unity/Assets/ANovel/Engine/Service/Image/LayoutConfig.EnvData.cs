@@ -1,8 +1,7 @@
-using ANovel.Core;
 using ANovel.Serialization;
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public partial class LayoutConfig
 	{

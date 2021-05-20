@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace ANovel.Service.Sound
+namespace ANovel.Engine
 {
 	public interface IAudioMixerProvider
 	{

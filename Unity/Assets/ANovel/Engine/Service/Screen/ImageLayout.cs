@@ -2,7 +2,7 @@ using ANovel.Core;
 using System;
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public struct ImageLayout
 	{

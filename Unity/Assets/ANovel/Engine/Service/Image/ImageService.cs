@@ -1,8 +1,7 @@
-using ANovel.Core;
 using System;
 using System.Collections.Generic;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public partial class ImageService : Service
 	{
@@ -64,6 +63,11 @@ namespace ANovel.Service
 			return m_Images[category].PlayAnim(name, config, layout);
 		}
 
+		public void SetOrder(Category category, string name, long autoOrder)
+		{
+			m_Images[category].SetOrder(name, autoOrder);
+		}
+
 		protected override void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader)
 		{
 			foreach (var image in m_Images.Values)
@@ -72,7 +76,7 @@ namespace ANovel.Service
 			}
 		}
 
-		protected override void Restore(IMetaData meta, IEnvDataHolder data, ResourceCache cache)
+		protected override void Restore(IMetaData meta, IEnvDataHolder data, IResourceCache cache)
 		{
 			foreach (var image in m_Images.Values)
 			{
