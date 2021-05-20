@@ -1,4 +1,4 @@
-namespace ANovel.Core
+namespace ANovel
 {
 	public interface IPreLoader
 	{

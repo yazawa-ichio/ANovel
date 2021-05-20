@@ -1,7 +1,6 @@
-using ANovel.Core;
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public partial class ImageObjectConfig
 	{
@@ -26,7 +25,7 @@ namespace ANovel.Service
 			}
 		}
 
-		public void LoadTexture(string prefix, ResourceCache cache)
+		public void LoadTexture(string prefix, IResourceCache cache)
 		{
 			if (!string.IsNullOrEmpty(Path))
 			{
@@ -47,12 +46,12 @@ namespace ANovel.Service
 			}
 		}
 
-		public void LoadRule(PathConfig path, ResourceCache cache)
+		public void LoadRule(PathConfig path, IResourceCache cache)
 		{
 			LoadRule(path.GetRule(""), cache);
 		}
 
-		public void LoadRule(string prefix, ResourceCache cache)
+		public void LoadRule(string prefix, IResourceCache cache)
 		{
 			if (!string.IsNullOrEmpty(Rule))
 			{
@@ -60,7 +59,7 @@ namespace ANovel.Service
 			}
 		}
 
-		public static ImageObjectConfig Restore(ImageObjectEnvData data, string prefix, ResourceCache cache)
+		public static ImageObjectConfig Restore(ImageObjectEnvData data, string prefix, IResourceCache cache)
 		{
 			var config = new ImageObjectConfig();
 			config.Path = data.Path;

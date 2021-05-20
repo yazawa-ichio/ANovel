@@ -1,8 +1,7 @@
-using ANovel.Core;
 using System;
 using System.Collections.Generic;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public partial class ImageService : Service
 	{
@@ -77,7 +76,7 @@ namespace ANovel.Service
 			}
 		}
 
-		protected override void Restore(IMetaData meta, IEnvDataHolder data, ResourceCache cache)
+		protected override void Restore(IMetaData meta, IEnvDataHolder data, IResourceCache cache)
 		{
 			foreach (var image in m_Images.Values)
 			{

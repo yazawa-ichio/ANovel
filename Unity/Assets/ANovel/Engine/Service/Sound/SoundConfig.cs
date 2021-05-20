@@ -1,7 +1,6 @@
-using ANovel.Core;
 using UnityEngine;
 
-namespace ANovel.Service.Sound
+namespace ANovel.Engine
 {
 	public class PlayConfig
 	{
@@ -33,12 +32,12 @@ namespace ANovel.Service.Sound
 			loader.Load<AudioClip>(prefix + Path);
 		}
 
-		public void Load(string prefix, ResourceCache cache)
+		public void Load(string prefix, IResourceCache cache)
 		{
 			Clip = cache.Load<AudioClip>(prefix + Path);
 		}
 
-		public static PlayConfig Restore(PlaySoundEnvData data, string prefix, ResourceCache cache)
+		public static PlayConfig Restore(PlaySoundEnvData data, string prefix, IResourceCache cache)
 		{
 			return new PlayConfig()
 			{
@@ -51,7 +50,7 @@ namespace ANovel.Service.Sound
 			};
 		}
 
-		public static PlayConfig Restore(PlayVoiceEnvData data, string prefix, ResourceCache cache)
+		public static PlayConfig Restore(PlayVoiceEnvData data, string prefix, IResourceCache cache)
 		{
 			return new PlayConfig()
 			{

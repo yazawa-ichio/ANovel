@@ -1,8 +1,7 @@
-using ANovel.Core;
 using System;
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public class MessageService : Service, ITextProcessor
 	{
@@ -62,7 +61,7 @@ namespace ANovel.Service
 			}
 		}
 
-		protected override void Restore(IMetaData meta, IEnvDataHolder data, ResourceCache cache)
+		protected override void Restore(IMetaData meta, IEnvDataHolder data, IResourceCache cache)
 		{
 			ResetFace();
 			m_TextPrinter?.Restore(meta, data, cache);

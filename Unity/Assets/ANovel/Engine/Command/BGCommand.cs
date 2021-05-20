@@ -1,8 +1,6 @@
-using ANovel.Core;
-using ANovel.Service;
-using Category = ANovel.Service.ImageService.Category;
+using Category = ANovel.Engine.ImageService.Category;
 
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 
 	public class BGCommandBase : SyncCommandBase, IUseTransitionScope
@@ -34,7 +32,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Bg);
+			data = data.Prefixed(Category.Bg);
 			if (!data.Has<ImageObjectEnvData>(EnvKey))
 			{
 				// 現在の仕様ではBGは最背面固定
@@ -75,7 +73,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Bg);
+			data = data.Prefixed(Category.Bg);
 			data.Update<ImageObjectEnvData, ImageObjectConfig>(EnvKey, m_Transition);
 		}
 
@@ -105,7 +103,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Bg);
+			data = data.Prefixed(Category.Bg);
 			data.Delete<ImageObjectEnvData>(EnvKey);
 			LayoutConfig.DeleteEvnData(EnvKey, data);
 		}
@@ -133,7 +131,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Bg);
+			data = data.Prefixed(Category.Bg);
 			if (data.Has<ImageObjectEnvData>(EnvKey))
 			{
 				LayoutConfig.UpdateEvnData(EnvKey, data, m_Layout);

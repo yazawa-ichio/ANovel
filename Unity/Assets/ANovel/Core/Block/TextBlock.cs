@@ -1,10 +1,11 @@
+using ANovel.Core;
 using ANovel.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace ANovel.Core
+namespace ANovel
 {
 	public enum TextBlockType
 	{

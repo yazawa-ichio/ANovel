@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public class ImagePool : ComponentPool<ImageObject>
 	{

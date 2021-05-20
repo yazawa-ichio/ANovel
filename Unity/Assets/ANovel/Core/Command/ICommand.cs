@@ -1,5 +1,3 @@
-using ANovel.Core;
-
 namespace ANovel
 {
 	public interface ICommand

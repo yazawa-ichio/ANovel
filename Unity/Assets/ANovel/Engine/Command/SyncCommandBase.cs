@@ -1,4 +1,4 @@
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 	public class SyncCommandBase : Command
 	{

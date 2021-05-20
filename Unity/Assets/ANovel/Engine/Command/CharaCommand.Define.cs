@@ -1,8 +1,7 @@
 using ANovel.Core;
-using ANovel.Service;
 using System.Collections.Generic;
 
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 
 	[PreProcessName("define_chara")]

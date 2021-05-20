@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 
 	public class TextPrinter : TextPrinterBase

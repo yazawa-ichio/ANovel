@@ -1,10 +1,9 @@
-using ANovel.Core;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 
 

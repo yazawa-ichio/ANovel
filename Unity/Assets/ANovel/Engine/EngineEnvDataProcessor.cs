@@ -1,9 +1,6 @@
-using ANovel.Commands;
 using ANovel.Core;
-using ANovel.Service;
-using ANovel.Service.Sound;
 
-namespace ANovel
+namespace ANovel.Engine
 {
 	public interface IPreProcessDelete
 	{
@@ -74,7 +71,7 @@ namespace ANovel
 			}
 			key = CharaMetaData.GetKey(param.Meta, key);
 			var cmd = new FaceWindowShowCommand();
-			var data = PrefixedEnvData.Get(param.Data, ImageService.Category.Chara);
+			var data = param.Data.Prefixed(ImageService.Category.Chara);
 			if (data.TryGet<CharaObjectEnvData>(key, out var chara))
 			{
 				var meta = CharaMetaData.Get(param.Meta, key);

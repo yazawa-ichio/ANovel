@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace ANovel.Core
 {
+
 	public class EnvDataHook
 	{
 		List<IEnvDataCustomProcessor> m_List = new List<IEnvDataCustomProcessor>();

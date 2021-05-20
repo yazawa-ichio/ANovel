@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ANovel.Core
+namespace ANovel
 {
 	[UnityEngine.Scripting.Preserve]
 	public class ColorFormatter : IDefaultFormatter

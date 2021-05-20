@@ -1,4 +1,3 @@
-using ANovel.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace ANovel.Service.Sound
+namespace ANovel.Engine
 {
 	public interface ISoundService
 	{
@@ -226,25 +225,25 @@ namespace ANovel.Service.Sound
 
 		protected override void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader)
 		{
-			foreach (var kvp in PrefixedEnvData.Get<BgmConfig>(data).GetAll<PlaySoundEnvData>())
+			foreach (var kvp in data.Prefixed<BgmConfig>().GetAll<PlaySoundEnvData>())
 			{
 				loader.Load<AudioClip>(Path.GetBgm(kvp.Value.Path));
 			}
-			foreach (var kvp in PrefixedEnvData.Get<SeConfig>(data).GetAll<PlaySoundEnvData>())
+			foreach (var kvp in data.Prefixed<SeConfig>().GetAll<PlaySoundEnvData>())
 			{
 				loader.Load<AudioClip>(Path.GetSe(kvp.Value.Path));
 			}
 		}
 
-		protected override void Restore(IMetaData meta, IEnvDataHolder data, ResourceCache cache)
+		protected override void Restore(IMetaData meta, IEnvDataHolder data, IResourceCache cache)
 		{
 			StopAll();
-			foreach (var kvp in PrefixedEnvData.Get<BgmConfig>(data).GetAll<PlaySoundEnvData>())
+			foreach (var kvp in data.Prefixed<BgmConfig>().GetAll<PlaySoundEnvData>())
 			{
 				var config = PlayConfig.Restore(kvp.Value, Path.BgmRoot, cache);
 				PlayBgm(new BgmConfig { Slot = kvp.Key, Group = kvp.Value.Group }, config);
 			}
-			foreach (var kvp in PrefixedEnvData.Get<SeConfig>(data).GetAll<PlaySoundEnvData>())
+			foreach (var kvp in data.Prefixed<SeConfig>().GetAll<PlaySoundEnvData>())
 			{
 				var config = PlayConfig.Restore(kvp.Value, Path.SeRoot, cache);
 				PlaySe(new SeConfig { Slot = kvp.Key, Group = kvp.Value.Group }, config);
@@ -253,7 +252,7 @@ namespace ANovel.Service.Sound
 
 		public async Task ReplayVoice(IHistoryLog log)
 		{
-			var cache = Container.Get<ResourceCache>();
+			var cache = Container.Get<IResourceCache>();
 			var configs = new Dictionary<string, PlayConfig>();
 			foreach (var kvp in log.Extension.GetAll<PlayVoiceEnvData>())
 			{

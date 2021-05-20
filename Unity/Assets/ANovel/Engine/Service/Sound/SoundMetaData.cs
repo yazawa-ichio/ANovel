@@ -1,10 +1,8 @@
-using ANovel.Commands;
 using ANovel.Core;
-using ANovel.Service.Sound;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public class SoundMetaData : IParamConverter
 	{

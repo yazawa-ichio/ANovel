@@ -1,7 +1,6 @@
-using ANovel.Core;
 using ANovel.Serialization;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public struct MessageEnvData : IDefaultValueSerialization, IHistorySaveEnvData
 	{

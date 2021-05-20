@@ -1,6 +1,4 @@
-using ANovel.Core;
-
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 
 	public class CharaObjectConfig

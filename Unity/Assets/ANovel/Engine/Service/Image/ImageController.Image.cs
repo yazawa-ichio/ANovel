@@ -1,7 +1,6 @@
-using ANovel.Core;
 using System;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public partial class ImageController
 	{

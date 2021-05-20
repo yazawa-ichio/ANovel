@@ -1,7 +1,5 @@
-using ANovel.Core;
-using ANovel.Service.Sound;
 
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 	public abstract class SoundCommand : SyncCommandBase
 	{
@@ -22,7 +20,7 @@ namespace ANovel.Commands
 			{
 				return;
 			}
-			data = PrefixedEnvData.Get<SeConfig>(data);
+			data = data.Prefixed<SeConfig>();
 			if (m_PlayConfig.Loop)
 			{
 				data.Set(m_Config.Slot, new PlaySoundEnvData(m_Config.Group, m_PlayConfig));
@@ -59,7 +57,7 @@ namespace ANovel.Commands
 			{
 				return;
 			}
-			data = PrefixedEnvData.Get<SeConfig>(data);
+			data = data.Prefixed<SeConfig>();
 			data.Delete<PlaySoundEnvData>(m_Slot);
 		}
 
@@ -77,7 +75,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<SeConfig>(data);
+			data = data.Prefixed<SeConfig>();
 			data.DeleteAll<PlaySoundEnvData>();
 		}
 
@@ -98,7 +96,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<SeConfig>(data);
+			data = data.Prefixed<SeConfig>();
 			data.Update<PlaySoundEnvData, VolumeConfig>(m_Slot, m_Config);
 		}
 
@@ -120,7 +118,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<BgmConfig>(data);
+			data = data.Prefixed<BgmConfig>();
 			if (m_PlayConfig.Loop)
 			{
 				data.Set(m_Config.Slot, new PlaySoundEnvData(m_Config.Group, m_PlayConfig));
@@ -154,7 +152,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<BgmConfig>(data);
+			data = data.Prefixed<BgmConfig>();
 			data.Update<PlaySoundEnvData, VolumeConfig>(m_Slot, m_Config);
 		}
 		protected override void Execute()
@@ -173,7 +171,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get<BgmConfig>(data);
+			data = data.Prefixed<BgmConfig>();
 			data.Delete<PlaySoundEnvData>(m_Slot);
 		}
 

@@ -1,9 +1,8 @@
-using ANovel.Core;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public partial class ImageService
 	{
@@ -98,16 +97,16 @@ namespace ANovel.Service
 
 			public void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader)
 			{
-				data = PrefixedEnvData.Get(data, m_Category);
+				data = data.Prefixed(m_Category);
 				foreach (var kvp in data.GetAll<ImageObjectEnvData>())
 				{
 					loader.Load<Texture>(Path.GetPath(GetRootPath(), kvp.Value.Path));
 				}
 			}
 
-			public void Restore(IMetaData meta, IEnvDataHolder data, ResourceCache cache)
+			public void Restore(IMetaData meta, IEnvDataHolder data, IResourceCache cache)
 			{
-				data = PrefixedEnvData.Get(data, m_Category);
+				data = data.Prefixed(m_Category);
 				foreach (var kvp in data.GetAll<ImageObjectEnvData>())
 				{
 					var config = ImageObjectConfig.Restore(kvp.Value, GetRootPath(), cache);

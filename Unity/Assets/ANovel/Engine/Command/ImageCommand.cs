@@ -1,9 +1,7 @@
-using ANovel.Core;
-using ANovel.Service;
 using System.Linq;
-using Category = ANovel.Service.ImageService.Category;
+using Category = ANovel.Engine.ImageService.Category;
 
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 
 	public class ImageCommandBase : SyncCommandBase, IUseTransitionScope
@@ -31,7 +29,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Image);
+			data = data.Prefixed(Category.Image);
 			if (!data.Has<ImageObjectEnvData>(m_Name))
 			{
 				m_Transition.AutoOrder = ScreenOrderEnvData.GenOrder(data);
@@ -79,7 +77,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Image);
+			data = data.Prefixed(Category.Image);
 			if (m_Front)
 			{
 				m_Transition.AutoOrder = ScreenOrderEnvData.GenOrder(data);
@@ -116,7 +114,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Image);
+			data = data.Prefixed(Category.Image);
 			data.Delete<ImageObjectEnvData>(m_Name);
 			LayoutConfig.DeleteEvnData(m_Name, data);
 		}
@@ -154,7 +152,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Image);
+			data = data.Prefixed(Category.Image);
 			m_Names = data.GetKeys<LayoutConfig.LayoutLevelEnvData>(x =>
 			{
 				if (string.IsNullOrEmpty(m_Level))
@@ -199,7 +197,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Image);
+			data = data.Prefixed(Category.Image);
 			if (data.TryGet<ImageObjectEnvData>(m_Name, out var image))
 			{
 				LayoutConfig.UpdateEvnData(m_Name, data, m_Layout);

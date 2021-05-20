@@ -1,9 +1,8 @@
-using ANovel.Core;
 using System;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace ANovel.Service.Sound
+namespace ANovel.Engine
 {
 	public class SoundPlayer : IDisposable
 	{

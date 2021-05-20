@@ -1,9 +1,7 @@
-using ANovel.Core;
-using ANovel.Service;
 using System.Linq;
-using Category = ANovel.Service.ImageService.Category;
+using Category = ANovel.Engine.ImageService.Category;
 
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 
 	public class CharaCommandBase : SyncCommandBase, IUseTransitionScope
@@ -41,7 +39,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Chara);
+			data = data.Prefixed(Category.Chara);
 			var meta = GetMetaData(m_Name);
 			m_Config.Init(m_Name, meta, data);
 			m_Transition.Path = m_Config.ImagePath;
@@ -97,7 +95,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Chara);
+			data = data.Prefixed(Category.Chara);
 			m_Config.Init(m_Name, CharaMetaData.Get(Meta, m_Name), data);
 		}
 
@@ -130,7 +128,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Chara);
+			data = data.Prefixed(Category.Chara);
 			m_Config.Init(m_Name, GetMetaData(m_Name), data);
 			m_Transition.Path = m_Config.ImagePath;
 			if (m_Front)
@@ -176,7 +174,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, Category.Chara);
+			data = data.Prefixed(Category.Chara);
 			if (m_Clear)
 			{
 				data.Delete<CharaObjectEnvData>(m_Name);
@@ -220,7 +218,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, ImageService.Category.Chara);
+			data = data.Prefixed(Category.Chara);
 			m_Names = data.GetKeys<LayoutConfig.LayoutLevelEnvData>(x =>
 			{
 				if (string.IsNullOrEmpty(m_Level))
@@ -269,7 +267,7 @@ namespace ANovel.Commands
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
-			data = PrefixedEnvData.Get(data, ImageService.Category.Chara);
+			data = data.Prefixed(Category.Chara);
 			if (data.TryGet<ImageObjectEnvData>(m_Name, out var image))
 			{
 				LayoutConfig.UpdateEvnData(m_Name, data, m_Layout);

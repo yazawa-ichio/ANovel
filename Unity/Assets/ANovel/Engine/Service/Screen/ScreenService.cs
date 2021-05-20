@@ -1,9 +1,8 @@
-using ANovel.Core;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 
 	public interface IScreenService

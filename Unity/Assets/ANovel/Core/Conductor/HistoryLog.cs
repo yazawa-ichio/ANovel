@@ -1,11 +1,5 @@
 namespace ANovel.Core
 {
-	public interface IHistoryLog
-	{
-		BlockLabelInfo LabelInfo { get; }
-		TextBlock Text { get; }
-		IEnvDataHolder Extension { get; }
-	}
 
 	public class HistoryLog : IHistoryLog
 	{

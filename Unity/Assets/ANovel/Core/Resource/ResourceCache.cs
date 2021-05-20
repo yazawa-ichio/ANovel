@@ -4,7 +4,8 @@ using System.Threading;
 
 namespace ANovel.Core
 {
-	public class ResourceCache : IDisposable
+
+	public class ResourceCache : IResourceCache, IDisposable
 	{
 		Queue<string> m_Release = new Queue<string>();
 		Dictionary<string, CacheEntry> m_Dic = new Dictionary<string, CacheEntry>();

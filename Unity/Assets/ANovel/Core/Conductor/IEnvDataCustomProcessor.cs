@@ -1,4 +1,6 @@
-namespace ANovel.Core
+using ANovel.Core;
+
+namespace ANovel
 {
 	public interface IEnvDataCustomProcessor
 	{

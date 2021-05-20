@@ -1,7 +1,4 @@
-using ANovel.Core;
-using ANovel.Service;
-
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 	public class MessageCommandBase : Command
 	{

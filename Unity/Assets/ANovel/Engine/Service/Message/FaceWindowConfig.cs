@@ -1,7 +1,6 @@
-using ANovel.Core;
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public class FaceWindowConfig
 	{
@@ -22,7 +21,7 @@ namespace ANovel.Service
 			}
 		}
 
-		public void LoadTexture(string prefix, ResourceCache cache)
+		public void LoadTexture(string prefix, IResourceCache cache)
 		{
 			if (!string.IsNullOrEmpty(Path))
 			{

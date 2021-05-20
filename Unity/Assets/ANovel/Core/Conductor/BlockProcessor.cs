@@ -24,7 +24,7 @@ namespace ANovel.Core
 
 		public ServiceContainer Container { get; private set; }
 
-		public ResourceCache Cache { get; private set; }
+		public IResourceCache Cache { get; private set; }
 
 		public ITextProcessor Text { get; set; }
 

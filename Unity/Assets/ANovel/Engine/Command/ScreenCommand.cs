@@ -1,9 +1,9 @@
+using ANovel.Commands;
 using ANovel.Core;
-using ANovel.Service;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ANovel.Commands
+namespace ANovel.Engine
 {
 	public interface IUseTransitionScope
 	{

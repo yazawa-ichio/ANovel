@@ -1,7 +1,6 @@
-using ANovel.Core;
 using System.Collections.Generic;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 
 	public class CharaMetaData

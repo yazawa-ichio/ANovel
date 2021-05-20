@@ -7,7 +7,7 @@ namespace ANovel.Core
 {
 	public class PreLoadScope : IPreLoader, IDisposable
 	{
-		ResourceCache m_Owner;
+		IResourceCache m_Owner;
 		List<ICacheHandle> m_Handles = new List<ICacheHandle>();
 
 		public bool IsLoaded
@@ -40,7 +40,7 @@ namespace ANovel.Core
 			}
 		}
 
-		public PreLoadScope(ResourceCache owner)
+		public PreLoadScope(IResourceCache owner)
 		{
 			m_Owner = owner;
 		}

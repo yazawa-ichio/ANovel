@@ -8,7 +8,7 @@ namespace ANovel
 
 		protected ScopedEventBroker Event { get; private set; }
 
-		protected ResourceCache Cache { get; private set; }
+		protected IResourceCache Cache { get; private set; }
 
 		protected IMetaData Meta { get; private set; }
 
@@ -26,7 +26,7 @@ namespace ANovel
 			Container = container;
 			Event = container.Get<EventBroker>().Scoped();
 			Event.Subscribe(this);
-			Cache = container.Get<ResourceCache>();
+			Cache = container.Get<IResourceCache>();
 			Initialize();
 			Preload(container.Get<IPreLoader>());
 		}

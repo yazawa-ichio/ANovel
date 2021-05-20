@@ -1,8 +1,7 @@
-using ANovel.Core;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ANovel.Service
+namespace ANovel.Engine
 {
 	public abstract class TextPrinterBase : MonoBehaviour
 	{
@@ -94,7 +93,7 @@ namespace ANovel.Service
 		{
 		}
 
-		public virtual void Restore(IMetaData meta, IEnvDataHolder data, ResourceCache cache)
+		public virtual void Restore(IMetaData meta, IEnvDataHolder data, IResourceCache cache)
 		{
 			if (data.TryGetSingle<MessageEnvData>(out var msg))
 			{

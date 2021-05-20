@@ -1,6 +1,6 @@
 using ANovel.Commands;
 using ANovel.Core;
-using ANovel.Service;
+using ANovel.Engine;
 using System;
 using System.Linq;
 using System.Threading;
@@ -10,7 +10,7 @@ using UnityEngine;
 namespace ANovel
 {
 
-	public class Engine : MonoBehaviour
+	public class ANovelEngine : MonoBehaviour
 	{
 		[SerializeField]
 		EngineConfig m_Config;
@@ -200,7 +200,7 @@ namespace ANovel
 					Meta = block?.Meta,
 					Env = data
 				};
-				var cache = m_Conductor.Container.Get<ResourceCache>();
+				var cache = m_Conductor.Cache;
 				using (var loader = new PreLoadScope(cache))
 				{
 					await Task.WhenAll(m_Services.Select(x => x.PreRestore(restoreData, loader)));

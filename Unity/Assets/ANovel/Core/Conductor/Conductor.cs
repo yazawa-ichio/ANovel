@@ -11,7 +11,7 @@ namespace ANovel.Core
 
 		public EventBroker Event { get; private set; } = new EventBroker();
 
-		public ResourceCache Cache { get; private set; }
+		public IResourceCache Cache => m_Cache;
 
 		public ServiceContainer Container { get; private set; } = new ServiceContainer();
 
@@ -38,23 +38,24 @@ namespace ANovel.Core
 		CancellationTokenSource m_Cancellation = new CancellationTokenSource();
 		BlockProcessor m_BlockProcessor;
 		ScopeLocker m_Locker = new ScopeLocker();
+		ResourceCache m_Cache;
 
 		public Conductor(BlockReader reader, IResourceLoader loader)
 		{
 			m_Reader = reader;
-			Cache = new ResourceCache(loader);
+			m_Cache = new ResourceCache(loader);
 			Event.Register(this);
-			Container.Set(Cache);
+			Container.Set<IResourceCache>(m_Cache);
 			Container.Set(Event);
-			m_BlockProcessor = new BlockProcessor(Container, Cache);
+			m_BlockProcessor = new BlockProcessor(Container, m_Cache);
 		}
 
 		public void Dispose()
 		{
 			m_BlockProcessor?.Dispose();
 			m_BlockProcessor = null;
-			Cache?.Dispose();
-			Cache = null;
+			m_Cache?.Dispose();
+			m_Cache = null;
 			Event?.Dispose();
 			Event = null;
 			Container?.Dispose();
@@ -66,7 +67,7 @@ namespace ANovel.Core
 		public void Update()
 		{
 			Process();
-			Cache.ReleaseUnused();
+			m_Cache.ReleaseUnused();
 		}
 
 		public async Task Run(string path, string label, CancellationToken token)
