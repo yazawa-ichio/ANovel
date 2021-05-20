@@ -1,14 +1,14 @@
 namespace ANovel.Engine
 {
 
-	[CommandName("wait")]
+	[TagName("wait")]
 	public class WaitCommand : Command
 	{
 		IEngineTime Time => Get<IEngineTime>();
 
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		Millisecond m_Time = default;
-		[CommandField]
+		[Argument]
 		protected bool m_CanSkip = false;
 
 		IFadeHandle m_PlayHandle;
@@ -42,7 +42,7 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("wait_click")]
+	[TagName("wait_click")]
 	public class WaitClickCommand : Command
 	{
 		public override bool IsSync() => true;
@@ -63,14 +63,14 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("wait_trig")]
+	[TagName("wait_trig")]
 	public class WaitTriggerCommand : Command
 	{
 		public override bool IsSync() => true;
 
 		public override bool IsEnd() => m_Trigger;
 
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = null;
 
 		bool m_Trigger;

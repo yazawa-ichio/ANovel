@@ -15,15 +15,15 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("bg")]
+	[TagName("bg")]
 	public class BGShowCommand : BGCommandBase
 	{
-		[InjectParam]
+		[InjectArgument]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.4f)
 		};
-		[InjectParam(IgnoreKey = "level")]
+		[InjectArgument(IgnoreKey = "level")]
 		LayoutConfig m_Layout = new LayoutConfig()
 		{
 			ScreenMatch = ScreenMatchMode.Shrink,
@@ -62,10 +62,10 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("bg_change")]
+	[TagName("bg_change")]
 	public class BGChangeCommand : BGCommandBase
 	{
-		[InjectParam]
+		[InjectArgument]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.4f)
@@ -92,10 +92,10 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("bg_hide")]
+	[TagName("bg_hide")]
 	public class BGHideCommand : BGCommandBase
 	{
-		[InjectParam(IgnoreKey = "path")]
+		[InjectArgument(IgnoreKey = "path")]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.4f)
@@ -121,12 +121,12 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("bg_control")]
+	[TagName("bg_control")]
 	public class BGControlCommand : BGCommandBase
 	{
-		[InjectParam]
+		[InjectArgument]
 		PlayAnimConfig m_Config = new PlayAnimConfig();
-		[InjectParam(IgnoreKey = "level")]
+		[InjectArgument(IgnoreKey = "level")]
 		LayoutConfig m_Layout = new LayoutConfig();
 
 		protected override void UpdateEnvData(IEnvData data)

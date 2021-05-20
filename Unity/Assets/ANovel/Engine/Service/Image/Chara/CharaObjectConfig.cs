@@ -9,9 +9,9 @@ namespace ANovel.Engine
 		public string Face;
 		public string Level;
 
-		[SkipInjectParam]
+		[SkipArgument]
 		public string ImagePath { get; internal set; }
-		[SkipInjectParam]
+		[SkipArgument]
 		public FaceWindowConfig FaceWindowConfig { get; set; }
 
 		public void Init(string name, CharaMetaData meta, IEnvData data)

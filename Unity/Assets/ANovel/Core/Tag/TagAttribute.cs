@@ -1,28 +1,25 @@
 using System;
 using UnityEngine.Scripting;
 
-namespace ANovel.Core
+namespace ANovel
 {
 	[AttributeUsage(AttributeTargets.Class)]
 	public class TagNameAttribute : PreserveAttribute
 	{
 		public readonly string Name;
 
-		public readonly LineType Type;
-
 		public int Priority { get; set; }
 
 		public string Symbol { get; set; }
 
-		internal TagNameAttribute(string name, LineType type)
+		public TagNameAttribute(string name)
 		{
 			Name = name;
-			Type = type;
 		}
 	}
 
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-	public class TagFieldAttribute : PreserveAttribute
+	public class ArgumentAttribute : PreserveAttribute
 	{
 
 		public bool Required { get; set; }
@@ -31,8 +28,11 @@ namespace ANovel.Core
 
 		public Type Formatter { get; set; }
 
-		internal TagFieldAttribute() { }
+	}
 
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class SkipArgumentAttribute : PreserveAttribute
+	{
 	}
 
 }

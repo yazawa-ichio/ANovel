@@ -6,9 +6,9 @@ namespace ANovel.Engine
 
 		protected IEngineTime Time => Get<IEngineTime>();
 
-		[CommandField]
+		[Argument]
 		protected bool m_Sync = false;
-		[CommandField]
+		[Argument]
 		protected bool m_CanSkip = true;
 
 		protected IPlayHandle m_PlayHandle;

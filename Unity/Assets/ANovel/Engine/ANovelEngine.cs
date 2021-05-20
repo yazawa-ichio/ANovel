@@ -183,6 +183,20 @@ namespace ANovel
 			}
 		}
 
+		public void ReplayVoice(IHistoryLog log)
+		{
+			if (Container.TryGet(out IReplayVoiceService voice))
+			{
+				Handle(async () =>
+				{
+					using (Lock())
+					{
+						await voice.ReplayVoice(log);
+					}
+				});
+			}
+		}
+
 		public async Task Restore(StoreData data)
 		{
 			using (m_Locker.ExclusiveLock())

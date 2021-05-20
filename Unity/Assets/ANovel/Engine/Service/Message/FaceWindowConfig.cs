@@ -10,7 +10,7 @@ namespace ANovel.Engine
 		public float? Y;
 		public float? Z;
 		public float? Scale;
-		[SkipInjectParam]
+		[SkipArgument]
 		public ICacheHandle<Texture> Texture;
 
 		public void PreloadTexture(string prefix, IPreLoader loader)

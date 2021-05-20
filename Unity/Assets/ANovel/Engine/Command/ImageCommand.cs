@@ -12,19 +12,19 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("image")]
+	[TagName("image")]
 	public class ImageShowCommand : ImageCommandBase
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = null;
-		[InjectParam]
+		[InjectArgument]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.15f)
 		};
-		[InjectParam]
+		[InjectArgument]
 		LayoutConfig m_Layout = new LayoutConfig();
-		[CommandField]
+		[Argument]
 		bool m_Front = false;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -62,17 +62,17 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("image_change")]
+	[TagName("image_change")]
 	public class ImageChangeCommand : ImageCommandBase
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = null;
-		[InjectParam]
+		[InjectArgument]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.1f)
 		};
-		[CommandField]
+		[Argument]
 		bool m_Front = false;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -100,13 +100,13 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("image_hide")]
+	[TagName("image_hide")]
 	public class ImageHideCommand : ImageCommandBase
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = null;
 
-		[InjectParam(IgnoreKey = "path")]
+		[InjectArgument(IgnoreKey = "path")]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.15f)
@@ -132,15 +132,15 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("image_hide_all")]
+	[TagName("image_hide_all")]
 	public class ImageHideAllCommand : ImageCommandBase
 	{
-		[InjectParam(IgnoreKey = "path")]
+		[InjectArgument(IgnoreKey = "path")]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.15f)
 		};
-		[CommandField]
+		[Argument]
 		string m_Level = null;
 
 		string[] m_Names;
@@ -182,16 +182,16 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("image_control")]
+	[TagName("image_control")]
 	public class ImageControlCommand : ImageCommandBase
 	{
-		[CommandField]
+		[Argument]
 		string m_Name = null;
-		[InjectParam]
+		[InjectArgument]
 		PlayAnimConfig m_Config = new PlayAnimConfig();
-		[InjectParam(IgnoreKey = "level")]
+		[InjectArgument(IgnoreKey = "level")]
 		LayoutConfig m_Layout = new LayoutConfig();
-		[CommandField]
+		[Argument]
 		bool m_Front = false;
 		long m_AutoOrder;
 

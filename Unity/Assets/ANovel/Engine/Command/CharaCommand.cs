@@ -20,21 +20,21 @@ namespace ANovel.Engine
 	}
 
 
-	[CommandName("chara")]
+	[TagName("chara")]
 	public class CharaShowCommand : CharaCommandBase
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = null;
-		[InjectParam]
+		[InjectArgument]
 		CharaObjectConfig m_Config = new CharaObjectConfig();
-		[InjectParam(IgnoreKey = "path")]
+		[InjectArgument(IgnoreKey = "path")]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.15f)
 		};
-		[InjectParam]
+		[InjectArgument]
 		LayoutConfig m_Layout = new LayoutConfig();
-		[CommandField]
+		[Argument]
 		bool m_Front = false;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -81,16 +81,16 @@ namespace ANovel.Engine
 		}
 	}
 
-	[CommandName("chara_face_window")]
+	[TagName("chara_face_window")]
 	public class CharaParamCommand : Command
 	{
 		protected PathConfig Path => Get<EngineConfig>().Path;
 
 		protected ImageService Service => Get<ImageService>();
 
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = null;
-		[InjectParam(IgnoreKey = nameof(CharaObjectConfig.FaceWindow))]
+		[InjectArgument(IgnoreKey = nameof(CharaObjectConfig.FaceWindow))]
 		CharaObjectConfig m_Config = new CharaObjectConfig();
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -111,19 +111,19 @@ namespace ANovel.Engine
 		}
 	}
 
-	[CommandName("chara_change")]
+	[TagName("chara_change")]
 	public class CharaChangeCommand : CharaCommandBase
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = null;
-		[InjectParam]
+		[InjectArgument]
 		CharaObjectConfig m_Config = new CharaObjectConfig();
-		[InjectParam(IgnoreKey = "path")]
+		[InjectArgument(IgnoreKey = "path")]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.1f)
 		};
-		[CommandField]
+		[Argument]
 		bool m_Front = false;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -159,14 +159,14 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("chara_hide")]
+	[TagName("chara_hide")]
 	public class CharaHideCommand : CharaCommandBase
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = null;
-		[CommandField]
+		[Argument]
 		bool m_Clear = true;
-		[InjectParam(IgnoreKey = "path")]
+		[InjectArgument(IgnoreKey = "path")]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.15f)
@@ -196,17 +196,17 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("chara_hide_all")]
+	[TagName("chara_hide_all")]
 	public class CharaHideAllCommand : CharaCommandBase
 	{
-		[InjectParam(IgnoreKey = "path")]
+		[InjectArgument(IgnoreKey = "path")]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.15f)
 		};
-		[CommandField]
+		[Argument]
 		bool m_Clear = true;
-		[CommandField]
+		[Argument]
 		string m_Level = null;
 
 		string[] m_Names;
@@ -252,16 +252,16 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("chara_control")]
+	[TagName("chara_control")]
 	public class CharaControlCommand : CharaCommandBase
 	{
-		[CommandField]
+		[Argument]
 		string m_Name = null;
-		[InjectParam]
+		[InjectArgument]
 		PlayAnimConfig m_Config = new PlayAnimConfig();
-		[InjectParam(IgnoreKey = "level")]
+		[InjectArgument(IgnoreKey = "level")]
 		LayoutConfig m_Layout = new LayoutConfig();
-		[CommandField]
+		[Argument]
 		bool m_Front = false;
 		long m_AutoOrder;
 

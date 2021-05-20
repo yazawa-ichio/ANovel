@@ -6,12 +6,12 @@ namespace ANovel.Engine
 		protected ISoundService Sound => Get<ISoundService>();
 	}
 
-	[CommandName("se")]
+	[TagName("se")]
 	public class SePlayCommand : SoundCommand
 	{
-		[InjectParam]
+		[InjectArgument]
 		SeConfig m_Config = new SeConfig();
-		[InjectParam]
+		[InjectArgument]
 		PlayConfig m_PlayConfig = PlayConfig.Se;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -43,12 +43,12 @@ namespace ANovel.Engine
 		}
 	}
 
-	[CommandName("se_stop")]
+	[TagName("se_stop")]
 	public class SeStopCommand : SoundCommand
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Slot = null;
-		[InjectParam]
+		[InjectArgument]
 		StopConfig m_Config = new StopConfig();
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -67,10 +67,10 @@ namespace ANovel.Engine
 		}
 	}
 
-	[CommandName("se_stop_all")]
+	[TagName("se_stop_all")]
 	public class SeStopAllCommand : SoundCommand
 	{
-		[InjectParam]
+		[InjectArgument]
 		StopConfig m_Config = new StopConfig();
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -86,12 +86,12 @@ namespace ANovel.Engine
 	}
 
 
-	[CommandName("se_volume")]
+	[TagName("se_volume")]
 	public class SeVolumeCommand : SoundCommand
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		string m_Slot = null;
-		[InjectParam]
+		[InjectArgument]
 		VolumeConfig m_Config = new VolumeConfig();
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -108,12 +108,12 @@ namespace ANovel.Engine
 	}
 
 
-	[CommandName("bgm")]
+	[TagName("bgm")]
 	public class BgmPlayCommand : SoundCommand
 	{
-		[InjectParam]
+		[InjectArgument]
 		BgmConfig m_Config = new BgmConfig();
-		[InjectParam]
+		[InjectArgument]
 		PlayConfig m_PlayConfig = PlayConfig.Bgm;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -142,12 +142,12 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("bgm_volume")]
+	[TagName("bgm_volume")]
 	public class BgmVolumeCommand : SoundCommand
 	{
-		[CommandField]
+		[Argument]
 		string m_Slot = "default";
-		[InjectParam]
+		[InjectArgument]
 		VolumeConfig m_Config = new VolumeConfig();
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -161,12 +161,12 @@ namespace ANovel.Engine
 		}
 	}
 
-	[CommandName("bgm_stop")]
+	[TagName("bgm_stop")]
 	public class BgmStopCommand : SoundCommand
 	{
-		[CommandField]
+		[Argument]
 		string m_Slot = "default";
-		[InjectParam]
+		[InjectArgument]
 		StopConfig m_Config = new StopConfig();
 
 		protected override void UpdateEnvData(IEnvData data)

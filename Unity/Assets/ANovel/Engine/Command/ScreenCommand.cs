@@ -10,20 +10,20 @@ namespace ANovel.Engine
 		bool Use { get; }
 	}
 
-	[SystemCommandName("transition")]
+	[TagName("transition")]
 	public class TransitionCommand : ScopeCommand
 	{
 		protected PathConfig Path => Get<EngineConfig>().Path;
 
 		protected IScreenService Service => Get<IScreenService>();
 
-		[CommandField]
+		[Argument]
 		bool m_Sync = false;
-		[CommandField]
+		[Argument]
 		bool m_CanSkip = true;
-		[InjectParam]
+		[InjectArgument]
 		ScreenTransitionConfig m_Config = new ScreenTransitionConfig();
-		[CommandField]
+		[Argument]
 		string m_Rule = default;
 
 		IPlayHandle m_PlayHandle;

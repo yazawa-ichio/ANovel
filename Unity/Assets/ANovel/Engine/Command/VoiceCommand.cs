@@ -2,7 +2,7 @@ namespace ANovel.Engine
 {
 
 
-	[CommandName("voice")]
+	[TagName("voice")]
 	public class VoicePlayCommand : SoundCommand
 	{
 		public static VoicePlayCommand Create(string path)
@@ -12,9 +12,9 @@ namespace ANovel.Engine
 			return cmd;
 		}
 
-		[InjectParam]
+		[InjectArgument]
 		VoiceConfig m_Config = new VoiceConfig();
-		[InjectParam(IgnoreKey = nameof(PlayConfig.Loop))]
+		[InjectArgument(IgnoreKey = nameof(PlayConfig.Loop))]
 		PlayConfig m_PlayConfig = PlayConfig.Voice;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -35,12 +35,12 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("voice_stop")]
+	[TagName("voice_stop")]
 	public class VoiceStopCommand : SoundCommand
 	{
-		[CommandField]
+		[Argument]
 		string m_Slot = "default";
-		[InjectParam]
+		[InjectArgument]
 		StopConfig m_Config = new StopConfig();
 
 		protected override void Execute()
@@ -49,10 +49,10 @@ namespace ANovel.Engine
 		}
 	}
 
-	[CommandName("voice_stop_all")]
+	[TagName("voice_stop_all")]
 	public class VoiceStopAllCommand : SoundCommand
 	{
-		[InjectParam]
+		[InjectArgument]
 		StopConfig m_Config = new StopConfig();
 
 		protected override void Execute()
@@ -61,12 +61,12 @@ namespace ANovel.Engine
 		}
 	}
 
-	[CommandName("autovoice")]
+	[TagName("autovoice")]
 	public class AutoVoiceCommand : SoundCommand
 	{
-		[CommandField]
+		[Argument]
 		bool m_Enabled = true;
-		[CommandField]
+		[Argument]
 		int? m_Index;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -79,12 +79,12 @@ namespace ANovel.Engine
 
 	}
 
-	[CommandName("autovoice_reset")]
+	[TagName("autovoice_reset")]
 	public class AutoVoiceResetCommand : SoundCommand
 	{
-		[CommandField]
+		[Argument]
 		bool m_Common = true;
-		[CommandField]
+		[Argument]
 		bool m_Chara = true;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -110,7 +110,7 @@ namespace ANovel.Engine
 	}
 
 
-	[CommandName("autovoice_skip")]
+	[TagName("autovoice_skip")]
 	public class SkipAutoVoiceCommand : SoundCommand
 	{
 		protected override void UpdateEnvData(IEnvData data)

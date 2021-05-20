@@ -4,9 +4,9 @@ namespace ANovel.Engine
 	{
 		protected MessageService Service => Get<MessageService>();
 
-		[CommandField]
+		[Argument]
 		protected bool m_Sync = true;
-		[CommandField]
+		[Argument]
 		protected bool m_CanSkip = true;
 
 		protected IPlayHandle m_PlayHandle;
@@ -29,7 +29,7 @@ namespace ANovel.Engine
 		}
 	}
 
-	[CommandName("message_show")]
+	[TagName("message_show")]
 	public class MessageShowCommand : MessageCommandBase
 	{
 		protected override void UpdateEnvData(IEnvData data)
@@ -47,7 +47,7 @@ namespace ANovel.Engine
 		}
 	}
 
-	[CommandName("message_hide")]
+	[TagName("message_hide")]
 	public class MessageHideCommand : MessageCommandBase
 	{
 		protected override void UpdateEnvData(IEnvData data)

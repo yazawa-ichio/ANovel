@@ -8,7 +8,7 @@ namespace ANovel.Engine
 		public float Vague = 0.2f;
 		public bool Capture = true;
 		public bool Copy = true;
-		[SkipInjectParam]
+		[SkipArgument]
 		public ICacheHandle<Texture> Rule;
 	}
 }

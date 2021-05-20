@@ -170,10 +170,10 @@ namespace ANovel.Core.Tests
 			}
 		}
 
-		[CommandName("test_log")]
+		[TagName("test_log")]
 		class TestLogCommand : Command
 		{
-			[CommandField]
+			[Argument]
 			public string Message { get; private set; }
 
 			protected override void Execute()
@@ -182,10 +182,10 @@ namespace ANovel.Core.Tests
 			}
 		}
 
-		[CommandName("test_macro_define")]
+		[TagName("test_macro_define")]
 		class TestMacroDefineCommand : Command
 		{
-			[CommandField]
+			[Argument]
 			public string Message { get; private set; }
 
 			protected override void Execute()

@@ -16,7 +16,7 @@ namespace ANovel.Engine
 		{
 		};
 
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		public string Path;
 		public float Volume = 1f;
 		public Millisecond Time;
@@ -24,7 +24,7 @@ namespace ANovel.Engine
 		public Easing? Easing;
 		public float Pitch = 1f;
 		public float Pan;
-		[SkipInjectParam]
+		[SkipArgument]
 		public ICacheHandle<AudioClip> Clip { get; set; }
 
 		public void Preload(string prefix, IPreLoader loader)
@@ -64,7 +64,7 @@ namespace ANovel.Engine
 
 	public class VolumeConfig
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		public float Volume = 1f;
 		public Millisecond Time = Millisecond.FromSecond(0.5f);
 		public Easing? Easing;

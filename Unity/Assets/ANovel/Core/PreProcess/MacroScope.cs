@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 namespace ANovel.Core
 {
-	[TagName("macro", LineType.PreProcess)]
+	[TagName("macro")]
 	public class MacroScope : PreProcess
 	{
-		[TagField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = default;
 
 		List<LineData> m_List = new List<LineData>();
@@ -21,7 +21,7 @@ namespace ANovel.Core
 		}
 	}
 
-	[TagName("endmacro", LineType.PreProcess)]
+	[TagName("endmacro")]
 	public class EndMacroScope : PreProcess
 	{
 	}

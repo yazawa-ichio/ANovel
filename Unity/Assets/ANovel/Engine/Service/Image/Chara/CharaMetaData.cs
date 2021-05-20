@@ -44,13 +44,13 @@ namespace ANovel.Engine
 		public float? FaceWindowZ;
 		public float? FaceWindowScale;
 
-		[SkipInjectParam, System.NonSerialized]
+		[SkipArgument, System.NonSerialized]
 		public CharaCommonMetaData Common;
-		[SkipInjectParam]
+		[SkipArgument]
 		public List<DefineCharaPoseParam> Pose = new List<DefineCharaPoseParam>();
-		[SkipInjectParam]
+		[SkipArgument]
 		public List<DefineCharaParam> Face = new List<DefineCharaParam>();
-		[SkipInjectParam]
+		[SkipArgument]
 		public List<DefineCharaLevelParam> Level = new List<DefineCharaLevelParam>();
 
 		public string GetPath(string name, CharaObjectEnvData data)

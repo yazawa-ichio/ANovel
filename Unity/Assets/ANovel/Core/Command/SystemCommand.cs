@@ -1,6 +1,6 @@
 namespace ANovel.Commands
 {
-	public abstract class SystemCommand : Command
+	public abstract class SystemCommand : Command, ISystemCommand
 	{
 	}
 }

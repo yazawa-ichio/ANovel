@@ -173,56 +173,56 @@ namespace ANovel.Core.Tests
 			return ret.Count > 0 ? ret[0] : null;
 		}
 
-		[CommandName("test_default_formatter", Priority = -1)]
+		[TagName("test_default_formatter", Priority = -1)]
 		class IgnoreCommand : Command
 		{
 
 		}
 
-		[CommandName("test_default_formatter")]
+		[TagName("test_default_formatter")]
 		class TestDefaultFormatter : Command
 		{
-			[CommandField(KeyName = "key1")]
+			[Argument(KeyName = "key1")]
 			string m_String = default;
 			public string String => m_String;
 
-			[CommandField(KeyName = "key2")]
+			[Argument(KeyName = "key2")]
 			int m_Int = default;
 			public int Int => m_Int;
 
-			[CommandField(KeyName = "key2")]
+			[Argument(KeyName = "key2")]
 			long m_Long = default;
 			public long Long => m_Long;
 
-			[CommandField(KeyName = "key3")]
+			[Argument(KeyName = "key3")]
 			float m_Float = default;
 			public float Float => m_Float;
 
-			[CommandField(KeyName = "key3")]
+			[Argument(KeyName = "key3")]
 			double m_Double = default;
 			public double Double => m_Double;
 
-			[CommandField(KeyName = "key4")]
+			[Argument(KeyName = "key4")]
 			bool m_Bool = default;
 			public bool Bool => m_Bool;
 		}
 
-		[CommandName("test_custom_formatter")]
+		[TagName("test_custom_formatter")]
 		class TestCustomFormatter : Command
 		{
-			[CommandField]
+			[Argument]
 			int[] key1 = default;
 			public int[] Array => key1;
 
-			[CommandField(Formatter = typeof(Vector3Formatter))]
+			[Argument(Formatter = typeof(Vector3Formatter))]
 			Vector3 _Key2 = default;
 			public Vector3 Vector3 => _Key2;
 
-			[CommandField(Formatter = typeof(CustomIntFormatter))]
+			[Argument(Formatter = typeof(CustomIntFormatter))]
 			int m_Key3 = default;
 			public int CustomInt => m_Key3;
 
-			[CommandField(KeyName = "key3")]
+			[Argument(KeyName = "key3")]
 			string m_Key3Raw = default;
 			public string CustomIntRaw => m_Key3Raw;
 
@@ -233,18 +233,18 @@ namespace ANovel.Core.Tests
 		/// </summary>
 		class TestRequiredBase : Command
 		{
-			[CommandField(Required = false)]
+			[Argument(Required = false)]
 			public bool Optional { get; private set; }
 		}
 
-		[CommandName("test_required")]
+		[TagName("test_required")]
 		class TestRequired : TestRequiredBase
 		{
-			[CommandField(Required = true)]
+			[Argument(Required = true)]
 			public bool Required { get; private set; }
 		}
 
-		[CommandName("test_symbol", Symbol = TestSymbol.Symbol)]
+		[TagName("test_symbol", Symbol = TestSymbol.Symbol)]
 		class TestSymbol : Command
 		{
 			public const string Symbol = "TEST_SYMBOL";

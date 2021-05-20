@@ -10,13 +10,13 @@ namespace ANovel.Engine
 		public string DefaultFace;
 		public string DefaultPose;
 		public float? FaceWindowScale = 1f;
-		[SkipInjectParam]
+		[SkipArgument]
 		public List<DefineCharaPoseParam> Pose = new List<DefineCharaPoseParam>();
-		[SkipInjectParam]
+		[SkipArgument]
 		public List<DefineCharaParam> Face = new List<DefineCharaParam>();
-		[SkipInjectParam]
+		[SkipArgument]
 		public List<DefineCharaLevelParam> Level = new List<DefineCharaLevelParam>();
-		[SkipInjectParam]
+		[SkipArgument]
 		public Dictionary<string, string> DispNameToName = new Dictionary<string, string>();
 
 		CharaMetaData m_Default;

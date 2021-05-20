@@ -3,10 +3,10 @@ using ANovel.Core;
 namespace ANovel.Engine
 {
 
-	[PreProcessName("define_autovoice")]
+	[TagName("define_autovoice")]
 	public class DefineAutoVoiceCommand : PreProcess
 	{
-		[InjectParam]
+		[InjectArgument]
 		AutoVoiceMetaData m_Param = new AutoVoiceMetaData();
 
 		public override void Result(PreProcessor.Result result)
@@ -16,10 +16,10 @@ namespace ANovel.Engine
 
 	}
 
-	[PreProcessName("define_sound")]
+	[TagName("define_sound")]
 	public class DefineSoundCommand : PreProcess, IImportText
 	{
-		[CommandField]
+		[Argument]
 		string m_Import = default;
 		SoundMetaData m_Param;
 
@@ -41,10 +41,10 @@ namespace ANovel.Engine
 
 	}
 
-	[PreProcessName("define_se")]
+	[TagName("define_se")]
 	public class DefineSeCommand : PreProcess
 	{
-		[CommandField]
+		[Argument]
 		SeMetaData m_Param;
 
 		public override void Result(PreProcessor.Result result)
@@ -54,10 +54,10 @@ namespace ANovel.Engine
 		}
 	}
 
-	[PreProcessName("define_bgm")]
+	[TagName("define_bgm")]
 	public class DefineBgmCommand : PreProcess
 	{
-		[CommandField]
+		[Argument]
 		BgmMetaData m_Param;
 
 		public override void Result(PreProcessor.Result result)

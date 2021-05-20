@@ -13,4 +13,9 @@ namespace ANovel
 		void TryNext();
 		void FinishBlock();
 	}
+
+	public interface ISystemCommand : ICommand
+	{
+	}
+
 }

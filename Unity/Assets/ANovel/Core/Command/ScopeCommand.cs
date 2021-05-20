@@ -67,7 +67,7 @@ namespace ANovel.Commands
 	}
 
 
-	[TagName("end", LineType.SystemCommand)]
+	[TagName("end")]
 	public class EndScopeCommand : SystemCommand
 	{
 	}

@@ -5,10 +5,10 @@ namespace ANovel.Core
 		void Result(PreProcessor.Result result);
 	}
 
-	[TagName("define_symbol", LineType.PreProcess)]
+	[TagName("define_symbol")]
 	public class DefineSymbol : PreProcess, IDefineSymbol
 	{
-		[TagField(Required = true)]
+		[Argument(Required = true)]
 		string m_Name = default;
 
 		public override void Result(PreProcessor.Result result)

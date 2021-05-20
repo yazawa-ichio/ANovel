@@ -62,7 +62,7 @@ namespace ANovel.Core.Tests
 			public int PrivateX => m_X;
 			public int Y = default;
 
-			[CommandField(KeyName = "x")]
+			[Argument(KeyName = "x")]
 			int m_ConvX = default;
 			public int ConvX => m_ConvX;
 		}
@@ -70,7 +70,7 @@ namespace ANovel.Core.Tests
 		[UnityEngine.Scripting.Preserve]
 		class InjectParamSkipTest
 		{
-			[SkipInjectParam]
+			[SkipArgument]
 			public int X { get; set; }
 		}
 
@@ -83,25 +83,25 @@ namespace ANovel.Core.Tests
 
 		}
 
-		[CommandName("test_inject_param")]
+		[TagName("test_inject_param")]
 		class InjectParamTestCommand : Command
 		{
-			[InjectParam]
+			[InjectArgument]
 			InjectParamTest m_Test1 = default;
 			public InjectParamTest Test1 => m_Test1;
-			[InjectParam]
+			[InjectArgument]
 			public InjectParamTestDep Test2 { get; set; } = new InjectParamTestDep()
 			{
 				Flag = 111,
 			};
-			[InjectParam]
+			[InjectArgument]
 			public InjectParamTestDep Test3 { get; set; }
-			[InjectParam]
+			[InjectArgument]
 			Vector2 m_Vec1 = default;
 			public Vector2 Vec1 => m_Vec1;
-			[InjectParam(TargetKey = "x")]
+			[InjectArgument(TargetKey = "x")]
 			public Vector2 Vec2 { get; set; } = default;
-			[InjectParam]
+			[InjectArgument]
 			public InjectParamSkipTest SkipTest = default;
 
 		}

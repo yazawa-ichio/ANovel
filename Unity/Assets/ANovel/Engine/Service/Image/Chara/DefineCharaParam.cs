@@ -6,12 +6,12 @@ namespace ANovel.Engine
 		/// プログラム上で扱われる名前です。
 		/// ファイル名などはこちらで解決されます。
 		/// </summary>
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		public string Value;
 		/// <summary>
 		/// スクリプト上で可読性の高い名前を付ける為に利用します
 		/// </summary>
-		[CommandField]
+		[Argument]
 		string m_Key = default;
 		public string Key => m_Key ?? Value;
 	}

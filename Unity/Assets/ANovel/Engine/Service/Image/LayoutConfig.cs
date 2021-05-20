@@ -13,26 +13,26 @@ namespace ANovel.Engine
 
 	public partial class LayoutConfig
 	{
-		[CommandField(KeyName = "x")]
+		[Argument(KeyName = "x")]
 		public float? PosX;
-		[CommandField(KeyName = "y")]
+		[Argument(KeyName = "y")]
 		public float? PosY;
-		[CommandField(KeyName = "z")]
+		[Argument(KeyName = "z")]
 		public float? PosZ;
 		public ScreenMatchMode? ScreenMatch;
 		public float? Scale;
 		public float? ScaleX;
 		public float? ScaleY;
-		[CommandField(KeyName = "w")]
+		[Argument(KeyName = "w")]
 		public float? Width;
-		[CommandField(KeyName = "h")]
+		[Argument(KeyName = "h")]
 		public float? Height;
 
 		public float? AngleX;
 		public float? AngleY;
 		public float? AngleZ;
 
-		[CommandField(Formatter = typeof(ColorFormatter))]
+		[Argument(Formatter = typeof(ColorFormatter))]
 		public Color? Color;
 		public float? Opacity;
 

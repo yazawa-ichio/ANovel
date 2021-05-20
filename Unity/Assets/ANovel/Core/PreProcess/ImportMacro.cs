@@ -1,9 +1,9 @@
 namespace ANovel.Core
 {
-	[TagName("importmacro", LineType.PreProcess)]
+	[TagName("importmacro")]
 	public class ImportMacro : PreProcess, IImportPreProcess
 	{
-		[TagField(Required = true)]
+		[Argument(Required = true)]
 		public string Path { get; private set; }
 
 		PreProcessor.Result m_Import;

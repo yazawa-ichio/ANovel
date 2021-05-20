@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace ANovel.Commands
 {
-	[TagName("parallel", LineType.SystemCommand)]
+	[TagName("parallel")]
 	public class ParallelCommand : ScopeCommand
 	{
-		[CommandField]
+		[Argument]
 		bool? m_Sync = null;
 
 		List<ICommand> m_RunCommands;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ANovel.Commands
 {
-	[TagName("async", LineType.SystemCommand)]
+	[TagName("async")]
 	public class AsyncScopeCommand : ScopeCommand
 	{
 		List<ICommand> m_BatchCommands;

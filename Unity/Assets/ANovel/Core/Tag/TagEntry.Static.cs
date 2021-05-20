@@ -11,7 +11,7 @@ namespace ANovel.Core
 
 		static Dictionary<string, TagEntry[]>[] s_Dic;
 		static Dictionary<Type, TagFieldEntry[]> s_Fields = new Dictionary<Type, TagFieldEntry[]>();
-		static Dictionary<Type, InjectParamEntry[]> s_InjectParams = new Dictionary<Type, InjectParamEntry[]>();
+		static Dictionary<Type, InjectEntry[]> s_NestParams = new Dictionary<Type, InjectEntry[]>();
 
 		static TagEntry()
 		{
@@ -94,63 +94,63 @@ namespace ANovel.Core
 			{
 				foreach (var info in type.GetFields(s_BindingFlags))
 				{
-					if (!info.IsDefined(typeof(TagFieldAttribute), inherit: false))
+					if (!info.IsDefined(typeof(ArgumentAttribute), inherit: false))
 					{
 						continue;
 					}
-					foreach (var attr in info.GetCustomAttributes(typeof(TagFieldAttribute), false))
+					foreach (var attr in info.GetCustomAttributes(typeof(ArgumentAttribute), false))
 					{
-						list.Add(new TagFieldEntry(info, attr as TagFieldAttribute));
+						list.Add(new TagFieldEntry(info, attr as ArgumentAttribute));
 					}
 				}
 				foreach (var info in type.GetProperties(s_BindingFlags))
 				{
-					if (!info.IsDefined(typeof(TagFieldAttribute), inherit: false))
+					if (!info.IsDefined(typeof(ArgumentAttribute), inherit: false))
 					{
 						continue;
 					}
-					foreach (var attr in info.GetCustomAttributes(typeof(TagFieldAttribute), false))
+					foreach (var attr in info.GetCustomAttributes(typeof(ArgumentAttribute), false))
 					{
-						list.Add(new TagFieldEntry(info, attr as TagFieldAttribute));
+						list.Add(new TagFieldEntry(info, attr as ArgumentAttribute));
 					}
 				}
 				return list.ToArray();
 			}
 		}
 
-		internal static InjectParamEntry[] GetInjectParams(Type type)
+		internal static InjectEntry[] GetInjects(Type type)
 		{
-			if (!s_InjectParams.TryGetValue(type, out var ret))
+			if (!s_NestParams.TryGetValue(type, out var ret))
 			{
-				s_InjectParams[type] = ret = GetInjectParamsImpl(type);
+				s_NestParams[type] = ret = GetInjectInjectsImpl(type);
 			}
 			return ret;
 		}
 
-		static InjectParamEntry[] GetInjectParamsImpl(Type type)
+		static InjectEntry[] GetInjectInjectsImpl(Type type)
 		{
-			using (ListPool<InjectParamEntry>.Use(out var list))
+			using (ListPool<InjectEntry>.Use(out var list))
 			{
 				foreach (var info in type.GetFields(s_BindingFlags))
 				{
-					if (!info.IsDefined(typeof(InjectParamAttribute), inherit: false))
+					if (!info.IsDefined(typeof(InjectArgumentAttribute), inherit: false))
 					{
 						continue;
 					}
-					foreach (var attr in info.GetCustomAttributes(typeof(InjectParamAttribute), inherit: false))
+					foreach (var attr in info.GetCustomAttributes(typeof(InjectArgumentAttribute), inherit: false))
 					{
-						list.Add(new InjectParamEntry(info, attr as InjectParamAttribute));
+						list.Add(new InjectEntry(info, attr as InjectArgumentAttribute));
 					}
 				}
 				foreach (var info in type.GetProperties(s_BindingFlags))
 				{
-					if (!info.IsDefined(typeof(InjectParamAttribute), inherit: false))
+					if (!info.IsDefined(typeof(InjectArgumentAttribute), inherit: false))
 					{
 						continue;
 					}
-					foreach (var attr in info.GetCustomAttributes(typeof(InjectParamAttribute), inherit: false))
+					foreach (var attr in info.GetCustomAttributes(typeof(InjectArgumentAttribute), inherit: false))
 					{
-						list.Add(new InjectParamEntry(info, attr as InjectParamAttribute));
+						list.Add(new InjectEntry(info, attr as InjectArgumentAttribute));
 					}
 				}
 				return list.ToArray();

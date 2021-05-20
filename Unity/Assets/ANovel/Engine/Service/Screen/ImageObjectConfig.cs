@@ -4,17 +4,17 @@ namespace ANovel.Engine
 {
 	public partial class ImageObjectConfig
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		public string Path;
 		public Millisecond Time = Millisecond.FromSecond(0.2f);
 		public float Vague = 0.2f;
 		public string Rule;
-		[SkipInjectParam]
+		[SkipArgument]
 		public long? AutoOrder;
-		[SkipInjectParam]
+		[SkipArgument]
 		public ICacheHandle<Texture> Texture;
 
-		[SkipInjectParam]
+		[SkipArgument]
 		public ICacheHandle<Texture> RuleTexture;
 
 		public void PreloadTexture(string prefix, IPreLoader loader)

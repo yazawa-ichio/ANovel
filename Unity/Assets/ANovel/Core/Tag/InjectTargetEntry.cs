@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 namespace ANovel.Core
 {
-	public class InjectParamTargetEntry
+	public class InjectTargetEntry
 	{
-		static Dictionary<Type, InjectParamTargetEntry> s_Dic = new Dictionary<Type, InjectParamTargetEntry>();
+		static Dictionary<Type, InjectTargetEntry> s_Dic = new Dictionary<Type, InjectTargetEntry>();
 
-		public static InjectParamTargetEntry Get(Type type)
+		public static InjectTargetEntry Get(Type type)
 		{
 			if (!s_Dic.TryGetValue(type, out var value))
 			{
-				s_Dic[type] = value = new InjectParamTargetEntry(type);
+				s_Dic[type] = value = new InjectTargetEntry(type);
 			}
 			return value;
 		}
@@ -22,7 +22,7 @@ namespace ANovel.Core
 		Dictionary<string, TagFieldEntry[]> m_Fields;
 		string[] m_Required;
 
-		public InjectParamTargetEntry(Type type)
+		public InjectTargetEntry(Type type)
 		{
 			m_Type = type;
 		}
@@ -87,7 +87,7 @@ namespace ANovel.Core
 					{
 						continue;
 					}
-					if (!field.IsDefined(typeof(TagFieldAttribute), inherit: false) && !field.IsDefined(typeof(NonSerializedAttribute), inherit: false) && !field.IsDefined(typeof(SkipInjectParamAttribute), inherit: false))
+					if (!field.IsDefined(typeof(ArgumentAttribute), inherit: false) && !field.IsDefined(typeof(NonSerializedAttribute), inherit: false) && !field.IsDefined(typeof(SkipArgumentAttribute), inherit: false))
 					{
 						list.Add(new TagFieldEntry(field, null));
 					}
@@ -98,7 +98,7 @@ namespace ANovel.Core
 					{
 						continue;
 					}
-					if (!property.IsDefined(typeof(TagFieldAttribute), inherit: false) && !property.IsDefined(typeof(SkipInjectParamAttribute), inherit: false))
+					if (!property.IsDefined(typeof(ArgumentAttribute), inherit: false) && !property.IsDefined(typeof(SkipArgumentAttribute), inherit: false))
 					{
 						list.Add(new TagFieldEntry(property, null));
 					}

@@ -44,10 +44,10 @@ namespace ANovel.Engine
 
 	public class SeMetaData
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		public string Name;
 		public string Group;
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		public string Path;
 		public float? Volume;
 		public float? Pitch;
@@ -65,10 +65,10 @@ namespace ANovel.Engine
 
 	public class BgmMetaData
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		public string Name;
 		public string Group;
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		public string Path;
 		public float? Volume;
 		public float? Pitch;
@@ -86,7 +86,7 @@ namespace ANovel.Engine
 
 	public class AutoVoiceMetaData
 	{
-		[CommandField(Required = true)]
+		[Argument(Required = true)]
 		public string Path;
 		public bool ResetOnJump = true;
 		public bool CharaIndex = false;
