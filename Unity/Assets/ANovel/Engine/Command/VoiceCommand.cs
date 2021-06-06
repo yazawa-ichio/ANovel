@@ -15,6 +15,7 @@ namespace ANovel.Engine
 		[InjectArgument]
 		VoiceConfig m_Config = new VoiceConfig();
 		[InjectArgument(IgnoreKey = nameof(PlayConfig.Loop))]
+		[InjectPathDefine("path", PathCategory.Voice)]
 		PlayConfig m_PlayConfig = PlayConfig.Voice;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -24,12 +25,12 @@ namespace ANovel.Engine
 
 		protected override void Preload(IPreLoader loader)
 		{
-			m_PlayConfig.Preload(Path.VoiceRoot, loader);
+			m_PlayConfig.Preload(Path.GetRoot(PathCategory.Voice), loader);
 		}
 
 		protected override void Execute()
 		{
-			m_PlayConfig.Load(Path.VoiceRoot, Cache);
+			m_PlayConfig.Load(Path.GetRoot(PathCategory.Voice), Cache);
 			m_PlayHandle = Sound.PlayVoice(m_Config, m_PlayConfig);
 		}
 
@@ -62,7 +63,7 @@ namespace ANovel.Engine
 	}
 
 	[TagName("autovoice")]
-	public class AutoVoiceCommand : SoundCommand
+	public class AutoVoiceCommand : Command
 	{
 		[Argument]
 		bool m_Enabled = true;
@@ -80,7 +81,7 @@ namespace ANovel.Engine
 	}
 
 	[TagName("autovoice_reset")]
-	public class AutoVoiceResetCommand : SoundCommand
+	public class AutoVoiceResetCommand : Command
 	{
 		[Argument]
 		bool m_Common = true;
@@ -111,7 +112,7 @@ namespace ANovel.Engine
 
 
 	[TagName("autovoice_skip")]
-	public class SkipAutoVoiceCommand : SoundCommand
+	public class SkipAutoVoiceCommand : Command
 	{
 		protected override void UpdateEnvData(IEnvData data)
 		{

@@ -20,8 +20,11 @@ namespace ANovel.Engine
 		[Argument(KeyName = "z")]
 		public float? PosZ;
 		public ScreenMatchMode? ScreenMatch;
+		[RateArgument]
 		public float? Scale;
+		[RateArgument]
 		public float? ScaleX;
+		[RateArgument]
 		public float? ScaleY;
 		[Argument(KeyName = "w")]
 		public float? Width;

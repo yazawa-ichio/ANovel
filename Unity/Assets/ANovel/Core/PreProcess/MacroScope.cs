@@ -15,7 +15,7 @@ namespace ANovel.Core
 			m_List.Add(data);
 		}
 
-		public override void Result(PreProcessor.Result result)
+		public override void Result(PreProcessResult result)
 		{
 			result.MacroDefine.Add(m_Name, m_List.ToArray());
 		}

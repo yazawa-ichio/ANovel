@@ -105,6 +105,16 @@ namespace ANovel.Core
 			return type.FullName;
 		}
 
+		public static IEnumerable<Type> GetTypesWithAttribute<T>() where T : Attribute
+		{
+			foreach (var type in GetTypes())
+			{
+				if (Attribute.IsDefined(type, typeof(T)))
+				{
+					yield return type;
+				}
+			}
+		}
 	}
 
 }

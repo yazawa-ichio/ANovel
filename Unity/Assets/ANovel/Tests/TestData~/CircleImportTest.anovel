@@ -1,4 +1,4 @@
 
-#importmacro path="CircleImport.anovel"
+#import path="CircleImport.anovel"
 
 @dep_macrolog

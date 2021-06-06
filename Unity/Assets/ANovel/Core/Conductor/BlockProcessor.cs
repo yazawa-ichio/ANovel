@@ -88,7 +88,7 @@ namespace ANovel.Core
 			}
 		}
 
-		public void PostJump(PreProcessor.Result result)
+		public void PostJump(PreProcessResult result)
 		{
 			m_StopCommand = null;
 			ClearPreload();

@@ -1,0 +1,20 @@
+{
+    "name": "ANovel.Engine.Editor",
+    "rootNamespace": "",
+    "references": [
+        "ANovel.Core",
+        "ANovel.Tools",
+        "ANovel.Engine"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

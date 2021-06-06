@@ -91,9 +91,10 @@ namespace ANovel.Core.Tests
 
 		}
 
-		void ChangeTestData(ref TestEnvData1 data)
+		TestEnvData1 ChangeTestData(TestEnvData1 data)
 		{
 			data.Value1 = 30;
+			return data;
 		}
 
 		[Test]

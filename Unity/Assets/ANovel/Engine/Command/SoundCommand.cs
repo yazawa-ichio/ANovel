@@ -12,6 +12,7 @@ namespace ANovel.Engine
 		[InjectArgument]
 		SeConfig m_Config = new SeConfig();
 		[InjectArgument]
+		[InjectPathDefine("path", PathCategory.Se)]
 		PlayConfig m_PlayConfig = PlayConfig.Se;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -33,12 +34,12 @@ namespace ANovel.Engine
 
 		protected override void Preload(IPreLoader loader)
 		{
-			m_PlayConfig.Preload(Path.SeRoot, loader);
+			m_PlayConfig.Preload(Path.GetRoot(PathCategory.Se), loader);
 		}
 
 		protected override void Execute()
 		{
-			m_PlayConfig.Load(Path.SeRoot, Cache);
+			m_PlayConfig.Load(Path.GetRoot(PathCategory.Se), Cache);
 			m_PlayHandle = Sound.PlaySe(m_Config, m_PlayConfig);
 		}
 	}
@@ -114,6 +115,7 @@ namespace ANovel.Engine
 		[InjectArgument]
 		BgmConfig m_Config = new BgmConfig();
 		[InjectArgument]
+		[InjectPathDefine("path", PathCategory.Bgm)]
 		PlayConfig m_PlayConfig = PlayConfig.Bgm;
 
 		protected override void UpdateEnvData(IEnvData data)
@@ -131,12 +133,12 @@ namespace ANovel.Engine
 
 		protected override void Preload(IPreLoader loader)
 		{
-			m_PlayConfig.Preload(Path.BgmRoot, loader);
+			m_PlayConfig.Preload(Path.GetRoot(PathCategory.Bgm), loader);
 		}
 
 		protected override void Execute()
 		{
-			m_PlayConfig.Load(Path.BgmRoot, Cache);
+			m_PlayConfig.Load(Path.GetRoot(PathCategory.Bgm), Cache);
 			m_PlayHandle = Sound.PlayBgm(m_Config, m_PlayConfig);
 		}
 

@@ -68,6 +68,7 @@ namespace ANovel.Commands
 
 
 	[TagName("end")]
+	[Description("スコープを終了します。汎用コマンドです")]
 	public class EndScopeCommand : SystemCommand
 	{
 	}

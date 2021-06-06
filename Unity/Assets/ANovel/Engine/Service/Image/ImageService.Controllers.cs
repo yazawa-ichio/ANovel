@@ -86,13 +86,13 @@ namespace ANovel.Engine
 				switch (m_Category)
 				{
 					case Category.Bg:
-						return Path.BgRoot;
+						return Path.GetRoot(PathCategory.Bg);
 					case Category.Image:
-						return Path.ImageRoot;
+						return Path.GetRoot(PathCategory.Image);
 					case Category.Chara:
-						return Path.CharaRoot;
+						return Path.GetRoot(PathCategory.Chara);
 				}
-				return Path.ImageRoot;
+				return Path.GetRoot(PathCategory.Image);
 			}
 
 			public void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader)

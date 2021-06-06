@@ -11,6 +11,7 @@ namespace ANovel.Engine
 	}
 
 	[TagName("transition")]
+	[Description("画面切り替えを行います")]
 	public class TransitionCommand : ScopeCommand
 	{
 		protected PathConfig Path => Get<EngineConfig>().Path;
@@ -18,8 +19,10 @@ namespace ANovel.Engine
 		protected IScreenService Service => Get<IScreenService>();
 
 		[Argument]
+		[Description("実行を同期するか？")]
 		bool m_Sync = false;
 		[Argument]
+		[Description("スキップ可能か？")]
 		bool m_CanSkip = true;
 		[InjectArgument]
 		ScreenTransitionConfig m_Config = new ScreenTransitionConfig();
@@ -79,7 +82,7 @@ namespace ANovel.Engine
 		{
 			if (!string.IsNullOrEmpty(m_Rule))
 			{
-				loader.Load<Texture>(Path.GetRule(m_Rule));
+				loader.Load<Texture>(Path.GetPath(PathCategory.Rule, m_Rule));
 			}
 		}
 
@@ -87,7 +90,7 @@ namespace ANovel.Engine
 		{
 			if (!string.IsNullOrEmpty(m_Rule))
 			{
-				m_Config.Rule = Cache.Load<Texture>(Path.GetRule(m_Rule));
+				m_Config.Rule = Cache.Load<Texture>(Path.GetPath(PathCategory.Rule, m_Rule));
 			}
 			Service.Transition.Prepare(m_Config);
 			foreach (var cmd in m_RunCommands)

@@ -21,7 +21,7 @@ namespace ANovel.Core.Tests
 
 		void TestMacroImport(string symbol, params string[] output)
 		{
-			var reader = new BlockReader(new TestDataLoader(), symbol != null ? new[] { symbol } : new string[0]);
+			var reader = new BlockReader(new TestDataLoader(), symbol != null ? new[] { symbol, "TEST" } : new string[] { "TEST" });
 			reader.Load("ImportMacroTest.anovel", CancellationToken.None).Wait();
 			//var block = new Block();
 			Assert.IsTrue(reader.TryRead(out var block));
@@ -51,7 +51,7 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void 依存マクロインポート()
 		{
-			var reader = new BlockReader(new TestDataLoader());
+			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
 			reader.Load("CircleImportTest.anovel", CancellationToken.None).Wait();
 			Assert.IsTrue(reader.TryRead(out var block));
 			var log = block.Commands.OfType<TestLogCommand>().First();
@@ -61,7 +61,7 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void テキストブロック()
 		{
-			var reader = new BlockReader(new TestDataLoader());
+			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
 			reader.Load("TextBlockTest.anovel", CancellationToken.None).Wait();
 			int blockIndex = 0;
 			{
@@ -153,7 +153,7 @@ namespace ANovel.Core.Tests
 
 		Task CacheLineDataError(string text, string message)
 		{
-			var reader = new BlockReader(new DummyLoader(text));
+			var reader = new BlockReader(new DummyLoader(text), new string[] { "TEST" });
 			return CacheLineDataError(reader, message);
 		}
 
@@ -170,7 +170,7 @@ namespace ANovel.Core.Tests
 			}
 		}
 
-		[TagName("test_log")]
+		[TagName("test_log", Symbol = "TEST")]
 		class TestLogCommand : Command
 		{
 			[Argument]
@@ -182,7 +182,7 @@ namespace ANovel.Core.Tests
 			}
 		}
 
-		[TagName("test_macro_define")]
+		[TagName("test_macro_define", Symbol = "TEST")]
 		class TestMacroDefineCommand : Command
 		{
 			[Argument]

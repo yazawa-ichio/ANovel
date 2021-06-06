@@ -131,7 +131,7 @@ namespace ANovel.Core.Tests
 			var reader = new LineReader("マクロ機能テスト3", "@test_macro macro_key2=55\n@test_required required");
 			{
 				var ret = new List<Tag>();
-				var provider = new TagProvider();
+				var provider = new TagProvider(new List<string> { "TEST" });
 				provider.Macros.Add(macro);
 				LineData data = default;
 
@@ -162,7 +162,7 @@ namespace ANovel.Core.Tests
 			LineData data = default;
 			Assert.IsTrue(reader.TryRead(ref data), "読み取れる");
 			var ret = new List<Tag>();
-			var provider = new TagProvider();
+			var provider = new TagProvider(new List<string> { "TEST" });
 			if (symbol != null)
 			{
 				provider.Symbols.Add(symbol);
@@ -173,13 +173,13 @@ namespace ANovel.Core.Tests
 			return ret.Count > 0 ? ret[0] : null;
 		}
 
-		[TagName("test_default_formatter", Priority = -1)]
+		[TagName("test_default_formatter", Priority = -1, Symbol = "TEST")]
 		class IgnoreCommand : Command
 		{
 
 		}
 
-		[TagName("test_default_formatter")]
+		[TagName("test_default_formatter", Symbol = "TEST")]
 		class TestDefaultFormatter : Command
 		{
 			[Argument(KeyName = "key1")]
@@ -207,7 +207,7 @@ namespace ANovel.Core.Tests
 			public bool Bool => m_Bool;
 		}
 
-		[TagName("test_custom_formatter")]
+		[TagName("test_custom_formatter", Symbol = "TEST")]
 		class TestCustomFormatter : Command
 		{
 			[Argument]
@@ -237,7 +237,7 @@ namespace ANovel.Core.Tests
 			public bool Optional { get; private set; }
 		}
 
-		[TagName("test_required")]
+		[TagName("test_required", Symbol = "TEST")]
 		class TestRequired : TestRequiredBase
 		{
 			[Argument(Required = true)]

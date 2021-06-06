@@ -42,7 +42,7 @@ namespace ANovel.Core.Tests
 
 		/* file:CircleImport.anovel
 		
-		#importmacro path="MacroSet.anovel"
+		#import path="MacroSet.anovel"
 		
 		#if condition="IMMEDIATE_DEFINE" not
 			;define_symbolは即時反映される
@@ -54,15 +54,15 @@ namespace ANovel.Core.Tests
 			#endif
 		#endif
 		*/
-		public const string CircleImport = "\n#importmacro path=\"MacroSet.anovel\"\n\n#if condition=\"IMMEDIATE_DEFINE\" not\n	;define_symbolは即時反映される\n	#define_symbol name=\"IMMEDIATE_DEFINE\"\n	#if condition=\"IMMEDIATE_DEFINE\"\n		#macro name=\"dep_macrolog\"\n		@macrolog2 m=\"dep\"\n		#endmacro\n	#endif\n#endif\n";
+		public const string CircleImport = "\n#import path=\"MacroSet.anovel\"\n\n#if condition=\"IMMEDIATE_DEFINE\" not\n	;define_symbolは即時反映される\n	#define_symbol name=\"IMMEDIATE_DEFINE\"\n	#if condition=\"IMMEDIATE_DEFINE\"\n		#macro name=\"dep_macrolog\"\n		@macrolog2 m=\"dep\"\n		#endmacro\n	#endif\n#endif\n";
 
 		/* file:CircleImportTest.anovel
 		
-		#importmacro path="CircleImport.anovel"
+		#import path="CircleImport.anovel"
 		
 		@dep_macrolog
 		*/
-		public const string CircleImportTest = "\n#importmacro path=\"CircleImport.anovel\"\n\n@dep_macrolog";
+		public const string CircleImportTest = "\n#import path=\"CircleImport.anovel\"\n\n@dep_macrolog";
 
 		/* file:CommandEndBlockTest.anovel
 		
@@ -233,7 +233,7 @@ namespace ANovel.Core.Tests
 		;ローカルのシンボルはインポート先には影響しない
 		#define_symbol name="SKIP_MACRO_LOG"
 		
-		#importmacro path="MacroSet.anovel"
+		#import path="MacroSet.anovel"
 		
 		#if condition="SKIP_MACRO_LOG_DEFINE" not
 		@macrolog m="tt"
@@ -244,7 +244,7 @@ namespace ANovel.Core.Tests
 		@definelog
 		
 		*/
-		public const string ImportMacroTest = ";ローカルのシンボルはインポート先には影響しない\n#define_symbol name=\"SKIP_MACRO_LOG\"\n\n#importmacro path=\"MacroSet.anovel\"\n\n#if condition=\"SKIP_MACRO_LOG_DEFINE\" not\n@macrolog m=\"tt\"\n#endif\n\n@macrolog2 m=\"bb\"\n\n@definelog\n\n";
+		public const string ImportMacroTest = ";ローカルのシンボルはインポート先には影響しない\n#define_symbol name=\"SKIP_MACRO_LOG\"\n\n#import path=\"MacroSet.anovel\"\n\n#if condition=\"SKIP_MACRO_LOG_DEFINE\" not\n@macrolog m=\"tt\"\n#endif\n\n@macrolog2 m=\"bb\"\n\n@definelog\n\n";
 
 		/* file:KeyValueTest.anovel
 		@command1
@@ -269,7 +269,7 @@ namespace ANovel.Core.Tests
 
 		/* file:MacroSet.anovel
 		
-		#importmacro path="CircleImport.anovel"
+		#import path="CircleImport.anovel"
 		
 		#if condition="SKIP_MACRO_LOG_DEFINE" not
 		
@@ -299,7 +299,7 @@ namespace ANovel.Core.Tests
 		#endif
 		#endmacro
 		*/
-		public const string MacroSet = "\n#importmacro path=\"CircleImport.anovel\"\n\n#if condition=\"SKIP_MACRO_LOG_DEFINE\" not\n\n#macro name=\"macrolog\"\n#if condition=\"SKIP_MACRO_LOG\" not\n@test_log message=\"%m%\"\n#endif\n#endmacro\n\n#endif\n\n#macro name=\"macrolog2\"\n#if condition=\"SKIP_MACRO_LOG\" not\n@test_log message=\"%m%\"\n#endif\n#endmacro\n\n#macro name=\"definelog\"\n#if condition=\"MACRO_LOG\"\n@test_macro_define message=\"Define MACRO_LOG\"\n#elseif condition=\"SKIP_MACRO_LOG_DEFINE\"\n@test_macro_define message=\"Define SKIP_MACRO_LOG_DEFINE\"\n#elseif condition=\"SKIP_MACRO_LOG\"\n@test_macro_define message=\"Define SKIP_MACRO_LOG\"\n#else\n@test_macro_define message=\"No Define\"\n#endif\n#endmacro\n";
+		public const string MacroSet = "\n#import path=\"CircleImport.anovel\"\n\n#if condition=\"SKIP_MACRO_LOG_DEFINE\" not\n\n#macro name=\"macrolog\"\n#if condition=\"SKIP_MACRO_LOG\" not\n@test_log message=\"%m%\"\n#endif\n#endmacro\n\n#endif\n\n#macro name=\"macrolog2\"\n#if condition=\"SKIP_MACRO_LOG\" not\n@test_log message=\"%m%\"\n#endif\n#endmacro\n\n#macro name=\"definelog\"\n#if condition=\"MACRO_LOG\"\n@test_macro_define message=\"Define MACRO_LOG\"\n#elseif condition=\"SKIP_MACRO_LOG_DEFINE\"\n@test_macro_define message=\"Define SKIP_MACRO_LOG_DEFINE\"\n#elseif condition=\"SKIP_MACRO_LOG\"\n@test_macro_define message=\"Define SKIP_MACRO_LOG\"\n#else\n@test_macro_define message=\"No Define\"\n#endif\n#endmacro\n";
 
 		/* file:MetaDataDefineTest.anovel
 		
@@ -339,7 +339,7 @@ namespace ANovel.Core.Tests
 		public const string TagTest = "@test_default_formatter Key1=\"test1\" key2=\"10\" key3=\"2.5\" key4=false\n@test_default_formatter Key1=\"test1\" key2=\"error\"\n@test_custom_formatter key1=\"1,2,3\" key2=\"1,2,3\" key3=\"四五\"\n@test_custom_formatter key1=\"1,2,3\" key2=\"1,2,3\" key3=\"四五\"\n@test_required required optional\n@test_required required\n@test_required optional\n@replace_test_default_formatter Key1=\"test1\" key2_replace key3=\"2.5\" key4=false";
 
 		/* file:TextBlockTest.anovel
-		#importmacro path="MacroSet.anovel"
+		#import path="MacroSet.anovel"
 		
 		*開始
 		
@@ -374,7 +374,7 @@ namespace ANovel.Core.Tests
 		
 		最終行テキスト
 		*/
-		public const string TextBlockTest = "#importmacro path=\"MacroSet.anovel\"\n\n*開始\n\n一行テキスト\n\n二行テキスト\n二行テキスト\n\n```\n空白ありテキスト\n\n上が空白\n```\n\n@test_log message=\"命令1\"\n@test_log message=\"命令2\"\n\n命令とテキストが一度に取れる\n@test_log message=\"msg\"\n命令でテキストブロックは解除される\n\n\n```test\n特殊テキストブロック\n```\n\n```test : value\n値付き特殊テキストブロック\n```\n\n*終了\n\n最終行テキスト";
+		public const string TextBlockTest = "#import path=\"MacroSet.anovel\"\n\n*開始\n\n一行テキスト\n\n二行テキスト\n二行テキスト\n\n```\n空白ありテキスト\n\n上が空白\n```\n\n@test_log message=\"命令1\"\n@test_log message=\"命令2\"\n\n命令とテキストが一度に取れる\n@test_log message=\"msg\"\n命令でテキストブロックは解除される\n\n\n```test\n特殊テキストブロック\n```\n\n```test : value\n値付き特殊テキストブロック\n```\n\n*終了\n\n最終行テキスト";
 
 	}
 }

@@ -2,7 +2,7 @@ namespace ANovel.Core
 {
 	public interface IDefineSymbol
 	{
-		void Result(PreProcessor.Result result);
+		void Result(PreProcessResult result);
 	}
 
 	[TagName("define_symbol")]
@@ -11,7 +11,7 @@ namespace ANovel.Core
 		[Argument(Required = true)]
 		string m_Name = default;
 
-		public override void Result(PreProcessor.Result result)
+		public override void Result(PreProcessResult result)
 		{
 			base.Result(result);
 			if (!result.Symbols.Contains(m_Name))

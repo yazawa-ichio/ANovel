@@ -11,9 +11,9 @@ namespace ANovel.Engine
 		public bool UseDefaultTextEnvDataProcessor = true;
 		public List<IEnvDataCustomProcessor> EnvDataCustomProcessor;
 
-		public Conductor CreateConductor()
+		public Conductor CreateConductor(EngineConfig config)
 		{
-			var reader = new BlockReader(ScenarioLoader);
+			var reader = new BlockReader(ScenarioLoader, config.Symbols);
 			var conductor = new Conductor(reader, ResourceLoader);
 			conductor.Container.Set(Time);
 			if (UseDefaultTextEnvDataProcessor)

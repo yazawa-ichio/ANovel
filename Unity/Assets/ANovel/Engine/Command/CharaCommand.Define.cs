@@ -3,49 +3,36 @@ using System.Collections.Generic;
 
 namespace ANovel.Engine
 {
-
-	[TagName("define_chara")]
-	public class DefineCharaCommand : PreProcess, IImportText, IParamConverter
+	public abstract class DefineCharaBaseCommand : PreProcess, IParamConverter
 	{
 		[Argument(Required = true)]
 		string m_Name = default;
 		[Argument]
 		string m_DispName = default;
-		[InjectArgument]
-		CharaMetaData m_Param = default;
-		[Argument]
-		string m_Import = default;
 
 		MetaData m_Meta;
 
 		int IParamConverter.Priority => 0;
 
-		bool IImportText.Enabled => !string.IsNullOrEmpty(m_Import);
+		protected abstract CharaMetaData Param { get; }
 
-		string IImportText.Path => m_Import;
-
-		void IImportText.Import(string text)
-		{
-			m_Param = UnityEngine.JsonUtility.FromJson<CharaMetaData>(text);
-		}
-
-		bool CheckPath(PreProcessor.Result result)
+		bool CheckPath(PreProcessResult result)
 		{
 			if (result.Meta.TryGetSingle<CharaCommonMetaData>(out var common) && !string.IsNullOrEmpty(common.Path))
 			{
 				return false;
 			}
-			return !string.IsNullOrEmpty(m_Param.Path);
+			return !string.IsNullOrEmpty(Param.Path);
 		}
 
-		public override void Result(PreProcessor.Result result)
+		public override void Result(PreProcessResult result)
 		{
-			if (m_Param == null || !CheckPath(result))
+			if (Param == null || !CheckPath(result))
 			{
 				throw new System.Exception("パラメーターが不正です");
 			}
+			result.Meta.Add(m_Name, Param);
 			result.Converters.Add(this);
-			result.Meta.Add(m_Name, m_Param);
 			if (!string.IsNullOrEmpty(m_DispName))
 			{
 				var common = result.Meta.GetOrCreateSingle<CharaCommonMetaData>();
@@ -58,9 +45,9 @@ namespace ANovel.Engine
 		{
 			if (CharaCommonMetaData.ConvertList.Contains(param.Name) || param.Name == m_Name || param.Name == m_DispName)
 			{
-				ConvertParam(param, "face", m_Param.Face);
-				ConvertParam(param, "pose", m_Param.Pose);
-				ConvertParam(param, "level", m_Param.Level);
+				ConvertParam(param, "face", Param.Face);
+				ConvertParam(param, "pose", Param.Pose);
+				ConvertParam(param, "level", Param.Level);
 				if (m_Meta.TryGetSingle<CharaCommonMetaData>(out var common))
 				{
 					common.PreConvert(param);
@@ -74,7 +61,11 @@ namespace ANovel.Engine
 		{
 			if (param.Name == name)
 			{
-				if (param.ContainsKey("hide"))
+				if (param.ContainsKey("show"))
+				{
+					param.Name = "chara";
+				}
+				else if (param.ContainsKey("hide"))
 				{
 					param.Name = "chara_hide";
 				}
@@ -124,89 +115,95 @@ namespace ANovel.Engine
 
 	}
 
+#if ANOVEL_DEFINE_IMPORT
+	[TagName("import_chara")]
+	public class ImportCharaCommand : DefineCharaBaseCommand, IImportText
+	{
+		[Argument(Required = true)]
+		string m_Path = default;
+		[InjectArgument]
+		CharaMetaData m_Param = default;
+
+		string IImportText.Path => m_Path;
+
+		protected override CharaMetaData Param => m_Param;
+
+		void IImportText.Import(string text)
+		{
+			m_Param = UnityEngine.JsonUtility.FromJson<CharaMetaData>(text);
+		}
+
+	}
+#endif
+
+	[TagName("define_chara")]
+	[ReplaceTagDefine("@{dispname}", "@chara name=\"{name}\"")]
+	[ReplaceTagDefine("@{dispname}", "@chara_hide name=\"{name}\"", SecondaryKey = "hide")]
+	[ReplaceTagDefine("@{dispname}", "@chara_change name=\"{name}\"", SecondaryKey = "change")]
+	[ReplaceTagDefine("@{dispname}", "@chara name=\"{name}\"", Label = "{name}({dispname})")]
+	[ReplaceTagDefine("@{dispname}", "@chara_hide name=\"{name}\"", SecondaryKey = "hide", Label = "{name}({dispname})")]
+	[ReplaceTagDefine("@{dispname}", "@chara_change name=\"{name}\"", SecondaryKey = "change", Label = "{name}({dispname})")]
+	public class DefineCharaCommand : DefineCharaBaseCommand
+	{
+		[InjectArgument]
+		CharaMetaData m_Param = default;
+
+		protected override CharaMetaData Param => m_Param;
+	}
+
 	[TagName("define_chara_face")]
+	[ArgumentValueDefine("chara", "face", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
+	[ArgumentValueDefine("chara_change", "face", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
 	public class DefineCharaFaceCommand : PreProcess
 	{
-		[Argument]
+		[Argument(Required = true)]
 		string m_Name = default;
 		[InjectArgument]
 		DefineCharaParam m_Param = new DefineCharaParam();
 
-		public override void Result(PreProcessor.Result result)
+		public override void Result(PreProcessResult result)
 		{
-			if (!string.IsNullOrEmpty(m_Name))
-			{
-				var meta = result.Meta.Get<CharaMetaData>(m_Name);
-				meta.Face.Add(m_Param);
-			}
-			else
-			{
-				var meta = result.Meta.GetOrCreateSingle<CharaCommonMetaData>();
-				if (!result.Converters.Contains(meta))
-				{
-					result.Converters.Add(meta);
-				}
-				meta.Face.Add(m_Param);
-			}
+			var meta = result.Meta.Get<CharaMetaData>(m_Name);
+			meta.Face.Add(m_Param);
 		}
 	}
 
 	[TagName("define_chara_pose")]
+	[ArgumentValueDefine("chara", "pose", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
+	[ArgumentValueDefine("chara_change", "pose", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
 	public class DefineCharaPoseCommand : PreProcess
 	{
-		[Argument]
+		[Argument(Required = true)]
 		string m_Name = default;
 		[InjectArgument]
 		DefineCharaPoseParam m_Param = new DefineCharaPoseParam();
 
-		public override void Result(PreProcessor.Result result)
+		public override void Result(PreProcessResult result)
 		{
-			if (!string.IsNullOrEmpty(m_Name))
-			{
-				var meta = result.Meta.Get<CharaMetaData>(m_Name);
-				meta.Pose.Add(m_Param);
-			}
-			else
-			{
-				var meta = result.Meta.GetOrCreateSingle<CharaCommonMetaData>();
-				if (!result.Converters.Contains(meta))
-				{
-					result.Converters.Add(meta);
-				}
-				meta.Pose.Add(m_Param);
-			}
+			var meta = result.Meta.Get<CharaMetaData>(m_Name);
+			meta.Pose.Add(m_Param);
 		}
 	}
 
 	[TagName("define_chara_level")]
+	[ArgumentValueDefine("chara", "level", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
 	public class DefineCharaLevelCommand : PreProcess
 	{
-		[Argument]
+		[Argument(Required = true)]
 		string m_Name = default;
 		[InjectArgument]
 		DefineCharaLevelParam m_Param = new DefineCharaLevelParam();
 
-		public override void Result(PreProcessor.Result result)
+		public override void Result(PreProcessResult result)
 		{
-			if (!string.IsNullOrEmpty(m_Name))
-			{
-				var meta = result.Meta.Get<CharaMetaData>(m_Name);
-				meta.Level.Add(m_Param);
-			}
-			else
-			{
-				var meta = result.Meta.GetOrCreateSingle<CharaCommonMetaData>();
-				if (!result.Converters.Contains(meta))
-				{
-					result.Converters.Add(meta);
-				}
-				meta.Level.Add(m_Param);
-			}
+			var meta = result.Meta.Get<CharaMetaData>(m_Name);
+			meta.Level.Add(m_Param);
 		}
 	}
 
+
 	[TagName("define_chara_common")]
-	public class DefineCharaCommonCommand : PreProcess, IImportText
+	public class DefineCharaCommonCommand : PreProcess
 	{
 		public static DefineCharaLevelCommand Get(IMetaData meta)
 		{
@@ -215,19 +212,8 @@ namespace ANovel.Engine
 
 		[InjectArgument]
 		CharaCommonMetaData m_Param = default;
-		[Argument]
-		string m_Import = default;
 
-		bool IImportText.Enabled => !string.IsNullOrEmpty(m_Import);
-
-		string IImportText.Path => m_Import;
-
-		void IImportText.Import(string text)
-		{
-			m_Param = UnityEngine.JsonUtility.FromJson<CharaCommonMetaData>(text);
-		}
-
-		public override void Result(PreProcessor.Result result)
+		public override void Result(PreProcessResult result)
 		{
 			if (!result.Converters.Contains(m_Param))
 			{
@@ -238,4 +224,91 @@ namespace ANovel.Engine
 
 	}
 
+#if ANOVEL_DEFINE_IMPORT
+	[TagName("import_chara_common")]
+	public class ImportCharaCommonCommand : PreProcess, IImportText
+	{
+		public static DefineCharaLevelCommand Get(IMetaData meta)
+		{
+			return meta.Get<DefineCharaLevelCommand>(nameof(DefineCharaCommonCommand));
+		}
+
+		[Argument(Required = true)]
+		string m_Path = default;
+		CharaCommonMetaData m_Param = default;
+
+		string IImportText.Path => m_Path;
+
+		void IImportText.Import(string text)
+		{
+			m_Param = UnityEngine.JsonUtility.FromJson<CharaCommonMetaData>(text);
+		}
+
+		public override void Result(PreProcessResult result)
+		{
+			if (!result.Converters.Contains(m_Param))
+			{
+				result.Converters.Add(m_Param);
+			}
+			result.Meta.SetSingle(m_Param);
+		}
+
+	}
+#endif
+
+	[TagName("define_chara_common_pose")]
+	[ArgumentValueDefine("chara", "pose", "{key}")]
+	[ArgumentValueDefine("chara_change", "pose", "{key}")]
+	public class DefineCharaCommonPoseCommand : PreProcess
+	{
+		[InjectArgument]
+		DefineCharaPoseParam m_Param = new DefineCharaPoseParam();
+
+		public override void Result(PreProcessResult result)
+		{
+			var meta = result.Meta.GetOrCreateSingle<CharaCommonMetaData>();
+			if (!result.Converters.Contains(meta))
+			{
+				result.Converters.Add(meta);
+			}
+			meta.Pose.Add(m_Param);
+		}
+	}
+
+	[TagName("define_chara_common_face")]
+	[ArgumentValueDefine("chara", "face", "{key}")]
+	[ArgumentValueDefine("chara_change", "face", "{key}")]
+	public class DefineCharaCommonFaceCommand : PreProcess
+	{
+		[InjectArgument]
+		DefineCharaParam m_Param = new DefineCharaParam();
+
+		public override void Result(PreProcessResult result)
+		{
+			var meta = result.Meta.GetOrCreateSingle<CharaCommonMetaData>();
+			if (!result.Converters.Contains(meta))
+			{
+				result.Converters.Add(meta);
+			}
+			meta.Face.Add(m_Param);
+		}
+	}
+
+	[TagName("define_chara_common_level")]
+	[ArgumentValueDefine("chara", "level", "{key}")]
+	public class DefineCharaCommonLevelCommand : PreProcess
+	{
+		[InjectArgument]
+		DefineCharaLevelParam m_Param = new DefineCharaLevelParam();
+
+		public override void Result(PreProcessResult result)
+		{
+			var meta = result.Meta.GetOrCreateSingle<CharaCommonMetaData>();
+			if (!result.Converters.Contains(meta))
+			{
+				result.Converters.Add(meta);
+			}
+			meta.Level.Add(m_Param);
+		}
+	}
 }

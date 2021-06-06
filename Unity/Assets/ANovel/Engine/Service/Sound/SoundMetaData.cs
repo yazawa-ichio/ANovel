@@ -25,17 +25,17 @@ namespace ANovel.Engine
 		{
 			foreach (var se in SE)
 			{
-				if (se.Name == param.Name)
+				if ("se_" + se.Name == param.Name)
 				{
 					se.Convert(param);
 					return;
 				}
 			}
-			foreach (var se in BGM)
+			foreach (var bgm in BGM)
 			{
-				if (se.Name == param.Name)
+				if ("bgm_" + bgm.Name == param.Name)
 				{
-					se.Convert(param);
+					bgm.Convert(param);
 					return;
 				}
 			}
@@ -49,8 +49,11 @@ namespace ANovel.Engine
 		public string Group;
 		[Argument(Required = true)]
 		public string Path;
+		[RateArgument]
 		public float? Volume;
+		[RateArgument]
 		public float? Pitch;
+		[RateArgument]
 		public float? Pan;
 
 		public void Convert(TagParam param)
@@ -70,8 +73,11 @@ namespace ANovel.Engine
 		public string Group;
 		[Argument(Required = true)]
 		public string Path;
+		[RateArgument]
 		public float? Volume;
+		[RateArgument]
 		public float? Pitch;
+		[RateArgument]
 		public float? Pan;
 
 		public void Convert(TagParam param)
@@ -87,8 +93,20 @@ namespace ANovel.Engine
 	public class AutoVoiceMetaData
 	{
 		[Argument(Required = true)]
+		[Description(
+			"再生するボイスのパスです。{}で囲った以下の要素が置換されます\n" +
+			"{FILE_NAME}ファイル名です\n" +
+			"{BLOCK_INDEX}ラベルからのテキスト毎のインデックスです\n" +
+			"{INDEX}ボイスの再生にインクリメントされるインデックスです\n" +
+			"{LABEL}現在のラベルです\n" +
+			"{CHARA}キャラのIDです\n" +
+			"{CHARA_INDEX}キャラの発言毎にインクリメントされるインデックスです\n" +
+			"{DISP_NAME}キャラの表示名です\n"
+		)]
 		public string Path;
+		[Description("Jump時にインデックス等をリセットします")]
 		public bool ResetOnJump = true;
+		[Description("CHARA_INDEXを利用するか？")]
 		public bool CharaIndex = false;
 
 		KeyValueFormat m_Format;

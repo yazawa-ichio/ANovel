@@ -48,7 +48,7 @@ namespace ANovel.Core.Tests
 			LineData data = default;
 			Assert.IsTrue(reader.TryRead(ref data), "読み取れる");
 			var ret = new List<Tag>();
-			var provider = new TagProvider();
+			var provider = new TagProvider(new List<string> { "TEST" });
 			provider.Provide(in data, ret);
 			return ret.Count > 0 ? ret[0] : null;
 		}
@@ -83,7 +83,7 @@ namespace ANovel.Core.Tests
 
 		}
 
-		[TagName("test_inject_param")]
+		[TagName("test_inject_param", Symbol = "TEST")]
 		class InjectParamTestCommand : Command
 		{
 			[InjectArgument]

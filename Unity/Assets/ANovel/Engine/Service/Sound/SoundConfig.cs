@@ -18,11 +18,14 @@ namespace ANovel.Engine
 
 		[Argument(Required = true)]
 		public string Path;
+		[RateArgument]
 		public float Volume = 1f;
 		public Millisecond Time;
 		public bool Loop;
 		public Easing? Easing;
+		[RateArgument]
 		public float Pitch = 1f;
+		[RateArgument]
 		public float Pan;
 		[SkipArgument]
 		public ICacheHandle<AudioClip> Clip { get; set; }
@@ -65,6 +68,7 @@ namespace ANovel.Engine
 	public class VolumeConfig
 	{
 		[Argument(Required = true)]
+		[RateArgument]
 		public float Volume = 1f;
 		public Millisecond Time = Millisecond.FromSecond(0.5f);
 		public Easing? Easing;

@@ -5,37 +5,38 @@ using System.Threading.Tasks;
 
 namespace ANovel.Core
 {
+	public class PreProcessResult
+	{
+		public bool Header { get; internal set; } = true;
+		public readonly List<string> Symbols;
+		public readonly MacroDefine MacroDefine;
+		public readonly List<MacroDefine> DependMacros;
+		public readonly List<IParamConverter> Converters;
+		public readonly List<SkipScope> SkipScopes;
+		public readonly MetaData Meta;
+		public PreProcessResult(string[] symbols)
+		{
+			Symbols = new List<string>(symbols);
+			DependMacros = new List<MacroDefine>();
+			Converters = new List<IParamConverter>();
+			MacroDefine = new MacroDefine(Converters, DependMacros);
+			SkipScopes = new List<SkipScope>();
+			Meta = new MetaData();
+		}
+	}
 
 	public class PreProcessor
 	{
-		public class Result
-		{
-			public bool Header { get; internal set; } = true;
-			public readonly List<string> Symbols;
-			public readonly MacroDefine MacroDefine;
-			public readonly List<MacroDefine> DependMacros;
-			public readonly List<IParamConverter> Converters;
-			public readonly List<SkipScope> SkipScopes;
-			public readonly MetaData Meta;
-			public Result(string[] symbols)
-			{
-				Symbols = new List<string>(symbols);
-				DependMacros = new List<MacroDefine>();
-				Converters = new List<IParamConverter>();
-				MacroDefine = new MacroDefine(Converters, DependMacros);
-				SkipScopes = new List<SkipScope>();
-				Meta = new MetaData();
-			}
-		}
+
 
 		class Entry
 		{
 			public TagProvider Provider;
 			public LineReader Reader;
 			public Queue<LineData> Temp = new Queue<LineData>();
-			public Result Result;
+			public PreProcessResult Result;
 
-			public Entry(string path, List<string> symbols, string text, Result result)
+			public Entry(string path, List<string> symbols, string text, PreProcessResult result)
 			{
 				Provider = new TagProvider(symbols);
 				Reader = new LineReader(path, text);
@@ -45,7 +46,7 @@ namespace ANovel.Core
 		}
 
 		IScenarioLoader m_Loader;
-		Dictionary<string, Result> m_Cache = new Dictionary<string, Result>();
+		Dictionary<string, PreProcessResult> m_Cache = new Dictionary<string, PreProcessResult>();
 		string[] m_Symbols;
 		List<Tag> m_Tags = new List<Tag>();
 		Stack<Entry> m_Stack = new Stack<Entry>();
@@ -58,11 +59,11 @@ namespace ANovel.Core
 			m_Symbols = symbols ?? Array.Empty<string>();
 		}
 
-		public Task<Result> Run(string path, string text, CancellationToken token)
+		public Task<PreProcessResult> Run(string path, string text, CancellationToken token)
 		{
 			try
 			{
-				return RunImpl(path, text, token);
+				return RunImpl(0, path, text, token);
 			}
 			finally
 			{
@@ -70,13 +71,17 @@ namespace ANovel.Core
 			}
 		}
 
-		async Task<Result> RunImpl(string path, string text, CancellationToken token)
+		async Task<PreProcessResult> RunImpl(int depth, string path, string text, CancellationToken token)
 		{
 			if (m_Cache.TryGetValue(path, out var result))
 			{
 				return result;
 			}
-			result = m_Cache[path] = new Result(m_Symbols);
+			result = new PreProcessResult(m_Symbols);
+			if (depth > 0)
+			{
+				m_Cache[path] = result;
+			}
 			if (text == null)
 			{
 				text = await m_Loader.Load(path, token);
@@ -98,15 +103,17 @@ namespace ANovel.Core
 					ProcessIfScope(data, (IfScope)process);
 					continue;
 				}
-				if (process is IImportPreProcess import)
+				if (process is ImportCommand import)
 				{
-					import.Import(await RunImpl(import.Path, null, token));
+					// サークルインポートを制限すべきか？
+					//if (depth > 0) throw new LineDataException(data, "not allow nest import" + depth);
+					import.Import(await RunImpl(depth + 1, import.Path, null, token));
 				}
 				if (process is MacroScope macro)
 				{
 					ProcessMacroScope(data, macro);
 				}
-				if (process is IImportText importText && importText.Enabled)
+				if (process is IImportText importText)
 				{
 					importText.Import(await m_Loader.Load(importText.Path, token));
 				}
@@ -134,7 +141,7 @@ namespace ANovel.Core
 			return (PreProcess)m_Tags[0];
 		}
 
-		void CheckStart(in LineData data, PreProcess process, Result result)
+		void CheckStart(in LineData data, PreProcess process, PreProcessResult result)
 		{
 			if (!result.Header && process.HeaderOnly)
 			{

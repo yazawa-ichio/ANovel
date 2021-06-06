@@ -21,6 +21,7 @@ namespace ANovel.Engine
 		public float OffsetX;
 		public float OffsetY;
 		public float OffsetZ;
+		[RateArgument]
 		public float Scale = 1f;
 
 		public float? FaceWindowX;
@@ -34,6 +35,7 @@ namespace ANovel.Engine
 		public float OffsetX;
 		public float OffsetY;
 		public float OffsetZ;
+		[RateArgument]
 		public float Scale = 1f;
 	}
 }

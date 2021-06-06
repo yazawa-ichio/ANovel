@@ -12,7 +12,7 @@ namespace ANovel.Core
 		LineReader m_LineReader;
 		PreProcessor m_PreProcessor;
 		TagProvider m_TagProvider;
-		PreProcessor.Result m_PreProcess;
+		PreProcessResult m_PreProcess;
 		List<Tag> m_Tags = new List<Tag>();
 		List<LineData> m_Text = new List<LineData>();
 		List<ICommand> m_Commands = new List<ICommand>();
@@ -38,7 +38,7 @@ namespace ANovel.Core
 			}
 		}
 
-		public async Task<PreProcessor.Result> Load(string path, CancellationToken token)
+		public async Task<PreProcessResult> Load(string path, CancellationToken token)
 		{
 			m_Stop = false;
 			m_Label.Reset();

@@ -227,11 +227,11 @@ namespace ANovel.Engine
 		{
 			foreach (var kvp in data.Prefixed<BgmConfig>().GetAll<PlaySoundEnvData>())
 			{
-				loader.Load<AudioClip>(Path.GetBgm(kvp.Value.Path));
+				loader.Load<AudioClip>(Path.GetPath(PathCategory.Bgm, kvp.Value.Path));
 			}
 			foreach (var kvp in data.Prefixed<SeConfig>().GetAll<PlaySoundEnvData>())
 			{
-				loader.Load<AudioClip>(Path.GetSe(kvp.Value.Path));
+				loader.Load<AudioClip>(Path.GetPath(PathCategory.Se, kvp.Value.Path));
 			}
 		}
 
@@ -240,12 +240,12 @@ namespace ANovel.Engine
 			StopAll();
 			foreach (var kvp in data.Prefixed<BgmConfig>().GetAll<PlaySoundEnvData>())
 			{
-				var config = PlayConfig.Restore(kvp.Value, Path.BgmRoot, cache);
+				var config = PlayConfig.Restore(kvp.Value, Path.GetRoot(PathCategory.Bgm), cache);
 				PlayBgm(new BgmConfig { Slot = kvp.Key, Group = kvp.Value.Group }, config);
 			}
 			foreach (var kvp in data.Prefixed<SeConfig>().GetAll<PlaySoundEnvData>())
 			{
-				var config = PlayConfig.Restore(kvp.Value, Path.SeRoot, cache);
+				var config = PlayConfig.Restore(kvp.Value, Path.GetRoot(PathCategory.Se), cache);
 				PlaySe(new SeConfig { Slot = kvp.Key, Group = kvp.Value.Group }, config);
 			}
 		}
@@ -256,7 +256,7 @@ namespace ANovel.Engine
 			var configs = new Dictionary<string, PlayConfig>();
 			foreach (var kvp in log.Extension.GetAll<PlayVoiceEnvData>())
 			{
-				configs.Add(kvp.Key, PlayConfig.Restore(kvp.Value, Path.VoiceRoot, cache));
+				configs.Add(kvp.Key, PlayConfig.Restore(kvp.Value, Path.GetRoot(PathCategory.Voice), cache));
 			}
 			await Task.WhenAll(configs.Values.Select(x => x.Clip.GetAsync()));
 			foreach (var kvp in configs)
