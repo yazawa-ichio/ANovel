@@ -8,12 +8,12 @@ namespace ANovel.Engine
 		public string Path;
 		public Millisecond Time = Millisecond.FromSecond(0.2f);
 		public float Vague = 0.2f;
+		[PathDefine(PathCategory.Rule)]
 		public string Rule;
 		[SkipArgument]
 		public long? AutoOrder;
 		[SkipArgument]
 		public ICacheHandle<Texture> Texture;
-
 		[SkipArgument]
 		public ICacheHandle<Texture> RuleTexture;
 
@@ -35,7 +35,7 @@ namespace ANovel.Engine
 
 		public void PreloadRule(PathConfig path, IPreLoader loader)
 		{
-			PreloadRule(path.GetRule(""), loader);
+			PreloadRule(path.GetRoot(PathCategory.Rule), loader);
 		}
 
 		public void PreloadRule(string prefix, IPreLoader loader)
@@ -48,7 +48,7 @@ namespace ANovel.Engine
 
 		public void LoadRule(PathConfig path, IResourceCache cache)
 		{
-			LoadRule(path.GetRule(""), cache);
+			LoadRule(path.GetRoot(PathCategory.Rule), cache);
 		}
 
 		public void LoadRule(string prefix, IResourceCache cache)
@@ -70,7 +70,7 @@ namespace ANovel.Engine
 
 	}
 
-	public struct ImageObjectEnvData : IEnvDataUpdate<ImageObjectConfig>, IEnvDataUpdate<string>, IScreenChildEnvData
+	public struct ImageObjectEnvData : IEnvDataUpdate<ImageObjectConfig>, IScreenChildEnvData
 	{
 
 		public string Path;
@@ -92,11 +92,6 @@ namespace ANovel.Engine
 		{
 			Path = arg.Path;
 			arg.AutoOrder = AutoOrder = arg.AutoOrder.GetValueOrDefault(AutoOrder);
-		}
-
-		public void Update(string arg)
-		{
-			Path = arg;
 		}
 
 	}

@@ -1,19 +1,19 @@
 namespace ANovel.Core
 {
 	[TagName("import")]
-	public class ImportCommand : PreProcess, IImportPreProcess
+	public sealed class ImportCommand : PreProcess
 	{
 		[Argument(Required = true)]
 		public string Path { get; private set; }
 
-		PreProcessor.Result m_Import;
+		PreProcessResult m_Import;
 
-		public void Import(PreProcessor.Result result)
+		public void Import(PreProcessResult result)
 		{
 			m_Import = result;
 		}
 
-		public override void Result(PreProcessor.Result result)
+		public override void Result(PreProcessResult result)
 		{
 			result.DependMacros.Add(m_Import.MacroDefine);
 			result.Meta.Depend(m_Import.Meta);

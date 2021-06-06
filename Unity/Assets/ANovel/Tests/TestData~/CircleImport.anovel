@@ -1,5 +1,5 @@
 
-#importmacro path="MacroSet.anovel"
+#import path="MacroSet.anovel"
 
 #if condition="IMMEDIATE_DEFINE" not
 	;define_symbolは即時反映される

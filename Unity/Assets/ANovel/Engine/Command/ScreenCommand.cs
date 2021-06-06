@@ -79,7 +79,7 @@ namespace ANovel.Engine
 		{
 			if (!string.IsNullOrEmpty(m_Rule))
 			{
-				loader.Load<Texture>(Path.GetRule(m_Rule));
+				loader.Load<Texture>(Path.GetPath(PathCategory.Rule, m_Rule));
 			}
 		}
 
@@ -87,7 +87,7 @@ namespace ANovel.Engine
 		{
 			if (!string.IsNullOrEmpty(m_Rule))
 			{
-				m_Config.Rule = Cache.Load<Texture>(Path.GetRule(m_Rule));
+				m_Config.Rule = Cache.Load<Texture>(Path.GetPath(PathCategory.Rule, m_Rule));
 			}
 			Service.Transition.Prepare(m_Config);
 			foreach (var cmd in m_RunCommands)

@@ -19,6 +19,7 @@ namespace ANovel.Engine
 	public class BGShowCommand : BGCommandBase
 	{
 		[InjectArgument]
+		[InjectPathDefine("path", PathCategory.Bg)]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.4f)
@@ -49,13 +50,13 @@ namespace ANovel.Engine
 
 		protected override void Preload(IPreLoader loader)
 		{
-			m_Transition.PreloadTexture(Path.BgRoot, loader);
+			m_Transition.PreloadTexture(Path.GetRoot(PathCategory.Bg), loader);
 			m_Transition.PreloadRule(Path, loader);
 		}
 
 		protected override void Execute()
 		{
-			m_Transition.LoadTexture(Path.BgRoot, Cache);
+			m_Transition.LoadTexture(Path.GetRoot(PathCategory.Bg), Cache);
 			m_Transition.LoadRule(Path, Cache);
 			m_PlayHandle = Service.Show(Category.Bg, EnvKey, m_Transition, m_Layout);
 		}
@@ -66,6 +67,7 @@ namespace ANovel.Engine
 	public class BGChangeCommand : BGCommandBase
 	{
 		[InjectArgument]
+		[InjectPathDefine("path", PathCategory.Bg)]
 		ImageObjectConfig m_Transition = new ImageObjectConfig()
 		{
 			Time = Millisecond.FromSecond(0.4f)
@@ -79,13 +81,13 @@ namespace ANovel.Engine
 
 		protected override void Preload(IPreLoader loader)
 		{
-			m_Transition.PreloadTexture(Path.BgRoot, loader);
+			m_Transition.PreloadTexture(Path.GetRoot(PathCategory.Bg), loader);
 			m_Transition.PreloadRule(Path, loader);
 		}
 
 		protected override void Execute()
 		{
-			m_Transition.LoadTexture(Path.BgRoot, Cache);
+			m_Transition.LoadTexture(Path.GetRoot(PathCategory.Bg), Cache);
 			m_Transition.LoadRule(Path, Cache);
 			m_PlayHandle = Service.Change(Category.Bg, EnvKey, m_Transition);
 		}

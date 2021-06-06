@@ -1,3 +1,4 @@
+using ANovel.Core.Define;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -154,6 +155,17 @@ namespace ANovel.Core
 					}
 				}
 				return list.ToArray();
+			}
+		}
+
+		internal static IEnumerable<TagDefine> GetDefines(List<string> symbols)
+		{
+			foreach (var tag in s_Dic.Where(x => x != null).SelectMany(x => x.Values).SelectMany(x => x))
+			{
+				if (tag.IsDefineSymbol(symbols))
+				{
+					yield return tag.CreateDefine();
+				}
 			}
 		}
 

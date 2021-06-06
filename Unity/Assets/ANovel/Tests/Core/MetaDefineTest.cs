@@ -19,13 +19,13 @@ namespace ANovel.Core.Tests
 		public string Value;
 	}
 
-	[TagName("test_meta_deine")]
+	[TagName("test_meta_deine", Symbol = "TEST")]
 	public class TestMetaDefineTest : PreProcess
 	{
 		[InjectArgument]
 		TestMetaData m_Data = new TestMetaData();
 
-		public override void Result(PreProcessor.Result result)
+		public override void Result(PreProcessResult result)
 		{
 			if (string.IsNullOrEmpty(m_Data.Name))
 			{

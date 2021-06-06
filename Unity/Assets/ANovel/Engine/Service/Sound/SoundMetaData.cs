@@ -25,17 +25,17 @@ namespace ANovel.Engine
 		{
 			foreach (var se in SE)
 			{
-				if (se.Name == param.Name)
+				if ("se_" + se.Name == param.Name)
 				{
 					se.Convert(param);
 					return;
 				}
 			}
-			foreach (var se in BGM)
+			foreach (var bgm in BGM)
 			{
-				if (se.Name == param.Name)
+				if ("bgm_" + bgm.Name == param.Name)
 				{
-					se.Convert(param);
+					bgm.Convert(param);
 					return;
 				}
 			}

@@ -56,7 +56,7 @@ namespace ANovel.Engine
 			m_TextPrinter?.PreRestore(meta, data, loader);
 			if (data.TryGetSingle(out FaceWindowEnvData faceWindow) && !string.IsNullOrEmpty(faceWindow.Path))
 			{
-				var path = Path.CharaFaceWindowRoot + faceWindow.Path;
+				var path = Path.GetRoot(PathCategory.CharaFaceWindow) + faceWindow.Path;
 				loader.Load<Texture>(path);
 			}
 		}
@@ -69,7 +69,7 @@ namespace ANovel.Engine
 			if (data.TryGetSingle(out FaceWindowEnvData faceWindow) && !string.IsNullOrEmpty(faceWindow.Path))
 			{
 				var config = faceWindow.CreateConfig();
-				config.LoadTexture(Path.CharaFaceWindowRoot, cache);
+				config.LoadTexture(Path.GetRoot(PathCategory.CharaFaceWindow), cache);
 				m_FaceWindow.ShowImmediate(config);
 			}
 		}

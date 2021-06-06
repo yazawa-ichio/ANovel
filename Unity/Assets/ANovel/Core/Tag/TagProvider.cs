@@ -20,7 +20,7 @@ namespace ANovel.Core
 			Symbols = symbols;
 		}
 
-		public void Setup(PreProcessor.Result result)
+		public void Setup(PreProcessResult result)
 		{
 			Symbols.Clear();
 			Converters.Clear();

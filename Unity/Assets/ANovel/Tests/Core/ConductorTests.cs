@@ -16,7 +16,7 @@ namespace ANovel.Core.Tests
 		[UnityTest]
 		public IEnumerator コンダクターテスト()
 		{
-			var reader = new BlockReader(new TestDataLoader());
+			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
 			var loader = new Loader();
 			var text = new Text();
 			var conductor = new Conductor(reader, loader)
@@ -76,7 +76,7 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void エラーテスト()
 		{
-			var reader = new BlockReader(new TestDataLoader());
+			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
 			var loader = new Loader();
 			var text = new Text();
 			var conductor = new Conductor(reader, loader)
@@ -140,7 +140,7 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void マニュアルジャンプテスト()
 		{
-			var reader = new BlockReader(new TestDataLoader());
+			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
 			var loader = new Loader();
 			var text = new Text();
 			var conductor = new Conductor(reader, loader)
@@ -261,7 +261,7 @@ namespace ANovel.Core.Tests
 		public IEnumerator コマンドテスト()
 		{
 			TestTrigger.Trigger = null;
-			var reader = new BlockReader(new TestDataLoader());
+			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
 			var loader = new Loader();
 			var text = new Text();
 			var conductor = new Conductor(reader, loader)
@@ -347,7 +347,7 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void エンドブロックテスト()
 		{
-			var reader = new BlockReader(new TestDataLoader());
+			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
 			var loader = new Loader();
 			var text = new Text();
 			var conductor = new Conductor(reader, loader)
@@ -385,7 +385,7 @@ namespace ANovel.Core.Tests
 			TestCountCommand.Count = 0;
 			TestTrigger.Trigger = null;
 
-			var reader = new BlockReader(new TestDataLoader());
+			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
 			var loader = new Loader();
 			var text = new Text();
 			var conductor = new Conductor(reader, loader)
@@ -482,7 +482,7 @@ namespace ANovel.Core.Tests
 
 		class DummyData { }
 
-		[TagName("test_preload")]
+		[TagName("test_preload", Symbol = "TEST")]
 		class TestPreLoad : Command
 		{
 			[Argument(Required = true)]
@@ -494,7 +494,7 @@ namespace ANovel.Core.Tests
 			}
 		}
 
-		[TagName("test_sync")]
+		[TagName("test_sync", Symbol = "TEST")]
 		public class TestSync : Command
 		{
 			public static bool EndFlag = false;
@@ -516,7 +516,7 @@ namespace ANovel.Core.Tests
 
 		}
 
-		[TagName("test_prepare_wait")]
+		[TagName("test_prepare_wait", Symbol = "TEST")]
 		public class TestPrepareWaitTime : Command
 		{
 			[Argument(Required = true)]
@@ -536,7 +536,7 @@ namespace ANovel.Core.Tests
 
 		}
 
-		[TagName("test_trigger")]
+		[TagName("test_trigger", Symbol = "TEST")]
 		public class TestTrigger : Command
 		{
 			public static string Trigger;
@@ -551,7 +551,7 @@ namespace ANovel.Core.Tests
 
 		}
 
-		[TagName("test_error")]
+		[TagName("test_error", Symbol = "TEST")]
 		public class TestError : Command
 		{
 			protected override void Execute()

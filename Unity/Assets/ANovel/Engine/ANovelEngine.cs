@@ -23,6 +23,8 @@ namespace ANovel
 		IService[] m_Services;
 		ScopeLocker m_Locker = new ScopeLocker();
 
+		public EngineConfig Config => m_Config;
+
 		public EventBroker Event => m_Conductor.Event;
 
 		public ServiceContainer Container => m_Conductor.Container;
@@ -73,15 +75,15 @@ namespace ANovel
 		public void Initialize(Setting setting)
 		{
 			m_Initialized = true;
-			m_Setting = setting;
-			m_Conductor = setting.CreateConductor();
-			m_Conductor.Text = GetComponentInChildren<ITextProcessor>(true);
-			m_Conductor.OnError += HandleError;
-			m_Conductor.OnLoad = Load;
 			if (m_Config == null)
 			{
 				m_Config = ScriptableObject.CreateInstance<EngineConfig>();
 			}
+			m_Setting = setting;
+			m_Conductor = setting.CreateConductor(m_Config);
+			m_Conductor.Text = GetComponentInChildren<ITextProcessor>(true);
+			m_Conductor.OnError += HandleError;
+			m_Conductor.OnLoad = Load;
 			m_Conductor.Container.Set(m_Config);
 			m_Conductor.Event.Register(this);
 			m_Services = GetComponentsInChildren<IService>(true).OrderBy(x => -(int)x.Priority).ToArray();

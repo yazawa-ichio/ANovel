@@ -1,5 +1,6 @@
 
 
+using ANovel.Core.Define;
 using System;
 using System.Collections.Generic;
 
@@ -144,6 +145,26 @@ namespace ANovel.Core
 							throw new LineDataException(tag.LineData, $"{tag.TagName} {entry.Name} format error : {kvp.Value}", ex);
 						}
 					}
+				}
+			}
+		}
+
+		public IEnumerable<ArgumentDefine> CreateDefine(HashSet<string> targets, HashSet<string> ignores, Attribute[] attributes)
+		{
+			TrySetFields();
+			foreach (var kvp in m_Fields)
+			{
+				if (ignores != null && ignores.Contains(kvp.Key))
+				{
+					continue;
+				}
+				if (targets != null && !targets.Contains(kvp.Key))
+				{
+					continue;
+				}
+				foreach (var f in kvp.Value)
+				{
+					yield return f.CreateDefine(attributes);
 				}
 			}
 		}

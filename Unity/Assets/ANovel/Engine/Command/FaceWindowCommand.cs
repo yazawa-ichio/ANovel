@@ -15,12 +15,12 @@ namespace ANovel.Engine
 
 		protected override void Preload(IPreLoader loader)
 		{
-			Config.PreloadTexture(Path.CharaFaceWindowRoot, loader);
+			Config.PreloadTexture(Path.GetRoot(PathCategory.CharaFaceWindow), loader);
 		}
 
 		protected override void Execute()
 		{
-			Config.LoadTexture(Path.CharaFaceWindowRoot, Cache);
+			Config.LoadTexture(Path.GetRoot(PathCategory.CharaFaceWindow), Cache);
 			Event.Publish(FaceWindowEvent.Show, Config);
 		}
 

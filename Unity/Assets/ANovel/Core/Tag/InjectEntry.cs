@@ -1,5 +1,7 @@
+using ANovel.Core.Define;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace ANovel.Core
@@ -81,6 +83,19 @@ namespace ANovel.Core
 			}
 		}
 
+		public IEnumerable<ArgumentDefine> CreateDefine()
+		{
+			Attribute[] attributes;
+			if (m_FieldInfo != null)
+			{
+				attributes = m_FieldInfo.GetCustomAttributes().ToArray();
+			}
+			else
+			{
+				attributes = m_PropertyInfo.GetCustomAttributes().ToArray();
+			}
+			return m_TargetEntry.CreateDefine(m_Targets, m_Ignores, attributes);
+		}
 	}
 
 }

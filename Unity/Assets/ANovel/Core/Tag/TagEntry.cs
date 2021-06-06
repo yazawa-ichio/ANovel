@@ -1,5 +1,7 @@
+using ANovel.Core.Define;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ANovel.Core
 {
@@ -117,7 +119,33 @@ namespace ANovel.Core
 			return tag;
 		}
 
-	}
+		public TagDefine CreateDefine()
+		{
+			Prepare();
+			TagDefine ret = new TagDefine();
+			ret.Name = Name;
+			ret.Symbols = m_Attr?.Symbol;
+			ret.LineType = Token.Get(Type).ToString();
+			ret.Description = DescriptionAttribute.Get(m_Type);
+			ret.Arguments = GetArgumentDefines().ToArray();
+			return ret;
+		}
 
+		IEnumerable<ArgumentDefine> GetArgumentDefines()
+		{
+			foreach (var f in m_Fields)
+			{
+				yield return f.CreateDefine(Array.Empty<Attribute>());
+			}
+			foreach (var e in m_Injects)
+			{
+				foreach (var d in e.CreateDefine())
+				{
+					yield return d;
+				}
+			}
+		}
+
+	}
 
 }

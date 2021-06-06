@@ -63,18 +63,18 @@ namespace ANovel.Engine
 
 		protected override void Preload(IPreLoader loader)
 		{
-			m_Transition.PreloadTexture(Path.CharaRoot, loader);
+			m_Transition.PreloadTexture(Path.GetRoot(PathCategory.Chara), loader);
 			m_Transition.PreloadRule(Path, loader);
-			m_Config?.FaceWindowConfig?.PreloadTexture(Path.CharaFaceWindowRoot, loader);
+			m_Config?.FaceWindowConfig?.PreloadTexture(Path.GetRoot(PathCategory.CharaFaceWindow), loader);
 		}
 
 		protected override void Execute()
 		{
-			m_Transition.LoadTexture(Path.CharaRoot, Cache);
+			m_Transition.LoadTexture(Path.GetRoot(PathCategory.Chara), Cache);
 			m_Transition.LoadRule(Path, Cache);
 			if (m_Config.FaceWindowConfig != null)
 			{
-				m_Config.FaceWindowConfig.LoadTexture(Path.CharaFaceWindowRoot, Cache);
+				m_Config.FaceWindowConfig.LoadTexture(Path.GetRoot(PathCategory.CharaFaceWindow), Cache);
 				Event.Publish(FaceWindowEvent.Update, m_Config.FaceWindowConfig);
 			}
 			m_PlayHandle = Service.Show(Category.Chara, m_Name, m_Transition, m_Layout);
@@ -101,12 +101,12 @@ namespace ANovel.Engine
 
 		protected override void Preload(IPreLoader loader)
 		{
-			m_Config.FaceWindowConfig.PreloadTexture(Path.CharaFaceWindowRoot, loader);
+			m_Config.FaceWindowConfig.PreloadTexture(Path.GetRoot(PathCategory.CharaFaceWindow), loader);
 		}
 
 		protected override void Execute()
 		{
-			m_Config.FaceWindowConfig.LoadTexture(Path.CharaFaceWindowRoot, Cache);
+			m_Config.FaceWindowConfig.LoadTexture(Path.GetRoot(PathCategory.CharaFaceWindow), Cache);
 			Event.Publish(FaceWindowEvent.Update, m_Config.FaceWindowConfig);
 		}
 	}
@@ -140,18 +140,18 @@ namespace ANovel.Engine
 
 		protected override void Preload(IPreLoader loader)
 		{
-			m_Transition.PreloadTexture(Path.CharaRoot, loader);
+			m_Transition.PreloadTexture(Path.GetRoot(PathCategory.Chara), loader);
 			m_Transition.PreloadRule(Path, loader);
-			m_Config.FaceWindowConfig?.PreloadTexture(Path.CharaFaceWindowRoot, loader);
+			m_Config.FaceWindowConfig?.PreloadTexture(Path.GetRoot(PathCategory.CharaFaceWindow), loader);
 		}
 
 		protected override void Execute()
 		{
-			m_Transition.LoadTexture(Path.CharaRoot, Cache);
+			m_Transition.LoadTexture(Path.GetRoot(PathCategory.Chara), Cache);
 			m_Transition.LoadRule(Path, Cache);
 			if (m_Config.FaceWindowConfig != null)
 			{
-				m_Config.FaceWindowConfig.LoadTexture(Path.CharaFaceWindowRoot, Cache);
+				m_Config.FaceWindowConfig.LoadTexture(Path.GetRoot(PathCategory.CharaFaceWindow), Cache);
 				Event.Publish(FaceWindowEvent.Update, m_Config.FaceWindowConfig);
 			}
 			m_PlayHandle = Service.Change(Category.Chara, m_Name, m_Transition);

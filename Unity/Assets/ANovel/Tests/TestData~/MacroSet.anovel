@@ -1,5 +1,5 @@
 
-#importmacro path="CircleImport.anovel"
+#import path="CircleImport.anovel"
 
 #if condition="SKIP_MACRO_LOG_DEFINE" not
 

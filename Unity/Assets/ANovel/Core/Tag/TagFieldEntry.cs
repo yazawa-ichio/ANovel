@@ -1,3 +1,4 @@
+using ANovel.Core.Define;
 using System;
 using System.Reflection;
 
@@ -86,7 +87,39 @@ namespace ANovel.Core
 			m_PropertyInfo?.SetValue(obj, val);
 		}
 
+		internal ArgumentDefine CreateDefine(Attribute[] attributes)
+		{
+			TryInit();
+			var ret = new ArgumentDefine();
+			ret.Name = Name;
+			ret.Description = DescriptionAttribute.Get(m_FieldInfo, m_PropertyInfo);
+			ret.Required = Required;
+			SetInputType(ret, attributes);
+			return ret;
+		}
+
+		void SetInputType(ArgumentDefine ret, Attribute[] attributes)
+		{
+			foreach (var attr in attributes)
+			{
+				if (attr is InjectPathDefineAttribute path && path.Path == ret.Name)
+				{
+					ret.InputType = ArgumentInputType.Path.ToString();
+					ret.InputOptions = new string[] { path.Category, path.Extension };
+					return;
+				}
+			}
+			if (PathDefineAttribute.TrySet(ret, m_FieldInfo, m_PropertyInfo))
+			{
+				return;
+			}
+			if (RateArgumentAttribute.TrySet(ret, m_FieldInfo, m_PropertyInfo))
+			{
+				return;
+			}
+			ret.SetDefaultInputType(m_FieldType);
+		}
 	}
-
-
 }
+
+

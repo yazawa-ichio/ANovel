@@ -45,5 +45,20 @@ namespace ANovel.Core
 			throw new Exception($"not found token {type}");
 		}
 
+
+		public static char Get(Type type)
+		{
+			var token = Token.Command;
+			if (typeof(ISystemCommand).IsAssignableFrom(type))
+			{
+				token = Token.SystemCommand;
+			}
+			if (typeof(PreProcess).IsAssignableFrom(type))
+			{
+				token = Token.PreProcess;
+			}
+			return token;
+		}
+
 	}
 }
