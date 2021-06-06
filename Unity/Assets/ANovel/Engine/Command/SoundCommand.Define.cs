@@ -4,6 +4,7 @@ namespace ANovel.Engine
 {
 
 	[TagName("define_autovoice")]
+	[Description("自動ボイス再生の定義です")]
 	public class DefineAutoVoiceCommand : PreProcess
 	{
 		[InjectArgument]
@@ -19,6 +20,7 @@ namespace ANovel.Engine
 #if ANOVEL_DEFINE_IMPORT
 
 	[TagName("import_sound")]
+	[Description("サウンド定義をインポートします")]
 	public class ImportSoundCommand : PreProcess, IImportText
 	{
 		[Argument(Required = true)]
@@ -48,6 +50,7 @@ namespace ANovel.Engine
 #endif
 
 	[TagName("define_se")]
+	[Description("SE情報を定義します")]
 	[ReplaceTagDefine("@se_{name}", "@se path={path}")]
 	public class DefineSeCommand : PreProcess
 	{
@@ -66,6 +69,7 @@ namespace ANovel.Engine
 	}
 
 	[TagName("define_bgm")]
+	[Description("BGM情報を定義します")]
 	[ReplaceTagDefine("@bgm_{name}", "@se path={path}")]
 	public class DefineBgmCommand : PreProcess
 	{

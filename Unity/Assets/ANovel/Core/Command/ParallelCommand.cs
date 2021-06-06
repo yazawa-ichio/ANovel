@@ -4,9 +4,11 @@ using System.Collections.Generic;
 namespace ANovel.Commands
 {
 	[TagName("parallel")]
+	[Description("コマンドを並列実行します")]
 	public class ParallelCommand : ScopeCommand
 	{
 		[Argument]
+		[Description("同期待ちを行うか？\n空の場合は実行中のコマンドから同期するか判断します")]
 		bool? m_Sync = null;
 
 		List<ICommand> m_RunCommands;

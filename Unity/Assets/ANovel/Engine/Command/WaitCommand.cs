@@ -2,13 +2,16 @@ namespace ANovel.Engine
 {
 
 	[TagName("wait")]
+	[Description("指定時間停止します")]
 	public class WaitCommand : Command
 	{
 		IEngineTime Time => Get<IEngineTime>();
 
 		[Argument(Required = true)]
+		[Description("指定時間")]
 		Millisecond m_Time = default;
 		[Argument]
+		[Description("スキップ可能か？")]
 		protected bool m_CanSkip = false;
 
 		IFadeHandle m_PlayHandle;

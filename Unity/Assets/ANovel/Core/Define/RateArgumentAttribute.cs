@@ -9,12 +9,12 @@ namespace ANovel
 	{
 		public static bool TrySet(ArgumentDefine ret, FieldInfo field, PropertyInfo property)
 		{
-			if (field != null && IsDefined(field, typeof(PathDefineAttribute)))
+			if (field != null && IsDefined(field, typeof(RateArgumentAttribute)))
 			{
 				ret.InputType = ArgumentInputType.Rate.ToString();
 				return true;
 			}
-			if (property != null && IsDefined(property, typeof(PathDefineAttribute)))
+			if (property != null && IsDefined(property, typeof(RateArgumentAttribute)))
 			{
 				ret.InputType = ArgumentInputType.Rate.ToString();
 				return true;

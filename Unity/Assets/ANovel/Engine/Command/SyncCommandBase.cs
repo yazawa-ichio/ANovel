@@ -7,8 +7,10 @@ namespace ANovel.Engine
 		protected IEngineTime Time => Get<IEngineTime>();
 
 		[Argument]
+		[Description("実行を同期するか？")]
 		protected bool m_Sync = false;
 		[Argument]
+		[Description("スキップ可能か？")]
 		protected bool m_CanSkip = true;
 
 		protected IPlayHandle m_PlayHandle;

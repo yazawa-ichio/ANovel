@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace ANovel.Commands
 {
 	[TagName("async")]
+	[Description("スコープを非同期実行します")]
 	public class AsyncScopeCommand : ScopeCommand
 	{
 		List<ICommand> m_BatchCommands;
