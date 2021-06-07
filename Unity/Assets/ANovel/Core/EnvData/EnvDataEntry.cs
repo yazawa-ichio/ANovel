@@ -16,8 +16,10 @@ namespace ANovel.Core
 	}
 
 	[UnityEngine.Scripting.Preserve]
-	internal class EnvDataEntry<TValue> : IEnvDataEntry where TValue : struct
+	internal class EnvDataEntry<TValue> : IEnvDataEntry where TValue : struct, IEnvValue
 	{
+		static readonly EqualityComparer<TValue> s_EqualityComparer = EqualityComparer<TValue>.Default;
+
 		Dictionary<string, TValue> m_Dic = new Dictionary<string, TValue>();
 		Dictionary<string, TValue> m_Prev = new Dictionary<string, TValue>();
 		HashSet<string> m_Ditry = new HashSet<string>();
@@ -125,7 +127,7 @@ namespace ANovel.Core
 						temp.Remove(kvp.Key);
 						if (cur.TryGetValue(kvp.Key, out var value))
 						{
-							if (m_Ditry.Remove(kvp.Key) && !value.Equals(kvp.Value))
+							if (m_Ditry.Remove(kvp.Key) && !s_EqualityComparer.Equals(value, kvp.Value))
 							{
 								updataList.Add(new UpdateDiffData<TValue>(kvp.Key, kvp.Value, value));
 							}

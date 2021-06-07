@@ -32,7 +32,7 @@ namespace ANovel
 			return new PrefixedEnvDataHolder(prefix, data);
 		}
 
-		public static IEnumerable<string> GetKeys<TValue>(this IEnvData self, Func<TValue, bool> func = null) where TValue : struct
+		public static IEnumerable<string> GetKeys<TValue>(this IEnvData self, Func<TValue, bool> func = null) where TValue : struct, IEnvValue
 		{
 			foreach (var kvp in self.GetAll<TValue>())
 			{
@@ -43,12 +43,12 @@ namespace ANovel
 			}
 		}
 
-		public static void DeleteAll<TValue>(this IEnvData self) where TValue : struct
+		public static void DeleteAll<TValue>(this IEnvData self) where TValue : struct, IEnvValue
 		{
 			self.DeleteAll<TValue>(null);
 		}
 
-		public static void DeleteAll<TValue>(this IEnvData self, Func<TValue, bool> func) where TValue : struct
+		public static void DeleteAll<TValue>(this IEnvData self, Func<TValue, bool> func) where TValue : struct, IEnvValue
 		{
 			self.DeleteAll<TValue>((_, v) =>
 			{
@@ -69,20 +69,20 @@ namespace ANovel
 			});
 		}
 
-		public static void Update<TValue>(this IEnvData self, string key, Func<TValue, TValue> update) where TValue : struct
+		public static void Update<TValue>(this IEnvData self, string key, Func<TValue, TValue> update) where TValue : struct, IEnvValue
 		{
 			self.TryGet<TValue>(key, out var value);
 			self.Set(key, update(value));
 		}
 
-		public static void Update<TValue>(this IEnvData self, string key, UpdateEnvDataDelegate<TValue> update) where TValue : struct
+		public static void Update<TValue>(this IEnvData self, string key, UpdateEnvDataDelegate<TValue> update) where TValue : struct, IEnvValue
 		{
 			self.TryGet<TValue>(key, out var value);
 			update(ref value);
 			self.Set(key, value);
 		}
 
-		public static void Update<TValue, TArg>(this IEnvData self, string key, TArg data) where TValue : struct, IEnvDataUpdate<TArg>
+		public static void Update<TValue, TArg>(this IEnvData self, string key, TArg data) where TValue : struct, IEnvValue, IEnvValueUpdate<TArg>
 		{
 			self.TryGet<TValue>(key, out var value);
 			value.Update(data);
@@ -109,21 +109,21 @@ namespace ANovel
 			return cur;
 		}
 
-		public static bool TryGetSingle<TValue>(this IEnvDataHolder self, out TValue value) where TValue : struct
+		public static bool TryGetSingle<TValue>(this IEnvDataHolder self, out TValue value) where TValue : struct, IEnvValue
 		{
 			self = self.GetRoot();
 			var key = EvnDataTypePrefix<TValue>.TypeName;
 			return self.TryGet(key, out value);
 		}
 
-		public static TValue GetSingle<TValue>(this IEnvDataHolder self) where TValue : struct
+		public static TValue GetSingle<TValue>(this IEnvDataHolder self) where TValue : struct, IEnvValue
 		{
 			self = self.GetRoot();
 			var key = EvnDataTypePrefix<TValue>.TypeName;
 			return self.Get<TValue>(key);
 		}
 
-		public static TValue GetSingleOrCreate<TValue>(this IEnvDataHolder self) where TValue : struct
+		public static TValue GetSingleOrCreate<TValue>(this IEnvDataHolder self) where TValue : struct, IEnvValue
 		{
 			self = self.GetRoot();
 			var key = EvnDataTypePrefix<TValue>.TypeName;
@@ -131,14 +131,14 @@ namespace ANovel
 			return value;
 		}
 
-		public static void DeleteSingle<TValue>(this IEnvData self) where TValue : struct
+		public static void DeleteSingle<TValue>(this IEnvData self) where TValue : struct, IEnvValue
 		{
 			self = self.GetRoot();
 			var key = EvnDataTypePrefix<TValue>.TypeName;
 			self.Delete<TValue>(key);
 		}
 
-		public static void SetSingle<TValue>(this IEnvData self, TValue value) where TValue : struct
+		public static void SetSingle<TValue>(this IEnvData self, TValue value) where TValue : struct, IEnvValue
 		{
 			self = self.GetRoot();
 			var key = EvnDataTypePrefix<TValue>.TypeName;
@@ -146,21 +146,21 @@ namespace ANovel
 		}
 
 
-		public static void UpdateSingle<TValue>(this IEnvData self, Func<TValue, TValue> update) where TValue : struct
+		public static void UpdateSingle<TValue>(this IEnvData self, Func<TValue, TValue> update) where TValue : struct, IEnvValue
 		{
 			self = self.GetRoot();
 			var key = EvnDataTypePrefix<TValue>.TypeName;
 			self.Update(key, update);
 		}
 
-		public static void UpdateSingle<TValue>(this IEnvData self, UpdateEnvDataDelegate<TValue> update) where TValue : struct
+		public static void UpdateSingle<TValue>(this IEnvData self, UpdateEnvDataDelegate<TValue> update) where TValue : struct, IEnvValue
 		{
 			self = self.GetRoot();
 			var key = EvnDataTypePrefix<TValue>.TypeName;
 			self.Update(key, update);
 		}
 
-		public static void UpdateSingle<TValue, TArg>(this IEnvData self, TArg data) where TValue : struct, IEnvDataUpdate<TArg>
+		public static void UpdateSingle<TValue, TArg>(this IEnvData self, TArg data) where TValue : struct, IEnvValue, IEnvValueUpdate<TArg>
 		{
 			self = self.GetRoot();
 			var key = EvnDataTypePrefix<TValue>.TypeName;

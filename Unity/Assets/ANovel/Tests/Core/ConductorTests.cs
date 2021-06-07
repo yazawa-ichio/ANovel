@@ -572,7 +572,7 @@ namespace ANovel.Core.Tests
 
 		public class TestEnvDataProcessor : IEnvDataCustomProcessor
 		{
-			public struct PriorityEnvData
+			public struct PriorityEnvData : IEnvValue
 			{
 				public int Priority;
 			}

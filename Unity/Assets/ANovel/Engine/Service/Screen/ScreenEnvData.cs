@@ -4,7 +4,7 @@ namespace ANovel.Engine
 	{
 	}
 
-	public struct ScreenOrderEnvData : IScreenChildEnvData
+	public struct ScreenOrderEnvData : IEnvValue, IScreenChildEnvData
 	{
 		public long AutoOrder;
 

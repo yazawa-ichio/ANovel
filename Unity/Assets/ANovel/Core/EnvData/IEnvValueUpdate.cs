@@ -1,6 +1,6 @@
 namespace ANovel
 {
-	public interface IEnvDataUpdate<TArg>
+	public interface IEnvValueUpdate<TArg>
 	{
 		void Update(TArg arg);
 	}

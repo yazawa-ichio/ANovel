@@ -12,7 +12,7 @@ namespace ANovel.Core.Tests
 			int Value1 { get; }
 		}
 
-		struct TestEnvData1 : IEnvDataUpdate<int>, ITestEnvData
+		struct TestEnvData1 : IEnvValue, IEnvValueUpdate<int>, ITestEnvData
 		{
 			public int Value1 { get; set; }
 			public string Value2;
@@ -23,7 +23,7 @@ namespace ANovel.Core.Tests
 			}
 		}
 
-		struct TestEnvData2 : ITestEnvData
+		struct TestEnvData2 : IEnvValue, ITestEnvData
 		{
 			public int Value1 { get; set; }
 		}

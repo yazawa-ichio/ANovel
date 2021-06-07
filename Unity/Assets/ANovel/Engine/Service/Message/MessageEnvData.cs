@@ -2,7 +2,7 @@ using ANovel.Serialization;
 
 namespace ANovel.Engine
 {
-	public struct MessageEnvData : IDefaultValueSerialization, IHistorySaveEnvData
+	public struct MessageEnvData : IEnvValue, IDefaultValueSerialization, IHistorySaveEnvData
 	{
 		public bool IsDefault => Equals(default);
 
@@ -11,7 +11,7 @@ namespace ANovel.Engine
 		public string Message;
 	}
 
-	public struct MessageStatusEnvData : IDefaultValueSerialization
+	public struct MessageStatusEnvData : IEnvValue, IDefaultValueSerialization
 	{
 		public bool IsDefault => Equals(default);
 
