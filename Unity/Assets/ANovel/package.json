@@ -1,0 +1,11 @@
+{
+  "name": "jp.anovel.main",
+  "displayName": "ANovel",
+  "version": "0.0.1",
+  "unity": "2020.3",
+  "description": "Unity Novel Framework",
+  "author": {
+    "name": "yazawa-ichio",
+    "email": "yazawa922473@gmail.com"
+  }
+}
