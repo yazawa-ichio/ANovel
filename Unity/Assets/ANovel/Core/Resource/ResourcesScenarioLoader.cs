@@ -37,7 +37,7 @@ namespace ANovel.Core
 			var text = Resources.Load<TextAsset>(path);
 			if (text == null)
 			{
-				new FileNotFoundException("not found Asset", path);
+				throw new FileNotFoundException($"not found Asset {path}", path);
 			}
 			return Task.FromResult(text.text);
 		}

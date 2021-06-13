@@ -7,7 +7,7 @@ namespace ANovel.Engine
 	{
 		[Argument(Required = true)]
 		string m_Name = default;
-		[Argument]
+		[Argument(Required = true)]
 		string m_DispName = default;
 
 		MetaData m_Meta;
@@ -20,7 +20,7 @@ namespace ANovel.Engine
 		{
 			if (result.Meta.TryGetSingle<CharaCommonMetaData>(out var common) && !string.IsNullOrEmpty(common.Path))
 			{
-				return false;
+				return true;
 			}
 			return !string.IsNullOrEmpty(Param.Path);
 		}
@@ -73,7 +73,7 @@ namespace ANovel.Engine
 				{
 					param.Name = "chara_change";
 				}
-				else if (!param.ContainsKey("face") && !param.ContainsKey("pose") && !param.ContainsKey("level"))
+				else if (param.ContainsKey("control"))
 				{
 					param.Name = "chara_control";
 				}
@@ -140,9 +140,11 @@ namespace ANovel.Engine
 	[ReplaceTagDefine("@{dispname}", "@chara name=\"{name}\"")]
 	[ReplaceTagDefine("@{dispname}", "@chara_hide name=\"{name}\"", SecondaryKey = "hide")]
 	[ReplaceTagDefine("@{dispname}", "@chara_change name=\"{name}\"", SecondaryKey = "change")]
+	[ReplaceTagDefine("@{dispname}", "@chara_control name=\"{name}\"", SecondaryKey = "control")]
 	[ReplaceTagDefine("@{dispname}", "@chara name=\"{name}\"", Label = "{name}({dispname})")]
 	[ReplaceTagDefine("@{dispname}", "@chara_hide name=\"{name}\"", SecondaryKey = "hide", Label = "{name}({dispname})")]
 	[ReplaceTagDefine("@{dispname}", "@chara_change name=\"{name}\"", SecondaryKey = "change", Label = "{name}({dispname})")]
+	[ReplaceTagDefine("@{dispname}", "@chara_control name=\"{name}\"", SecondaryKey = "control", Label = "{name}({dispname})")]
 	public class DefineCharaCommand : DefineCharaBaseCommand
 	{
 		[InjectArgument]

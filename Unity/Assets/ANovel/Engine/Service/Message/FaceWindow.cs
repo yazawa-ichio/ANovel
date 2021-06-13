@@ -20,7 +20,10 @@ namespace ANovel.Engine
 
 		public void Init()
 		{
-			m_RawImage.canvasRenderer.SetAlpha(0);
+			if (m_RawImage != null)
+			{
+				m_RawImage.canvasRenderer.SetAlpha(0);
+			}
 		}
 
 		public void TryShow()

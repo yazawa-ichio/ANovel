@@ -29,6 +29,10 @@ namespace ANovel.Engine.Tools
 					}
 					config = ScriptableObject.CreateInstance<EngineConfig>();
 					AssetDatabase.CreateAsset(config, path);
+					var so = new SerializedObject(target);
+					so.FindProperty("m_Config").objectReferenceValue = config;
+					so.ApplyModifiedProperties();
+					so.Dispose();
 				}
 			}
 		}
