@@ -54,7 +54,7 @@ public class SampleCommand : Command
 ## QuickStart
 
 ### インストール
-upmで以下のURLでパッケージのインストールが出来ます。
+upmで以下のURLでパッケージのインストールが出来ます。  
 `https://github.com/yazawa-ichio/ANovel.git?path=Unity/Assets/ANovel`
 
 ### インポート
