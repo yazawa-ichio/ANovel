@@ -1,0 +1,58 @@
+;キャラクターのパスを定義
+#define_chara_common path="an-chara-{NAME}"
+;キャラクターを定義
+#define_chara name="c1" dispname="キャラ1"
+
+*start
+
+ANovelのQuickStartです。
+
+シンプルな構成のサンプルになります。
+
+@bg path="an-bg"
+
+背景を表示します。
+
+@image name="i1" path="an-image-i1" x=-200
+
+画像を表示します。
+
+@chara name="c1" x=200
+
+キャラの表示
+
+&async
+@キャラ1 control x="300" time="200" sync
+@キャラ1 control x="100" time="200" sync
+@キャラ1 control x="300" time="200" sync
+@キャラ1 control x="200" time="200" sync
+&end
+
+```
+@キャラ1の用に書くことも出来ます
+```
+
+@image_hide name="i1" time="1000"
+@chara_hide_all time="1000"
+
+キャラと画像を消す
+
+&transition
+@image name="i1" path="an-image-i1" x=200
+@キャラ1 x="-200"
+&end
+
+一括で表示する
+
+@image_control name="i1" x=-500 time="1000"
+@キャラ1 control x="500" time="1000"
+
+;captureをfalseにすると動きながら切り替えが出来ます。
+&transition copy="false" capture="false" time="1000"
+&end
+
+全て消す。
+
+最初に戻ります
+
+&jump path="QuickStart" label="start"

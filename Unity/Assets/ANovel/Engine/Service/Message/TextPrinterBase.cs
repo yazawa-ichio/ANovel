@@ -5,14 +5,13 @@ namespace ANovel.Engine
 {
 	public abstract class TextPrinterBase : MonoBehaviour
 	{
-		[SerializeField]
-		bool m_OneFrameOneCharLimit = true;
-
 		Queue<char> m_Buffer = new Queue<char>();
 		float m_ShowTimer;
 		protected ServiceContainer Container { get; private set; }
 
 		public bool IsProcessing { get; private set; }
+
+		public virtual float Speed { get; set; } = 0.05f;
 
 		protected abstract void SetName(string name);
 
@@ -54,12 +53,8 @@ namespace ANovel.Engine
 			}
 			while (m_Buffer.Count > 0 && m_ShowTimer > 0)
 			{
-				m_ShowTimer -= 0.05f;
+				m_ShowTimer -= Speed;
 				AddMessage(m_Buffer.Dequeue().ToString());
-				if (m_OneFrameOneCharLimit)
-				{
-					break;
-				}
 			}
 		}
 

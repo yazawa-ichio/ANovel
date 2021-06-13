@@ -44,7 +44,7 @@ namespace ANovel.Engine
 			return config;
 		}
 
-		public struct LayoutPosEnvData : IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
+		public struct LayoutPosEnvData : IEnvValue, IEnvValueUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
 		{
 			public bool IsDefault => Equals(default);
 
@@ -79,7 +79,7 @@ namespace ANovel.Engine
 			}
 		}
 
-		public struct LayoutSizeEnvData : IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
+		public struct LayoutSizeEnvData : IEnvValue, IEnvValueUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
 		{
 			public bool IsDefault => Equals(default);
 
@@ -160,7 +160,7 @@ namespace ANovel.Engine
 			}
 		}
 
-		public struct LayoutAngleEnvData : IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
+		public struct LayoutAngleEnvData : IEnvValue, IEnvValueUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
 		{
 			public bool IsDefault => Equals(default);
 
@@ -195,7 +195,7 @@ namespace ANovel.Engine
 			}
 		}
 
-		public struct LayoutColorEnvData : IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
+		public struct LayoutColorEnvData : IEnvValue, IEnvValueUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
 		{
 			public bool IsDefault => Equals(default);
 
@@ -226,7 +226,7 @@ namespace ANovel.Engine
 			}
 		}
 
-		public struct LayoutLevelEnvData : IEnvDataUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
+		public struct LayoutLevelEnvData : IEnvValue, IEnvValueUpdate<LayoutConfig>, IScreenChildEnvData, IDefaultValueSerialization
 		{
 			public bool IsDefault => Equals(default);
 

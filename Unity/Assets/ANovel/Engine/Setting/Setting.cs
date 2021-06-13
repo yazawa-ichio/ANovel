@@ -7,9 +7,9 @@ namespace ANovel.Engine
 	{
 		public IScenarioLoader ScenarioLoader;
 		public IResourceLoader ResourceLoader;
-		public IEngineTime Time;
+		public IEngineTime Time = new EngineTime();
 		public bool UseDefaultTextEnvDataProcessor = true;
-		public List<IEnvDataCustomProcessor> EnvDataCustomProcessor;
+		public List<IEnvDataCustomProcessor> EnvDataCustomProcessor = new List<IEnvDataCustomProcessor>();
 
 		public Conductor CreateConductor(EngineConfig config)
 		{

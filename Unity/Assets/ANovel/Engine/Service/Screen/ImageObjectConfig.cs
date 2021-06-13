@@ -70,7 +70,7 @@ namespace ANovel.Engine
 
 	}
 
-	public struct ImageObjectEnvData : IEnvDataUpdate<ImageObjectConfig>, IScreenChildEnvData
+	public struct ImageObjectEnvData : IEnvValue, IEnvValueUpdate<ImageObjectConfig>, IScreenChildEnvData
 	{
 
 		public string Path;

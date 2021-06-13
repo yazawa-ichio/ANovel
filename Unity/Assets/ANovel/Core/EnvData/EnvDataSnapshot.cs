@@ -16,12 +16,12 @@ namespace ANovel.Core
 			return m_Dic.Keys;
 		}
 
-		public void Set<TValue>(Dictionary<string, TValue> data) where TValue : struct
+		public void Set<TValue>(Dictionary<string, TValue> data) where TValue : struct, IEnvValue
 		{
 			m_Dic[typeof(TValue)] = data;
 		}
 
-		public Dictionary<string, TValue> Get<TValue>() where TValue : struct
+		public Dictionary<string, TValue> Get<TValue>() where TValue : struct, IEnvValue
 		{
 			if (m_Dic.TryGetValue(typeof(TValue), out var obj))
 			{
@@ -44,6 +44,10 @@ namespace ANovel.Core
 			for (int i = 0; i < length; i++)
 			{
 				var type = TypeUtil.GetType(reader.ReadString());
+				if (!typeof(IEnvValue).IsAssignableFrom(type))
+				{
+					throw new InvalidOperationException($"not IEnvValue {type}");
+				}
 				var unpackType = typeof(Dictionary<,>).MakeGenericType(typeof(string), type);
 				m_Dic[type] = Packer.Unpack(reader, unpackType);
 			}

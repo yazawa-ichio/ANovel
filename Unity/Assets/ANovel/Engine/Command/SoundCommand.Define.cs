@@ -54,7 +54,7 @@ namespace ANovel.Engine
 	[ReplaceTagDefine("@se_{name}", "@se path={path}")]
 	public class DefineSeCommand : PreProcess
 	{
-		[Argument]
+		[InjectArgument]
 		SeMetaData m_Param;
 
 		public override void Result(PreProcessResult result)
@@ -73,7 +73,7 @@ namespace ANovel.Engine
 	[ReplaceTagDefine("@bgm_{name}", "@se path={path}")]
 	public class DefineBgmCommand : PreProcess
 	{
-		[Argument]
+		[InjectArgument]
 		BgmMetaData m_Param;
 
 		public override void Result(PreProcessResult result)

@@ -65,7 +65,7 @@ namespace ANovel
 			var setting = new Setting()
 			{
 				ResourceLoader = new ResourceLoader("ANovel"),
-				ScenarioLoader = new LocalScenarioLoader(Application.streamingAssetsPath + "/ANovel/Scenario"),
+				ScenarioLoader = new ResourcesScenarioLoader("ANovel/Scenario"),
 				Time = new EngineTime(),
 			};
 			action?.Invoke(setting);

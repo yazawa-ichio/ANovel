@@ -7,5 +7,10 @@ namespace ANovel
 		public BlockLabelInfo Label;
 		public EnvDataSnapshot Snapshot;
 		public HistoryLog[] Logs;
+
+		public byte[] Save() => Packer.Pack(this);
+
+		public static StoreData Load(byte[] buf) => Packer.Unpack<StoreData>(buf);
+
 	}
 }

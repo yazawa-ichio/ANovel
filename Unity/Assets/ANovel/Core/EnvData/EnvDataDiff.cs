@@ -43,6 +43,10 @@ namespace ANovel.Core
 			for (int i = 0; i < length; i++)
 			{
 				var type = TypeUtil.GetType(reader.ReadString());
+				if (!typeof(IEnvValue).IsAssignableFrom(type))
+				{
+					throw new InvalidOperationException($"not IEnvValue {type}");
+				}
 				var unpackType = typeof(DiffData<>).MakeGenericType(type);
 				m_Dic[type] = Packer.Unpack(reader, unpackType);
 			}

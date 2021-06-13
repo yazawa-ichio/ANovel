@@ -17,6 +17,8 @@ namespace ANovel.Engine
 
 		public bool IsProcessing => m_TextPrinter?.IsProcessing ?? false;
 
+		public float Speed { get => m_TextPrinter.Speed; set => m_TextPrinter.Speed = value; }
+
 		protected override void Initialize()
 		{
 			Event.Register(this);

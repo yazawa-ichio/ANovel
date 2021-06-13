@@ -122,7 +122,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c4f0970b99929f43b8398c088f246eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_OneFrameOneCharLimit: 1
   m_NameText: {fileID: 3142912472048426015}
   m_NameFormat: "\u3010{0}\u3011"
   m_MessageText: {fileID: 3142912472522341254}

@@ -12,11 +12,11 @@ namespace ANovel
 		[SerializeField]
 		string m_CharaFaceWindowRoot = "Chara/";
 		[SerializeField]
-		string m_BgRoot = "Image/Bg/";
+		string m_BgRoot = "Bg/";
 		[SerializeField]
 		string m_ImageRoot = "Image/";
 		[SerializeField]
-		string m_RuleRoot = "Image/Rule/";
+		string m_RuleRoot = "Rule/";
 		[SerializeField]
 		string m_BgmRoot = "Sound/BGM/";
 		[SerializeField]

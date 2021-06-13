@@ -100,7 +100,7 @@ namespace ANovel.Engine
 		public string Group = "Voice";
 	}
 
-	public struct PlaySoundEnvData : IEnvDataUpdate<VolumeConfig>
+	public struct PlaySoundEnvData : IEnvValue, IEnvValueUpdate<VolumeConfig>
 	{
 		public string Path;
 		public string Group;
@@ -124,7 +124,7 @@ namespace ANovel.Engine
 
 	}
 
-	public struct PlayVoiceEnvData : IPreProcessDelete, IHistorySaveEnvData
+	public struct PlayVoiceEnvData : IEnvValue, IPreProcessDelete, IHistorySaveEnvData
 	{
 		public string Path;
 		public string Group;
@@ -143,18 +143,18 @@ namespace ANovel.Engine
 
 	}
 
-	public struct AutoVoiceEnvData
+	public struct AutoVoiceEnvData : IEnvValue
 	{
 		public bool Enabled;
 		public int Index;
 	}
 
-	public struct CharaAutoVoiceEnvData
+	public struct CharaAutoVoiceEnvData : IEnvValue
 	{
 		public int Index;
 	}
 
-	public struct SkipAutoVoiceEnvData : IPreProcessDelete
+	public struct SkipAutoVoiceEnvData : IEnvValue, IPreProcessDelete
 	{
 	}
 

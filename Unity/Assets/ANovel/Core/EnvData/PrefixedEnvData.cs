@@ -19,12 +19,12 @@ namespace ANovel.Core
 
 		IEnvDataHolder IEnvDataHolder.GetParent() => m_Data;
 
-		public void Delete<TValue>(string key) where TValue : struct
+		public void Delete<TValue>(string key) where TValue : struct, IEnvValue
 		{
 			m_Data.Delete<TValue>(m_Prefix + key);
 		}
 
-		public void DeleteAll<TValue>(Func<string, TValue, bool> func) where TValue : struct
+		public void DeleteAll<TValue>(Func<string, TValue, bool> func) where TValue : struct, IEnvValue
 		{
 			Func<string, TValue, bool> wrapFunc = null;
 			if (func != null)
@@ -60,12 +60,12 @@ namespace ANovel.Core
 			m_Data.DeleteAllByInterface(wrapFunc);
 		}
 
-		public TValue Get<TValue>(string key) where TValue : struct
+		public TValue Get<TValue>(string key) where TValue : struct, IEnvValue
 		{
 			return m_Data.Get<TValue>(m_Prefix + key);
 		}
 
-		public IEnumerable<KeyValuePair<string, TValue>> GetAll<TValue>() where TValue : struct
+		public IEnumerable<KeyValuePair<string, TValue>> GetAll<TValue>() where TValue : struct, IEnvValue
 		{
 			foreach (var kvp in m_Data.GetAll<TValue>())
 			{
@@ -76,17 +76,17 @@ namespace ANovel.Core
 			}
 		}
 
-		public bool Has<TValue>(string key) where TValue : struct
+		public bool Has<TValue>(string key) where TValue : struct, IEnvValue
 		{
 			return m_Data.Has<TValue>(m_Prefix + key);
 		}
 
-		public void Set<TValue>(string key, TValue value) where TValue : struct
+		public void Set<TValue>(string key, TValue value) where TValue : struct, IEnvValue
 		{
 			m_Data.Set(m_Prefix + key, value);
 		}
 
-		public bool TryGet<TValue>(string key, out TValue value) where TValue : struct
+		public bool TryGet<TValue>(string key, out TValue value) where TValue : struct, IEnvValue
 		{
 			return m_Data.TryGet(m_Prefix + key, out value);
 		}
@@ -107,12 +107,12 @@ namespace ANovel.Core
 
 		public IEnvDataHolder GetParent() => m_Data;
 
-		public TValue Get<TValue>(string key) where TValue : struct
+		public TValue Get<TValue>(string key) where TValue : struct, IEnvValue
 		{
 			return m_Data.Get<TValue>(m_Prefix + key);
 		}
 
-		public IEnumerable<KeyValuePair<string, TValue>> GetAll<TValue>() where TValue : struct
+		public IEnumerable<KeyValuePair<string, TValue>> GetAll<TValue>() where TValue : struct, IEnvValue
 		{
 			foreach (var kvp in m_Data.GetAll<TValue>())
 			{
@@ -123,12 +123,12 @@ namespace ANovel.Core
 			}
 		}
 
-		public bool Has<TValue>(string key) where TValue : struct
+		public bool Has<TValue>(string key) where TValue : struct, IEnvValue
 		{
 			return m_Data.Has<TValue>(m_Prefix + key);
 		}
 
-		public bool TryGet<TValue>(string key, out TValue value) where TValue : struct
+		public bool TryGet<TValue>(string key, out TValue value) where TValue : struct, IEnvValue
 		{
 			return m_Data.TryGet(m_Prefix + key, out value);
 		}

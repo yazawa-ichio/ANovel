@@ -52,7 +52,7 @@ namespace ANovel.Engine
 		}
 	}
 
-	public struct CharaObjectEnvData
+	public struct CharaObjectEnvData : IEnvValue
 	{
 		public string Face;
 		public string Pose;
