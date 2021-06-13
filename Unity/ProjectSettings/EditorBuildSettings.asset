@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/ANovel.Example/Example.unity
-    guid: efeb086b1d35e3a438f724d93b495b5d
+    path: Assets/ANovel.QuickStart/QuickStart.unity
+    guid: 4ac4d7ebe663492408494bf38b40deae
   m_configObjects: {}

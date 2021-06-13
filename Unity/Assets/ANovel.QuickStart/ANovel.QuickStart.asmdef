@@ -1,0 +1,17 @@
+{
+    "name": "ANovel.QuickStart",
+    "rootNamespace": "",
+    "references": [
+        "ANovel.Core",
+        "ANovel.Engine"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
