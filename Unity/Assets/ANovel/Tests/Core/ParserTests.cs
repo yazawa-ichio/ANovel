@@ -21,6 +21,8 @@ namespace ANovel.Core.Tests
 			Read(reader, LineType.Command, skipNoneAndComment: false);
 
 			LineData data = default;
+			Assert.IsTrue(reader.TryRead(ref data, skipNoneAndComment: false), "最後はstopが自動挿入される");
+			Assert.AreEqual("&stop", data.Line);
 			Assert.IsFalse(reader.TryRead(ref data, skipNoneAndComment: false), "読み取れない");
 
 			// 読み取り位置をリセット
@@ -33,7 +35,8 @@ namespace ANovel.Core.Tests
 			Read(reader, LineType.Label, skipNoneAndComment: true);
 			Read(reader, LineType.Text, skipNoneAndComment: true);
 			Read(reader, LineType.Command, skipNoneAndComment: true);
-
+			// 自動挿入のStop
+			Read(reader, LineType.SystemCommand, skipNoneAndComment: true);
 		}
 
 		void Read(LineReader reader, LineType type, bool skipNoneAndComment)
@@ -84,6 +87,10 @@ namespace ANovel.Core.Tests
 				catch (LineDataException ex)
 				{
 					error = ex;
+				}
+				if (data.Line == "&stop")
+				{
+					continue;
 				}
 				Assert.IsNotNull(error, "不正な定義を防げる:" + data.Line + ":" + param.Name);
 			}

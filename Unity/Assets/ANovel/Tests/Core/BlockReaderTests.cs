@@ -121,8 +121,10 @@ namespace ANovel.Core.Tests
 				Assert.AreEqual("最終行テキスト", block.Text.Get());
 			}
 			{
-				Assert.IsFalse(reader.TryRead(out var block), "最後まで読み取った");
+				Assert.IsTrue(reader.TryRead(out var block), "自動挿入のStop");
+				Assert.IsNotNull(block.StopCommand, "自動挿入のStop");
 				Assert.IsFalse(reader.CanRead, "最後まで読み取った");
+				Assert.IsFalse(reader.TryRead(out var _), "最後まで読み取った");
 			}
 		}
 
