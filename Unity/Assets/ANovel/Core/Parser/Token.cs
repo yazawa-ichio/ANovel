@@ -22,6 +22,8 @@ namespace ANovel.Core
 		public const string TextBlockScope = "```";
 		public const char TextBlockValueSeparater = ':';
 
+		public const char Evaluate = '$';
+
 		public static bool IsEmptyOrTab(char c)
 		{
 			return c == Empty || c == Tab;

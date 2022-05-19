@@ -131,7 +131,7 @@ namespace ANovel.Core.Tests
 			var reader = new LineReader("マクロ機能テスト3", "@test_macro macro_key2=55\n@test_required required");
 			{
 				var ret = new List<Tag>();
-				var provider = new TagProvider(new List<string> { "TEST" });
+				var provider = new TagProvider(evaluator: null, new List<string> { "TEST" });
 				provider.Macros.Add(macro);
 				LineData data = default;
 
@@ -162,7 +162,7 @@ namespace ANovel.Core.Tests
 			LineData data = default;
 			Assert.IsTrue(reader.TryRead(ref data), "読み取れる");
 			var ret = new List<Tag>();
-			var provider = new TagProvider(new List<string> { "TEST" });
+			var provider = new TagProvider(evaluator: null, new List<string> { "TEST" });
 			if (symbol != null)
 			{
 				provider.Symbols.Add(symbol);
@@ -301,7 +301,7 @@ namespace ANovel.Core.Tests
 				}
 				if (param.TryGetValue("key2_replace", out var str) && str == null)
 				{
-					param["key2"] = "20";
+					param.AddValue("key2", "20");
 				}
 			}
 		}

@@ -13,11 +13,12 @@ namespace ANovel.Core
 
 		public List<IParamConverter> Converters { get; private set; } = new List<IParamConverter>();
 
-		public TagProvider() : this(new List<string>()) { }
+		public TagProvider() : this(null, new List<string>()) { }
 
-		public TagProvider(List<string> symbols)
+		public TagProvider(IEvaluator evaluator, List<string> symbols)
 		{
 			Symbols = symbols;
+			m_Param.Evaluator = evaluator;
 		}
 
 		public void Setup(PreProcessResult result)

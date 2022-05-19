@@ -12,6 +12,7 @@ namespace ANovel
 		TValue Get<TValue>(string key) where TValue : struct, IEnvValue;
 		bool TryGet<TValue>(string key, out TValue value) where TValue : struct, IEnvValue;
 		IEnumerable<KeyValuePair<string, TValue>> GetAll<TValue>() where TValue : struct, IEnvValue;
+		IEnumerable<KeyValuePair<string, TInterface>> GetAllByInterface<TInterface>() where TInterface : class;
 	}
 
 	public interface IEnvData : IEnvDataHolder

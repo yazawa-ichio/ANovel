@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text;
 
 namespace ANovel.Core
@@ -45,12 +44,13 @@ namespace ANovel.Core
 		static StringBuilder s_KeyBuilder = new StringBuilder();
 		static StringBuilder s_ValueBuilder = new StringBuilder();
 
-		public static void ReadKeyValue(in this LineData data, int startIndex, Dictionary<string, string> output)
+		public static void ReadKeyValue(in this LineData data, int startIndex, TagParam output)
 		{
 			State state = State.None;
 			var key = s_KeyBuilder.Clear();
 			var value = s_ValueBuilder.Clear();
 			bool prevBackSlash = false;
+			bool evaluate = false;
 
 			for (int i = startIndex; i < data.Line.Length; i++)
 			{
@@ -66,6 +66,7 @@ namespace ANovel.Core
 						break;
 					case State.Key:
 					case State.KeyEnd:
+						evaluate = false;
 						if (Token.IsEmptyOrTab(c))
 						{
 							state = State.KeyEnd;
@@ -80,7 +81,7 @@ namespace ANovel.Core
 						}
 						else if (state == State.KeyEnd)
 						{
-							output[key.ToString()] = null;
+							output.AddValue(key.ToString(), null);
 							key.Clear().Append(ToLowerAscii(c));
 							state = State.Key;
 						}
@@ -88,7 +89,11 @@ namespace ANovel.Core
 					case State.ValueStart:
 						if (!Token.IsEmptyOrTab(c))
 						{
-							if (c == Token.DoubleQuotation)
+							if (c == Token.Evaluate)
+							{
+								evaluate = true;
+							}
+							else if (c == Token.DoubleQuotation)
 							{
 								state = State.DoubleQuotationValue;
 							}
@@ -113,9 +118,17 @@ namespace ANovel.Core
 						else if ((state == State.Value && Token.IsEmptyOrTab(c)) || (state == State.DoubleQuotationValue && c == Token.DoubleQuotation))
 						{
 							state = State.None;
-							output[key.ToString()] = value.ToString();
+							if (evaluate)
+							{
+								output.AddValueWithEvaluator(key.ToString(), value.ToString());
+							}
+							else
+							{
+								output.AddValue(key.ToString(), value.ToString());
+							}
 							key.Clear();
 							value.Clear();
+							evaluate = false;
 						}
 						else
 						{
@@ -130,12 +143,12 @@ namespace ANovel.Core
 				case State.KeyEnd:
 					if (key.Length > 0)
 					{
-						output[key.ToString()] = null;
+						output.AddValue(key.ToString(), null);
 						key.Clear();
 					}
 					break;
 				case State.Value:
-					output[key.ToString()] = value.ToString();
+					output.AddValue(key.ToString(), value.ToString());
 					key.Clear();
 					value.Clear();
 					break;

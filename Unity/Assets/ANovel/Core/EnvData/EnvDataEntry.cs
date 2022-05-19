@@ -12,6 +12,7 @@ namespace ANovel.Core
 		void Save(EnvDataSnapshot data);
 		void Load(EnvDataSnapshot data);
 		void DeleteAll(Func<string, object, bool> func);
+		IEnumerable<KeyValuePair<string, object>> GetAll();
 		void Clear();
 	}
 
@@ -99,6 +100,11 @@ namespace ANovel.Core
 		public IEnumerable<KeyValuePair<string, TValue>> GetAll()
 		{
 			return m_Dic;
+		}
+
+		IEnumerable<KeyValuePair<string, object>> IEnvDataEntry.GetAll()
+		{
+			return m_Dic.Select(x => new KeyValuePair<string, object>(x.Key, x.Value));
 		}
 
 		public void Diff(EnvDataDiff diff)

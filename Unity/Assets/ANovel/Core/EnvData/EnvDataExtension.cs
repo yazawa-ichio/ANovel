@@ -43,6 +43,17 @@ namespace ANovel
 			}
 		}
 
+		public static IEnumerable<string> GetKeysByInterface<TInterface>(this IEnvData self, Func<TInterface, bool> func = null) where TInterface : class
+		{
+			foreach (var kvp in self.GetAllByInterface<TInterface>())
+			{
+				if (func == null || func(kvp.Value))
+				{
+					yield return kvp.Key;
+				}
+			}
+		}
+
 		public static void DeleteAll<TValue>(this IEnvData self) where TValue : struct, IEnvValue
 		{
 			self.DeleteAll<TValue>(null);

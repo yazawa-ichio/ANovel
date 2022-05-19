@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ANovel.Core
 {
@@ -11,7 +12,7 @@ namespace ANovel.Core
 
 		TagParam m_Param = new TagParam();
 		List<string> m_ParamKeys = new List<string>();
-		List<string> m_ParamValues = new List<string>();
+		List<TagParam.ValueEntry> m_ParamValues = new List<TagParam.ValueEntry>();
 		bool m_Do;
 
 		public Macro(MacroDefine owner, LineData[] line)
@@ -20,7 +21,7 @@ namespace ANovel.Core
 			m_Line = line;
 		}
 
-		public void Provide(List<string> symbols, Dictionary<string, string> variables, List<Tag> ret)
+		public void Provide(List<string> symbols, TagParam variables, List<Tag> ret)
 		{
 			if (m_Do) throw new InvalidOperationException("recursive call to macro is not allowed");
 			try
@@ -48,10 +49,13 @@ namespace ANovel.Core
 			}
 		}
 
-		void Assign(in LineData data, Dictionary<string, string> variables)
+
+		void Assign(in LineData data, TagParam variables)
 		{
+			m_Param.Evaluator = variables.Evaluator;
 			m_Param.Set(in data, m_Owner.m_Converters);
-			foreach (var kvp in m_Param)
+
+			foreach (var kvp in m_Param.m_Dic)
 			{
 				m_ParamKeys.Add(kvp.Key);
 				m_ParamValues.Add(kvp.Value);
@@ -59,23 +63,76 @@ namespace ANovel.Core
 			for (int i = 0; i < m_ParamValues.Count; i++)
 			{
 				var val = m_ParamValues[i];
-				if (val == null || val.Length < 3)
+				if (val.Value == null || !val.Value.Contains("%"))
 				{
 					continue;
 				}
-				if (val[0] == '%' && val[val.Length - 1] == '%')
+				var ret = Replace(val.Value, variables);
+				if (string.IsNullOrEmpty(ret))
 				{
-					val = val.Substring(1, val.Length - 2);
-					if (variables.TryGetValue(val, out var replace))
-					{
-						m_Param[m_ParamKeys[i]] = replace;
-					}
-					else
-					{
-						m_Param[m_ParamKeys[i]] = null;
-					}
+					ret = null;
+				}
+				if (val.UseEvaluator)
+				{
+					m_Param.AddValueWithEvaluator(m_ParamKeys[i], ret);
+				}
+				else
+				{
+					m_Param.AddValue(m_ParamKeys[i], ret);
 				}
 			}
+		}
+
+		StringBuilder m_Body = new StringBuilder();
+		StringBuilder m_Key = new StringBuilder();
+		string Replace(string value, TagParam variables)
+		{
+			var ret = m_Body.Clear();
+			for (int i = 0; i < value.Length; i++)
+			{
+				char c = value[i];
+				if (c == '%')
+				{
+					i++;
+					if (i < value.Length && value[i] == '%')
+					{
+						ret.Append(c);
+						continue;
+					}
+					ret.Append(GetValue(ref i, value, variables));
+				}
+				else
+				{
+					ret.Append(c);
+				}
+			}
+			return ret.ToString();
+		}
+
+		string GetValue(ref int i, string path, TagParam variables)
+		{
+			var key = m_Key.Clear();
+			bool end = false;
+			while (i < path.Length)
+			{
+				var c = path[i];
+				if (c == '%')
+				{
+					end = true;
+					break;
+				}
+				key.Append(c);
+				i++;
+			}
+			if (variables.TryGetValue(key.ToString(), out var ret))
+			{
+				return ret;
+			}
+			if (end)
+			{
+				return "";
+			}
+			return key.ToString();
 		}
 
 	}

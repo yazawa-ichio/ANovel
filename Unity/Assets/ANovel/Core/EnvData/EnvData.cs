@@ -172,7 +172,19 @@ namespace ANovel.Core
 			}
 		}
 
-
+		public IEnumerable<KeyValuePair<string, TInterface>> GetAllByInterface<TInterface>() where TInterface : class
+		{
+			foreach (var kvp in m_Dic)
+			{
+				if (typeof(TInterface).IsAssignableFrom(kvp.Key))
+				{
+					foreach (var ret in kvp.Value.GetAll())
+					{
+						yield return new KeyValuePair<string, TInterface>(ret.Key, ret.Value as TInterface);
+					}
+				}
+			}
+		}
 	}
 
 

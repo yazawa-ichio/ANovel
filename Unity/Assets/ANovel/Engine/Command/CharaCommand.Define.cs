@@ -81,7 +81,7 @@ namespace ANovel.Engine
 				{
 					param.Name = "chara";
 				}
-				param["name"] = m_Name;
+				param.AddValue("name", m_Name);
 			}
 		}
 
@@ -94,7 +94,7 @@ namespace ANovel.Engine
 
 					if (param.ContainsKey(defParam.Key) || param.ContainsKey(defParam.Value))
 					{
-						param[key] = defParam.Value;
+						param.AddValue(key, defParam.Value);
 						return;
 					}
 				}
@@ -106,7 +106,7 @@ namespace ANovel.Engine
 				{
 					if (param.ContainsKey(value))
 					{
-						param[key] = defParam.Value;
+						param.AddValue(key, defParam.Value);
 						return;
 					}
 				}

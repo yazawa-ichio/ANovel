@@ -45,9 +45,10 @@ namespace ANovel.Core
 			m_Reader = reader;
 			m_Cache = new ResourceCache(loader);
 			Event.Register(this);
+			Container.Set<IEvaluator>(reader.Evaluator);
 			Container.Set<IResourceCache>(m_Cache);
 			Container.Set(Event);
-			m_BlockProcessor = new BlockProcessor(Container, m_Cache);
+			m_BlockProcessor = new BlockProcessor(Container, m_Cache, reader.Evaluator);
 		}
 
 		public void Dispose()

@@ -91,6 +91,16 @@ namespace ANovel.Core
 			return m_Data.TryGet(m_Prefix + key, out value);
 		}
 
+		public IEnumerable<KeyValuePair<string, TInterface>> GetAllByInterface<TInterface>() where TInterface : class
+		{
+			foreach (var kvp in m_Data.GetAllByInterface<TInterface>())
+			{
+				if (kvp.Key.StartsWith(m_Prefix, StringComparison.Ordinal))
+				{
+					yield return new KeyValuePair<string, TInterface>(kvp.Key.Substring(m_Prefix.Length), kvp.Value);
+				}
+			}
+		}
 	}
 
 	public class PrefixedEnvDataHolder : IEnvDataHolder
@@ -133,6 +143,16 @@ namespace ANovel.Core
 			return m_Data.TryGet(m_Prefix + key, out value);
 		}
 
+		public IEnumerable<KeyValuePair<string, TInterface>> GetAllByInterface<TInterface>() where TInterface : class
+		{
+			foreach (var kvp in m_Data.GetAllByInterface<TInterface>())
+			{
+				if (kvp.Key.StartsWith(m_Prefix, StringComparison.Ordinal))
+				{
+					yield return new KeyValuePair<string, TInterface>(kvp.Key.Substring(m_Prefix.Length), kvp.Value);
+				}
+			}
+		}
 	}
 
 

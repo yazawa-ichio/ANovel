@@ -52,12 +52,15 @@ namespace ANovel.Core
 		EnvData m_PreUpdateEnvData = new EnvData();
 		IStopCommand m_StopCommand;
 		BlockEntry m_CurrentBlock;
+		Evaluator m_Evaluator;
 
-		public BlockProcessor(ServiceContainer container, ResourceCache cache)
+		public BlockProcessor(ServiceContainer container, ResourceCache cache, Evaluator evaluator)
 		{
 			Container = container;
 			Cache = cache;
 			Container.Set<IHistory>(History);
+			m_Evaluator = evaluator;
+			m_Evaluator?.Init(m_PreUpdateEnvData);
 		}
 
 		public void Reset()

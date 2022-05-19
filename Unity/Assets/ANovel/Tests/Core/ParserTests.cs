@@ -54,7 +54,7 @@ namespace ANovel.Core.Tests
 			var param = new TagParam();
 			while (reader.TryRead(ref data) && data.Type != LineType.PreProcess)
 			{
-				param.Set(data);
+				param.Set(data, default);
 				switch (param.Name)
 				{
 					case "command1":
@@ -82,7 +82,7 @@ namespace ANovel.Core.Tests
 				LineDataException error = null;
 				try
 				{
-					param.Set(data);
+					param.Set(data, null);
 				}
 				catch (LineDataException ex)
 				{

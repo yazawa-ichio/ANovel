@@ -18,24 +18,25 @@ namespace ANovel.Core
 		List<ICommand> m_Commands = new List<ICommand>();
 		LabelData m_Label = new LabelData();
 		bool m_Stop;
+		Evaluator m_Evaluator = new Evaluator();
+
+		internal Evaluator Evaluator => m_Evaluator;
 
 		public int LineIndex => m_LineReader.Index;
 
 		public bool CanRead => !m_Stop && m_LineReader != null && !m_LineReader.EndOfFile;
 
-		public BlockReader(IScenarioLoader loader) : this(loader, Array.Empty<string>())
-		{
-		}
-
 		public BlockReader(IScenarioLoader loader, string[] symbols)
 		{
 			m_Loader = loader;
-			m_PreProcessor = new PreProcessor(loader, symbols);
-			m_TagProvider = new TagProvider();
+			m_Evaluator = new Evaluator();
+			m_PreProcessor = new PreProcessor(loader, m_Evaluator, symbols);
+			var symbolsList = new List<string>();
 			if (symbols != null)
 			{
-				m_TagProvider.Symbols.AddRange(symbols);
+				symbolsList.AddRange(symbols);
 			}
+			m_TagProvider = new TagProvider(m_Evaluator, symbolsList);
 		}
 
 		public async Task<PreProcessResult> Load(string path, CancellationToken token)

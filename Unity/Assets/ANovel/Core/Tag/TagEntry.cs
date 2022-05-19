@@ -1,3 +1,4 @@
+using ANovel.Commands;
 using ANovel.Core.Define;
 using System;
 using System.Collections.Generic;
@@ -89,14 +90,15 @@ namespace ANovel.Core
 			return symbols.Contains(m_Attr.Symbol);
 		}
 
-		public Tag Create(in LineData data, Dictionary<string, string> param)
+		public Tag Create(in LineData data, TagParam param)
 		{
 			Prepare();
+			var dic = param.ToDictionary();
 			var tag = (Tag)Activator.CreateInstance(m_Type);
 			tag.Set(m_Attr.Name, data);
 			foreach (var field in m_Fields)
 			{
-				if (param.TryGetValue(field.Name, out var value))
+				if (dic.TryGetValue(field.Name, out var value))
 				{
 					try
 					{
@@ -114,7 +116,11 @@ namespace ANovel.Core
 			}
 			foreach (var inject in m_Injects)
 			{
-				inject.Set(tag, param);
+				inject.Set(tag, dic);
+			}
+			if (tag is IVariableCommand variableCommand)
+			{
+				variableCommand.UpdatVariables(param.Evaluator);
 			}
 			return tag;
 		}

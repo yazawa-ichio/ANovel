@@ -36,9 +36,9 @@ namespace ANovel.Core
 			public Queue<LineData> Temp = new Queue<LineData>();
 			public PreProcessResult Result;
 
-			public Entry(string path, List<string> symbols, string text, PreProcessResult result)
+			public Entry(string path, List<string> symbols, IEvaluator evaluator, string text, PreProcessResult result)
 			{
-				Provider = new TagProvider(symbols);
+				Provider = new TagProvider(evaluator, symbols);
 				Reader = new LineReader(path, text);
 				Result = result;
 			}
@@ -46,6 +46,7 @@ namespace ANovel.Core
 		}
 
 		IScenarioLoader m_Loader;
+		IEvaluator m_Evaluator;
 		Dictionary<string, PreProcessResult> m_Cache = new Dictionary<string, PreProcessResult>();
 		string[] m_Symbols;
 		List<Tag> m_Tags = new List<Tag>();
@@ -53,9 +54,10 @@ namespace ANovel.Core
 
 		Entry Current => m_Stack.Peek();
 
-		public PreProcessor(IScenarioLoader loader, string[] symbols)
+		public PreProcessor(IScenarioLoader loader, IEvaluator evaluator, string[] symbols)
 		{
 			m_Loader = loader;
+			m_Evaluator = evaluator;
 			m_Symbols = symbols ?? Array.Empty<string>();
 		}
 
@@ -86,7 +88,7 @@ namespace ANovel.Core
 			{
 				text = await m_Loader.Load(path, token);
 			}
-			var entry = new Entry(path, result.Symbols, text, result);
+			var entry = new Entry(path, result.Symbols, m_Evaluator, text, result);
 			m_Stack.Push(entry);
 			LineData data = default;
 			while (TryReadData(ref data))

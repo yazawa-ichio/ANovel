@@ -54,7 +54,7 @@ namespace ANovel.Engine
 			ConvertParam(param, "face", Face);
 			ConvertParam(param, "pose", Pose);
 			ConvertParam(param, "level", Level);
-			param["@pre_convert_chara_common_meta"] = "true";
+			param.AddValue("@pre_convert_chara_common_meta", "true");
 		}
 
 		void ConvertParam(TagParam param, string key, IEnumerable<DefineCharaParam> defParamList)
@@ -65,7 +65,7 @@ namespace ANovel.Engine
 				{
 					if (param.ContainsKey(defParam.Key) || param.ContainsKey(defParam.Value))
 					{
-						param[key] = defParam.Value;
+						param.AddValue(key, defParam.Value);
 						return;
 					}
 				}
@@ -77,7 +77,7 @@ namespace ANovel.Engine
 				{
 					if (param.ContainsKey(value))
 					{
-						param[key] = defParam.Value;
+						param.AddValue(key, defParam.Value);
 						return;
 					}
 				}
