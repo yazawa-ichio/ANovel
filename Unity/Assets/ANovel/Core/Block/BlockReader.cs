@@ -26,6 +26,8 @@ namespace ANovel.Core
 
 		public bool CanRead => !m_Stop && m_LineReader != null && !m_LineReader.EndOfFile;
 
+		public BranchController BranchController => m_TagProvider.BranchController;
+
 		public BlockReader(IScenarioLoader loader, string[] symbols)
 		{
 			m_Loader = loader;
@@ -83,6 +85,10 @@ namespace ANovel.Core
 				if (endBlock)
 				{
 					break;
+				}
+				if (m_TagProvider.BranchController.IsSkip)
+				{
+					continue;
 				}
 				if (data.Type == LineType.Text)
 				{
@@ -144,6 +150,10 @@ namespace ANovel.Core
 
 		void OnLabel(in LineData data, bool first)
 		{
+			if (m_TagProvider.BranchController.IsIfScope)
+			{
+				throw new LineDataException(in data, "label is not allow if scope");
+			}
 			if (!first)
 			{
 				throw new LineDataException(in data, "label is text block top only");

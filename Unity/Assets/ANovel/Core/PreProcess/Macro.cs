@@ -1,3 +1,4 @@
+using ANovel.Commands;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,11 +15,13 @@ namespace ANovel.Core
 		List<string> m_ParamKeys = new List<string>();
 		List<TagParam.ValueEntry> m_ParamValues = new List<TagParam.ValueEntry>();
 		bool m_Do;
+		BranchController m_BranchController;
 
 		public Macro(MacroDefine owner, LineData[] line)
 		{
 			m_Owner = owner;
 			m_Line = line;
+			m_BranchController = new BranchController();
 		}
 
 		public void Provide(List<string> symbols, TagParam variables, List<Tag> ret)
@@ -36,11 +39,30 @@ namespace ANovel.Core
 					}
 					else
 					{
+						if (m_BranchController.CheckIgnore(m_Param))
+						{
+							continue;
+						}
 						if (TagEntry.TryGet(in data, m_Param.Name, symbols, out var entry))
 						{
-							ret.Add(entry.Create(in data, m_Param));
+							var tag = entry.Create(in data, m_Param);
+							if (tag is IBranchCommand branchCommand)
+							{
+								m_BranchController.BranchCommand(variables.Evaluator, branchCommand);
+								continue;
+							}
+							if (tag is IBranchEnd branchEnd)
+							{
+								m_BranchController.BranchEnd(branchEnd);
+								continue;
+							}
+							ret.Add(tag);
 						}
 					}
+				}
+				if (m_Line.Length > 0)
+				{
+					m_BranchController.CheckFinish(variables.Data);
 				}
 			}
 			finally

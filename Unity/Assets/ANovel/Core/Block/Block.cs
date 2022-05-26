@@ -36,7 +36,7 @@ namespace ANovel.Core
 				}
 				if (cmd is ISkipHistoryCommand history)
 				{
-					SkipHistory = history.SkipHistory;
+					SkipHistory |= history.SkipHistory;
 				}
 			}
 			Text = text;

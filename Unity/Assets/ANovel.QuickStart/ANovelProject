@@ -3411,6 +3411,50 @@
             "Arguments": []
         },
         {
+            "Name": "if",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "IfCommand",
+            "Arguments": [
+                {
+                    "Name": "condition",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "elsif",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "ElseIfCommand",
+            "Arguments": [
+                {
+                    "Name": "condition",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "else",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "ElseCommand",
+            "Arguments": []
+        },
+        {
+            "Name": "endif",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "EndIfCommand",
+            "Arguments": []
+        },
+        {
             "Name": "parallel",
             "Symbols": "",
             "LineType": "&",
@@ -3490,6 +3534,105 @@
             "LineType": "&",
             "Description": "スコープを終了します。汎用コマンドです",
             "Arguments": []
+        },
+        {
+            "Name": "val",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableSetCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "type",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Bool",
+                        "Long",
+                        "Double",
+                        "String"
+                    ]
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "val_del",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableDeleteCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "val_del_all",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "DeleteAllVariableCommand",
+            "Arguments": [
+                {
+                    "Name": "prefix",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "suffix",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "contains",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
         },
         {
             "Name": "transition",
@@ -3582,6 +3725,15 @@
                 "LineType": "#",
                 "RegisterTag": "define_chara",
                 "Key": "@{dispname}",
+                "Replace": "@chara_control name=\"{name}\"",
+                "SecondaryKey": "control",
+                "SecondaryKeyValue": "",
+                "Label": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
                 "Replace": "@chara name=\"{name}\"",
                 "SecondaryKey": "",
                 "SecondaryKeyValue": "",
@@ -3602,6 +3754,15 @@
                 "Key": "@{dispname}",
                 "Replace": "@chara_change name=\"{name}\"",
                 "SecondaryKey": "change",
+                "SecondaryKeyValue": "",
+                "Label": "{name}({dispname})"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
+                "Replace": "@chara_control name=\"{name}\"",
+                "SecondaryKey": "control",
                 "SecondaryKeyValue": "",
                 "Label": "{name}({dispname})"
             },

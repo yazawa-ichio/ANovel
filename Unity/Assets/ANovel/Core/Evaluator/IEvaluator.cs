@@ -7,5 +7,6 @@ namespace ANovel.Core
 		IVariableContainer GlobalVariables { get; }
 		object Eval(string value);
 		object Eval(string value, LineData? data);
+		bool Condition(string value, LineData? data);
 	}
 }

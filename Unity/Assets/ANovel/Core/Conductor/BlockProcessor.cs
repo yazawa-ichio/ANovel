@@ -1,5 +1,8 @@
 using ANovel.Commands;
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ANovel.Core
 {
@@ -32,7 +35,7 @@ namespace ANovel.Core
 
 		public EnvDataHook EnvDataHook { get; private set; } = new EnvDataHook();
 
-		public bool IsStop => m_StopCommand != null || (m_PreloadQueue.Count == 0 && m_CurrentBlock == null);
+		public bool IsStop => !m_Reader.CanRead && (m_StopCommand != null || (m_PreloadQueue.Count == 0 && m_CurrentBlock == null));
 
 		public bool IsWaitNext
 		{
@@ -46,6 +49,7 @@ namespace ANovel.Core
 			}
 		}
 
+		BlockReader m_Reader;
 		State m_State = State.StartNext;
 		Queue<BlockPreloadEntry> m_PreloadQueue = new Queue<BlockPreloadEntry>();
 		EnvData m_CurrentEnvData = new EnvData();
@@ -54,8 +58,9 @@ namespace ANovel.Core
 		BlockEntry m_CurrentBlock;
 		Evaluator m_Evaluator;
 
-		public BlockProcessor(ServiceContainer container, ResourceCache cache, Evaluator evaluator)
+		public BlockProcessor(BlockReader reader, ServiceContainer container, ResourceCache cache, Evaluator evaluator)
 		{
+			m_Reader = reader;
 			Container = container;
 			Cache = cache;
 			Container.Set<IHistory>(History);
@@ -78,7 +83,7 @@ namespace ANovel.Core
 			ClearPreload();
 		}
 
-		public void ClearPreload()
+		void ClearPreload()
 		{
 			if (m_CurrentBlock != null)
 			{
@@ -91,15 +96,49 @@ namespace ANovel.Core
 			}
 		}
 
-		public void PostJump(PreProcessResult result)
+		public async Task Jump(BlockLabelInfo label, CancellationToken token)
 		{
+			var result = await m_Reader.Load(label.FileName, token);
+			m_Reader.Seek(label);
 			m_StopCommand = null;
 			ClearPreload();
 			EnvDataHook.PostJump(result.Meta, m_PreUpdateEnvData);
 			m_State = State.StartNext;
 		}
 
-		public void UpdateCurrent(Block block)
+		public async Task<bool> Seek(Func<Block, bool> match, Func<Block, IEnvDataHolder, Task> onLoad, CancellationToken token)
+		{
+			m_Reader.Seek(CurrentLabel);
+			bool first = true;
+			Block prevBlock = null;
+			while (m_Reader.TryRead(out var block))
+			{
+				if (!first && match(block))
+				{
+					if (onLoad != null)
+					{
+						await onLoad(prevBlock, Current);
+					}
+					PostSeek(block);
+					return true;
+				}
+				else
+				{
+					if (!first)
+					{
+						m_Reader.BranchController.Save(m_CurrentEnvData);
+					}
+					first = false;
+					UpdateCurrent(block);
+					prevBlock = block;
+				}
+			}
+			return false;
+
+		}
+
+
+		void UpdateCurrent(Block block)
 		{
 			EnvDataHook.PreUpdate(m_CurrentEnvData, block);
 			foreach (var cmd in block.Commands)
@@ -111,7 +150,7 @@ namespace ANovel.Core
 			History.Add(m_CurrentEnvData, block, m_CurrentEnvData.Diff());
 		}
 
-		public void PostSeek(Block block)
+		void PostSeek(Block block)
 		{
 			m_PreUpdateEnvData.Load(m_CurrentEnvData.Save());
 			m_StopCommand = null;
@@ -125,7 +164,17 @@ namespace ANovel.Core
 			//Process();
 		}
 
-		public StoreData Back(int num)
+		public Task Back(int num, Func<Block, IEnvDataHolder, Task> onLoad, CancellationToken token)
+		{
+			var data = BackImpl(num);
+			if (data != null)
+			{
+				return Restore(data, onLoad, token);
+			}
+			return Task.FromResult(true);
+		}
+
+		StoreData BackImpl(int num)
 		{
 			if (!History.TryBack(num, out var diff))
 			{
@@ -136,7 +185,6 @@ namespace ANovel.Core
 				m_CurrentEnvData.Undo(d);
 			}
 			var snapshot = m_CurrentEnvData.Save();
-			m_PreUpdateEnvData.Load(snapshot);
 			var data = new StoreData
 			{
 				Label = History.CurrentLabel,
@@ -146,7 +194,8 @@ namespace ANovel.Core
 			return data;
 		}
 
-		public void AddPreloadBlock(Block block)
+
+		void AddPreloadBlock(Block block)
 		{
 			EnvDataHook.PreUpdate(m_PreUpdateEnvData, block);
 			foreach (var cmd in block.Commands)
@@ -164,6 +213,7 @@ namespace ANovel.Core
 				cmd.Initialize(container);
 			}
 			m_PreloadQueue.Enqueue(new BlockPreloadEntry(block, scope, diff));
+			m_Reader.BranchController.Save(m_PreUpdateEnvData);
 		}
 
 		bool TryStartNext()
@@ -185,8 +235,26 @@ namespace ANovel.Core
 			return true;
 		}
 
+
+		void ProcessPreload()
+		{
+			while (m_Reader.CanRead && CanPreload)
+			{
+				if (m_Reader.TryRead(out var block))
+				{
+					AddPreloadBlock(block);
+				}
+				else
+				{
+					return;
+				}
+			}
+		}
+
 		public void Process()
 		{
+			ProcessPreload();
+
 			if (m_State == State.StartNext || m_State == State.WaitPreload)
 			{
 				if (!TryStartNext())
@@ -251,13 +319,28 @@ namespace ANovel.Core
 			};
 		}
 
-		public void Restore(StoreData data, Block block)
+		public async Task Restore(StoreData data, Func<Block, IEnvDataHolder, Task> onLoad, CancellationToken token)
 		{
-			m_StopCommand = block.StopCommand;
+			await Jump(data.Label, token);
+
 			m_CurrentEnvData.Load(data.Snapshot);
 			m_PreUpdateEnvData.Load(data.Snapshot);
+			m_Reader.BranchController.Load(m_CurrentEnvData);
 			History.Load(data.Logs);
+
+			if (!m_Reader.TryRead(out var block))
+			{
+				throw new Exception("");
+			}
+
+			m_StopCommand = block.StopCommand;
 			m_State = State.Finished;
+
+			if (onLoad != null)
+			{
+				await onLoad(block, Current);
+			}
+			ProcessPreload();
 		}
 
 	}

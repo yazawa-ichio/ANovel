@@ -128,6 +128,14 @@ namespace ANovel.Core
 			}
 		}
 
+		public bool Condition(string value, LineData? data)
+		{
+			if (bool.TryParse(value, out var ret))
+			{
+				return ret;
+			}
+			return false;
+		}
 	}
 
 }
