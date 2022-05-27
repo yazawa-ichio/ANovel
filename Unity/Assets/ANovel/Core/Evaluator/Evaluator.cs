@@ -1,3 +1,4 @@
+using Jace;
 using System.Text;
 
 namespace ANovel.Core
@@ -9,6 +10,7 @@ namespace ANovel.Core
 		StringBuilder m_Format = new StringBuilder();
 		VariableContainer m_Container = new VariableContainer();
 		VariableContainer m_GlobalContainer = new VariableContainer();
+		CalculationEngine m_CalculationEngine = new CalculationEngine();
 
 		public IVariableContainer Variables => m_Container;
 
@@ -130,11 +132,16 @@ namespace ANovel.Core
 
 		public bool Condition(string value, LineData? data)
 		{
-			if (bool.TryParse(value, out var ret))
 			{
-				return ret;
+				if (bool.TryParse(value, out var ret))
+				{
+					return ret;
+				}
 			}
-			return false;
+			{
+				var ret = m_CalculationEngine.Calculate(value);
+				return ret == 1.0d;
+			}
 		}
 	}
 

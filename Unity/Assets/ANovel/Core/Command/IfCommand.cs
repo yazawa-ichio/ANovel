@@ -7,11 +7,19 @@ namespace ANovel.Commands
 	{
 		[Argument]
 		string m_Condition;
+		[Argument]
+		string m_Left;
+		[Argument]
+		string m_Right;
 
 		public abstract bool IsStartScope { get; }
 
 		public bool Branch(IEvaluator evaluator)
 		{
+			if (string.IsNullOrEmpty(m_Condition))
+			{
+				return m_Left == m_Right;
+			}
 			return evaluator.Condition(m_Condition, LineData);
 		}
 	}

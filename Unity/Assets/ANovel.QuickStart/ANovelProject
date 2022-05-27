@@ -3422,6 +3422,20 @@
                     "Required": false,
                     "InputType": "String",
                     "InputOptions": []
+                },
+                {
+                    "Name": "left",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "right",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
                 }
             ]
         },
@@ -3433,6 +3447,20 @@
             "Arguments": [
                 {
                     "Name": "condition",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "left",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "right",
                     "Description": "",
                     "Required": false,
                     "InputType": "String",

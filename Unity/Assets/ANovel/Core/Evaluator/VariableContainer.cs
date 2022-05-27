@@ -113,7 +113,7 @@ namespace ANovel.Core
 		{
 			if (m_Data.TryGet<VariableBool>(key, out var variableBool))
 			{
-				value = variableBool.Value;
+				value = variableBool.Value.ToString().ToLower();
 				return true;
 			}
 			if (m_Data.TryGet<VariableLong>(key, out var variableLong))
