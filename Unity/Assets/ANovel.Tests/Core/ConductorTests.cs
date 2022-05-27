@@ -16,7 +16,7 @@ namespace ANovel.Core.Tests
 		[UnityTest]
 		public IEnumerator コンダクターテスト()
 		{
-			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
+			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), new string[] { "TEST" });
 			var loader = new Loader();
 			var text = new Text();
 			var conductor = new Conductor(reader, loader)
@@ -76,7 +76,7 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void エラーテスト()
 		{
-			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
+			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), new string[] { "TEST" });
 			var loader = new Loader();
 			var text = new Text();
 			var conductor = new Conductor(reader, loader)
@@ -140,7 +140,7 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void マニュアルジャンプテスト()
 		{
-			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
+			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), new string[] { "TEST" });
 			var loader = new Loader();
 			var text = new Text();
 			var conductor = new Conductor(reader, loader)
@@ -261,7 +261,7 @@ namespace ANovel.Core.Tests
 		public IEnumerator コマンドテスト()
 		{
 			TestTrigger.Trigger = null;
-			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
+			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), new string[] { "TEST" });
 			var loader = new Loader();
 			var text = new Text();
 			var conductor = new Conductor(reader, loader)
@@ -347,7 +347,7 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void エンドブロックテスト()
 		{
-			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
+			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), new string[] { "TEST" });
 			var loader = new Loader();
 			var text = new Text();
 			var conductor = new Conductor(reader, loader)
@@ -385,7 +385,7 @@ namespace ANovel.Core.Tests
 			TestCountCommand.Count = 0;
 			TestTrigger.Trigger = null;
 
-			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
+			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), new string[] { "TEST" });
 			var loader = new Loader();
 			var text = new Text();
 			var conductor = new Conductor(reader, loader)

@@ -13,7 +13,7 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void ファイルロードテスト()
 		{
-			var root = Path.Combine(Application.dataPath, "ANovel/Tests/TestData~");
+			var root = Path.Combine(Application.dataPath, "ANovel.Tests/Resources/TestScenario");
 			{
 				using (var loader = new LocalScenarioLoader(root))
 				{

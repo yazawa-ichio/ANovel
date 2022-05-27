@@ -21,7 +21,7 @@ namespace ANovel.Core.Tests
 
 		void TestMacroImport(string symbol, params string[] output)
 		{
-			var reader = new BlockReader(new TestDataLoader(), symbol != null ? new[] { symbol, "TEST" } : new string[] { "TEST" });
+			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), symbol != null ? new[] { symbol, "TEST" } : new string[] { "TEST" });
 			reader.Load("ImportMacroTest.anovel", CancellationToken.None).Wait();
 			//var block = new Block();
 			Assert.IsTrue(reader.TryRead(out var block));
