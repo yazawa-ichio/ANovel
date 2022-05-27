@@ -15,7 +15,7 @@ namespace ANovel.Core.Tests
 		{
 			//登録
 			Formatter.Register<IntArrayFormatter>();
-			var reader = new LineReader("TagTest", TestData.TagTest);
+			var reader = new LineReader("TagTest", Resources.Load<TextAsset>("TestScenario/TagTest").text);
 			{
 				var cmd = (TestDefaultFormatter)Read(reader);
 				Assert.AreEqual("test1", cmd.String, "読み取り出来ている");

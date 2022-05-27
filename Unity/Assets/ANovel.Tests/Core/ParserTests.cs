@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using UnityEngine;
 using Assert = UnityEngine.Assertions.Assert;
 
 namespace ANovel.Core.Tests
@@ -8,7 +9,7 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void LineReaderの読み取りテスト()
 		{
-			var reader = new LineReader("ReaderTest", TestData.ReaderTest);
+			var reader = new LineReader("ReaderTest", Resources.Load<TextAsset>("TestScenario/ReaderTest").text);
 
 			// 空行とコメントを読み取る
 			Read(reader, LineType.PreProcess, skipNoneAndComment: false);
@@ -49,7 +50,7 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void Tagのパラメーター読み込み()
 		{
-			var reader = new LineReader("KeyValueTest", TestData.KeyValueTest);
+			var reader = new LineReader("KeyValueTest", Resources.Load<TextAsset>("TestScenario/KeyValueTest").text);
 			LineData data = default;
 			var param = new TagParam();
 			while (reader.TryRead(ref data) && data.Type != LineType.PreProcess)

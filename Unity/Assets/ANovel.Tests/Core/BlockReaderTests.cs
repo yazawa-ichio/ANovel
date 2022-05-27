@@ -22,7 +22,7 @@ namespace ANovel.Core.Tests
 		void TestMacroImport(string symbol, params string[] output)
 		{
 			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), symbol != null ? new[] { symbol, "TEST" } : new string[] { "TEST" });
-			reader.Load("ImportMacroTest.anovel", CancellationToken.None).Wait();
+			reader.Load("ImportMacroTest", CancellationToken.None).Wait();
 			//var block = new Block();
 			Assert.IsTrue(reader.TryRead(out var block));
 
@@ -51,8 +51,8 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void 依存マクロインポート()
 		{
-			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
-			reader.Load("CircleImportTest.anovel", CancellationToken.None).Wait();
+			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), new string[] { "TEST" });
+			reader.Load("CircleImportTest", CancellationToken.None).Wait();
 			Assert.IsTrue(reader.TryRead(out var block));
 			var log = block.Commands.OfType<TestLogCommand>().First();
 			Assert.AreEqual("dep", log.Message, "依存先のマクロが利用できている");
@@ -61,8 +61,8 @@ namespace ANovel.Core.Tests
 		[Test]
 		public void テキストブロック()
 		{
-			var reader = new BlockReader(new TestDataLoader(), new string[] { "TEST" });
-			reader.Load("TextBlockTest.anovel", CancellationToken.None).Wait();
+			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), new string[] { "TEST" });
+			reader.Load("TextBlockTest", CancellationToken.None).Wait();
 			int blockIndex = 0;
 			{
 				Assert.IsTrue(reader.TryRead(out var block));

@@ -24,7 +24,7 @@ namespace ANovel.Core.Tests
 				Text = text
 			};
 			conductor.OnLoad = text.OnLoad;
-			conductor.Run("ConductorTest.anovel", null, CancellationToken.None).Wait();
+			conductor.Run("ConductorTest", null, CancellationToken.None).Wait();
 			conductor.Update();
 			Assert.AreEqual("テキスト表示", text.TextBlock.Get());
 			conductor.Update();
@@ -98,7 +98,7 @@ namespace ANovel.Core.Tests
 			Assert.IsTrue(conductor.HasError);
 			error = null;
 
-			conductor.Run("ConductorErrorTest.anovel", null, CancellationToken.None).Wait();
+			conductor.Run("ConductorErrorTest", null, CancellationToken.None).Wait();
 			Assert.IsNull(error);
 
 			conductor.Update();
@@ -149,7 +149,7 @@ namespace ANovel.Core.Tests
 			};
 			conductor.OnLoad = text.OnLoad;
 			StoreData store;
-			conductor.Run("ConductorJumpTest.anovel", "", CancellationToken.None).Wait();
+			conductor.Run("ConductorJumpTest", "", CancellationToken.None).Wait();
 			{
 				conductor.Update();
 				Assert.AreEqual("ジャンプテスト開始", text.TextBlock.Get());
@@ -180,7 +180,7 @@ namespace ANovel.Core.Tests
 			}
 			// Jump機能テスト
 			{
-				conductor.Jump("ConductorJumpTest.anovel", "jump1", CancellationToken.None).Wait();
+				conductor.Jump("ConductorJumpTest", "jump1", CancellationToken.None).Wait();
 				conductor.Update();
 				Assert.AreEqual("ジャンプ先1", text.TextBlock.Get());
 				Assert.IsFalse(conductor.IsStop, "終了ブロックではない");
@@ -206,7 +206,7 @@ namespace ANovel.Core.Tests
 
 				Assert.Throws<InvalidOperationException>(() =>
 				{
-					conductor.Jump("ConductorJumpTest.anovel", "jump1", CancellationToken.None).Wait();
+					conductor.Jump("ConductorJumpTest", "jump1", CancellationToken.None).Wait();
 				}, "エラー後にJump操作は出来ない");
 
 				conductor.Restore(Packer.Unpack<StoreData>(Packer.Pack(store)), CancellationToken.None).Wait();
@@ -224,7 +224,7 @@ namespace ANovel.Core.Tests
 			}
 			// シーク機能
 			{
-				conductor.Jump("ConductorJumpTest.anovel", "jump2", CancellationToken.None).Wait();
+				conductor.Jump("ConductorJumpTest", "jump2", CancellationToken.None).Wait();
 				conductor.Update();
 				Assert.AreEqual("ジャンプ先2", text.TextBlock.Get());
 				Assert.IsFalse(conductor.IsStop, "終了ブロックではない");
@@ -269,7 +269,7 @@ namespace ANovel.Core.Tests
 				Text = text
 			};
 			conductor.OnLoad = text.OnLoad;
-			conductor.Run("CommandTest.anovel", "", CancellationToken.None).Wait();
+			conductor.Run("CommandTest", "", CancellationToken.None).Wait();
 			conductor.Update();
 			{
 				Assert.AreEqual("asyncを利用するとスコープ内に同期コマンドがあっても非同期実行される", text.TextBlock.Get());
@@ -355,7 +355,7 @@ namespace ANovel.Core.Tests
 				Text = text
 			};
 			conductor.OnLoad = text.OnLoad;
-			conductor.Run("CommandEndBlockTest.anovel", "", CancellationToken.None).Wait();
+			conductor.Run("CommandEndBlockTest", "", CancellationToken.None).Wait();
 			conductor.Update();
 
 			Assert.AreEqual("エンドブロックコマンドテスト", text.TextBlock.Get());
@@ -401,7 +401,7 @@ namespace ANovel.Core.Tests
 				Priority = 10,
 			});
 			conductor.OnLoad = text.OnLoad;
-			conductor.Run("EnvDataHookTest.anovel", "", CancellationToken.None).Wait();
+			conductor.Run("EnvDataHookTest", "", CancellationToken.None).Wait();
 			conductor.Update();
 
 			Assert.AreEqual("Test1", text.TextBlock.Get());
