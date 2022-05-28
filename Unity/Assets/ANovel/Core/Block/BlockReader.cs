@@ -20,7 +20,7 @@ namespace ANovel.Core
 		bool m_Stop;
 		Evaluator m_Evaluator = new Evaluator();
 
-		internal Evaluator Evaluator => m_Evaluator;
+		public Evaluator Evaluator => m_Evaluator;
 
 		public int LineIndex => m_LineReader.Index;
 

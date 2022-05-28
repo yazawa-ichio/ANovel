@@ -40,6 +40,8 @@ namespace ANovel.Core
 
 			m_Param.Set(in data, Converters);
 
+			BranchController.TryPrepare(m_Param);
+
 			if (BranchController.CheckIgnore(m_Param))
 			{
 				return;

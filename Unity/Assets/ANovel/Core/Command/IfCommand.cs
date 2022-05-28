@@ -11,10 +11,25 @@ namespace ANovel.Commands
 		string m_Left;
 		[Argument]
 		string m_Right;
+		[Argument]
+		bool m_Not;
 
 		public abstract bool IsStartScope { get; }
 
 		public bool Branch(IEvaluator evaluator)
+		{
+			var ret = BranchImpl(evaluator);
+			if (m_Not)
+			{
+				return !ret;
+			}
+			else
+			{
+				return ret;
+			}
+		}
+
+		bool BranchImpl(IEvaluator evaluator)
 		{
 			if (string.IsNullOrEmpty(m_Condition))
 			{

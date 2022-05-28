@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -32,14 +31,6 @@ namespace ANovel.Core
 
 	public class BranchController
 	{
-		static string[] s_BranchTag = new string[]
-		{
-			"if",
-			"elsif",
-			"else",
-			"endif",
-		};
-
 		class StackData
 		{
 			public BranchState State;
@@ -59,12 +50,18 @@ namespace ANovel.Core
 			{
 				return false;
 			}
-			switch (m_Stack.Peek().State)
+			switch (BranchState)
 			{
 				case BranchState.Done:
 					return false;
+				case BranchState.Start:
+					if (param.Data.Type == LineType.SystemCommand && (param.Name == "elsif" || param.Name == "else"))
+					{
+						return false;
+					}
+					break;
 			}
-			if (Array.IndexOf(s_BranchTag, param.Name) >= 0)
+			if (param.Data.Type == LineType.SystemCommand && param.Name == "endif")
 			{
 				return false;
 			}
@@ -76,6 +73,40 @@ namespace ANovel.Core
 			if (m_Stack.Count != 0)
 			{
 				throw new LineDataException(in data, $"if scope not end. stack count {m_Stack.Count}");
+			}
+		}
+
+		public void TryPrepare(TagParam param)
+		{
+			// if などを不要な時は評価しないように事前に更新する
+
+			if (param.Data.Type != LineType.SystemCommand)
+			{
+				return;
+			}
+			switch (param.Name)
+			{
+				case "elsif":
+				case "else":
+					switch (BranchState)
+					{
+						case BranchState.Done:
+							if (m_Stack.Count > 0)
+							{
+								m_Stack.Peek().State = BranchState.End;
+							}
+							break;
+					}
+					break;
+				case "if":
+					switch (BranchState)
+					{
+						case BranchState.Start:
+						case BranchState.End:
+							m_Stack.Push(new StackData { State = BranchState.End });
+							break;
+					}
+					break;
 			}
 		}
 

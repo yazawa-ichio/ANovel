@@ -1,4 +1,3 @@
-using ANovel.Commands;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -39,6 +38,7 @@ namespace ANovel.Core
 					}
 					else
 					{
+						m_BranchController.TryPrepare(m_Param);
 						if (m_BranchController.CheckIgnore(m_Param))
 						{
 							continue;
@@ -77,6 +77,8 @@ namespace ANovel.Core
 			m_Param.Evaluator = variables.Evaluator;
 			m_Param.Set(in data, m_Owner.m_Converters);
 
+			m_ParamKeys.Clear();
+			m_ParamValues.Clear();
 			foreach (var kvp in m_Param.m_Dic)
 			{
 				m_ParamKeys.Add(kvp.Key);

@@ -1,4 +1,5 @@
 using Jace;
+using System;
 using System.Text;
 
 namespace ANovel.Core
@@ -138,9 +139,18 @@ namespace ANovel.Core
 					return ret;
 				}
 			}
+			try
 			{
 				var ret = m_CalculationEngine.Calculate(value);
 				return ret == 1.0d;
+			}
+			catch (Exception err)
+			{
+				if (data.HasValue)
+				{
+					throw new LineDataException(data.Value, $"calculate error {value}", err);
+				}
+				throw;
 			}
 		}
 	}
