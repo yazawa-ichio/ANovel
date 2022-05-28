@@ -1,4 +1,4 @@
-namespace ANovel.Core
+﻿namespace ANovel.Core
 {
 	public static class EvnDataTypePrefix<T>
 	{

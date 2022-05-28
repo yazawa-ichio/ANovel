@@ -1,4 +1,4 @@
-namespace ANovel.Core
+﻿namespace ANovel.Core
 {
 	[TagName("import")]
 	public sealed class ImportCommand : PreProcess

@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Category = ANovel.Engine.ImageService.Category;
 
 namespace ANovel.Engine

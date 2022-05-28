@@ -1,4 +1,4 @@
-using ANovel.Commands;
+﻿using ANovel.Commands;
 using ANovel.Core;
 using ANovel.Engine;
 using System;

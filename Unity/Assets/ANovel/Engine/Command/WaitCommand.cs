@@ -1,4 +1,4 @@
-namespace ANovel.Engine
+﻿namespace ANovel.Engine
 {
 
 	[TagName("wait")]

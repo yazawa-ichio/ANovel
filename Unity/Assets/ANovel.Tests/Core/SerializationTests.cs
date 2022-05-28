@@ -1,4 +1,4 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 using NUnit.Framework;
 using System;
 using System.Collections;

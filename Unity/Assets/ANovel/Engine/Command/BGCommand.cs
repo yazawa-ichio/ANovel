@@ -1,4 +1,4 @@
-using Category = ANovel.Engine.ImageService.Category;
+﻿using Category = ANovel.Engine.ImageService.Category;
 
 namespace ANovel.Engine
 {

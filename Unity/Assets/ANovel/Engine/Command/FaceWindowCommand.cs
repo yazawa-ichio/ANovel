@@ -1,4 +1,4 @@
-namespace ANovel.Engine
+﻿namespace ANovel.Engine
 {
 	[TagName("face_window_show")]
 	public class FaceWindowShowCommand : Command

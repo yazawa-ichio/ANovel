@@ -1,4 +1,4 @@
-using ANovel.Serialization;
+﻿using ANovel.Serialization;
 using UnityEngine;
 
 namespace ANovel.Engine

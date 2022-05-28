@@ -1,4 +1,4 @@
-
+﻿
 
 using ANovel.Core.Define;
 using System;

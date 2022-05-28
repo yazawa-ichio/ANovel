@@ -1,4 +1,4 @@
-using Jace;
+﻿using Jace;
 using System;
 using System.Text;
 

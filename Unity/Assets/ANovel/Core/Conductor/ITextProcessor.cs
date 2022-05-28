@@ -1,4 +1,4 @@
-namespace ANovel
+﻿namespace ANovel
 {
 	public interface ITextProcessor
 	{

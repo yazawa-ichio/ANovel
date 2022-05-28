@@ -1,4 +1,4 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 
 namespace ANovel.Commands
 {
