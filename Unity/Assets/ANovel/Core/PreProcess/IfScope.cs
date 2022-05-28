@@ -2,9 +2,7 @@
 
 namespace ANovel.Core
 {
-#if ANOVEL_ALLOW_IF_SCOPE
 	[TagName("if")]
-#endif
 	public class IfScope : PreProcess
 	{
 		public override bool HeaderOnly => false;
@@ -26,25 +24,19 @@ namespace ANovel.Core
 
 	}
 
-#if ANOVEL_ALLOW_IF_SCOPE
 	[TagName("elseif")]
-#endif
 	public class ElseIfScope : IfScope
 	{
 		public override bool HeaderOnly => false;
 	}
 
-#if ANOVEL_ALLOW_IF_SCOPE
 	[TagName("else")]
-#endif
 	public class ElseScope : PreProcess
 	{
 		public override bool HeaderOnly => false;
 	}
 
-#if ANOVEL_ALLOW_IF_SCOPE
 	[TagName("endif")]
-#endif
 	public class EndIfScope : PreProcess
 	{
 		public override bool HeaderOnly => false;
