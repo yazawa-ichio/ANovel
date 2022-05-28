@@ -21,6 +21,10 @@ namespace ANovel.Core
 
 		public IHistory History => m_BlockProcessor.History;
 
+		public IVariableContainer Variables => Container.Get<IEvaluator>().Variables;
+
+		public IVariableContainer GlobalVariables => Container.Get<IEvaluator>().GlobalVariables;
+
 		public event Action<Exception> OnError;
 
 		public Func<Block, IEnvDataHolder, Task> OnLoad { get; set; }

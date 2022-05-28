@@ -90,7 +90,7 @@ namespace ANovel.Core
 			string value;
 			if (ret.UseEvaluator)
 			{
-				value = Evaluator.Eval(ret.Value, Data).ToString();
+				value = Evaluator.ReplaceVariable(ret.Value, Data).ToString();
 			}
 			else
 			{
@@ -105,7 +105,7 @@ namespace ANovel.Core
 			{
 				if (ret.UseEvaluator)
 				{
-					value = Evaluator.Eval(ret.Value, Data).ToString();
+					value = Evaluator.ReplaceVariable(ret.Value, Data).ToString();
 				}
 				else
 				{

@@ -33,6 +33,10 @@ namespace ANovel.Commands
 		{
 			if (string.IsNullOrEmpty(m_Condition))
 			{
+				if (bool.TryParse(m_Left, out var left) && bool.TryParse(m_Right, out var right))
+				{
+					return left == right;
+				}
 				return m_Left == m_Right;
 			}
 			return evaluator.Condition(m_Condition, LineData);

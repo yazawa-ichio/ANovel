@@ -1,5 +1,6 @@
 ﻿using Jace;
 using System;
+using System.Globalization;
 using System.Text;
 
 namespace ANovel.Core
@@ -11,24 +12,42 @@ namespace ANovel.Core
 		StringBuilder m_Format = new StringBuilder();
 		VariableContainer m_Container = new VariableContainer();
 		VariableContainer m_GlobalContainer = new VariableContainer();
-		CalculationEngine m_CalculationEngine = new CalculationEngine();
+		CalculationEngine m_CalculationEngine = new CalculationEngine(new JaceOptions
+		{
+			CultureInfo = CultureInfo.InvariantCulture,
+			ExecutionMode = Jace.Execution.ExecutionMode.Interpreted,
+			CacheEnabled = false,
+			OptimizerEnabled = false,
+		});
+
 
 		public IVariableContainer Variables => m_Container;
 
-		public IVariableContainer GlobalVariables => m_Container;
+		public IVariableContainer GlobalVariables => m_GlobalContainer;
 
-		public void Init(EnvData data)
+		public void SetEnvData(IEnvData data)
 		{
-			m_Container.Init(data.Prefixed<Evaluator>());
-			m_GlobalContainer.Init(new EnvData());
+			m_Container.SetEnvData(data);
 		}
 
-		public object Eval(string value)
+		public double Eval(string value, LineData? data)
 		{
-			return Eval(value, null);
+			try
+			{
+				var ret = m_CalculationEngine.Calculate(value);
+				return ret;
+			}
+			catch (Exception err)
+			{
+				if (data.HasValue)
+				{
+					throw new LineDataException(data.Value, $"calculate error {value}", err);
+				}
+				throw;
+			}
 		}
 
-		public object Eval(string value, LineData? data)
+		public string ReplaceVariable(string value, LineData? data)
 		{
 			// {{ と }} はエスケープする
 			var ret = m_Body.Clear();

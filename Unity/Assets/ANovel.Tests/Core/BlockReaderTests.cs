@@ -62,7 +62,7 @@ namespace ANovel.Core.Tests
 		public void マクロ内Ifテスト()
 		{
 			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), new string[] { "TEST" });
-			reader.Evaluator.Init(new EnvData());
+			reader.Evaluator.SetEnvData(new EnvData());
 			reader.Load("MacroIfTest", CancellationToken.None).Wait();
 			for (int i = 0; i < 5; i++)
 			{

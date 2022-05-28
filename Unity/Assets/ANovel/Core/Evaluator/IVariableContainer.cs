@@ -13,5 +13,7 @@ namespace ANovel.Core
 		object Get(string name);
 		void Delete(string name);
 		void Clear();
+		byte[] Save();
+		void Load(byte[] data);
 	}
 }

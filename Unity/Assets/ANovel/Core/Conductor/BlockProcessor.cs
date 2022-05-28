@@ -65,7 +65,7 @@ namespace ANovel.Core
 			Cache = cache;
 			Container.Set<IHistory>(History);
 			m_Evaluator = evaluator;
-			m_Evaluator?.Init(m_PreUpdateEnvData);
+			m_Evaluator?.SetEnvData(m_PreUpdateEnvData);
 		}
 
 		public void Reset()

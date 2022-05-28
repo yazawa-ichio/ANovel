@@ -3436,6 +3436,13 @@
                     "Required": false,
                     "InputType": "String",
                     "InputOptions": []
+                },
+                {
+                    "Name": "not",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
                 }
             ]
         },
@@ -3464,6 +3471,13 @@
                     "Description": "",
                     "Required": false,
                     "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "not",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
                     "InputOptions": []
                 }
             ]
@@ -3590,10 +3604,123 @@
                     "InputType": "Enum",
                     "InputOptions": [
                         "Bool",
-                        "Long",
-                        "Double",
+                        "Int",
+                        "Real",
                         "String"
                     ]
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "val_eval",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableEvalCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "type",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Bool",
+                        "Int",
+                        "Real",
+                        "String"
+                    ]
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "val_add",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableAddCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "allow_empty",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "flag",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableFlagCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "on",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "off",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
                 },
                 {
                     "Name": "global",
@@ -3630,7 +3757,7 @@
             "Name": "val_del_all",
             "Symbols": "",
             "LineType": "&",
-            "Description": "DeleteAllVariableCommand",
+            "Description": "VariableDeleteAllCommand",
             "Arguments": [
                 {
                     "Name": "prefix",

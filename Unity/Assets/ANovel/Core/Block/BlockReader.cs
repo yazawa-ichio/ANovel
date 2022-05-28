@@ -19,6 +19,7 @@ namespace ANovel.Core
 		LabelData m_Label = new LabelData();
 		bool m_Stop;
 		Evaluator m_Evaluator = new Evaluator();
+		bool m_Load;
 
 		public Evaluator Evaluator => m_Evaluator;
 
@@ -49,11 +50,16 @@ namespace ANovel.Core
 			m_LineReader = new LineReader(path, text);
 			m_PreProcess = await m_PreProcessor.Run(path, text, token);
 			m_TagProvider.Setup(m_PreProcess);
+			m_Load = true;
 			return m_PreProcess;
 		}
 
 		public bool TryRead(out Block block)
 		{
+			if (!m_Load)
+			{
+				throw new InvalidOperationException("not load scenario");
+			}
 			block = null;
 			if (!CanRead)
 			{
