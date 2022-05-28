@@ -205,29 +205,6 @@ namespace ANovel.Core.Tests
 			}
 		}
 
-		[TagName("test_log", Symbol = "TEST")]
-		class TestLogCommand : Command
-		{
-			[Argument]
-			public string Message { get; private set; }
-
-			protected override void Execute()
-			{
-				Debug.Log(Message);
-			}
-		}
-
-		[TagName("test_macro_define", Symbol = "TEST")]
-		class TestMacroDefineCommand : Command
-		{
-			[Argument]
-			public string Message { get; private set; }
-
-			protected override void Execute()
-			{
-				Debug.Log(Message);
-			}
-		}
 
 		class DummyLoader : IScenarioLoader
 		{
