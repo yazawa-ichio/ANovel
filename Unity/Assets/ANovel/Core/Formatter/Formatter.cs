@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace ANovel
 {
@@ -21,12 +22,12 @@ namespace ANovel
 		static Dictionary<Type, Func<string, object>> s_Func = new Dictionary<Type, Func<string, object>>()
 		{
 			{ typeof(bool), (str) => str == null || bool.Parse(str) },
-			{ typeof(int), (str) => int.Parse(str) },
-			{ typeof(long), (str) => long.Parse(str) },
-			{ typeof(float), (str) => float.Parse(str) },
-			{ typeof(double), (str) => double.Parse(str) },
+			{ typeof(int), (str) => int.Parse(str, CultureInfo.InvariantCulture) },
+			{ typeof(long), (str) => long.Parse(str, CultureInfo.InvariantCulture) },
+			{ typeof(float), (str) => float.Parse(str, CultureInfo.InvariantCulture) },
+			{ typeof(double), (str) => double.Parse(str, CultureInfo.InvariantCulture) },
 			{ typeof(string), (str) => str },
-			{ typeof(Millisecond), (str) => new Millisecond(int.Parse(str)) },
+			{ typeof(Millisecond), (str) => new Millisecond(int.Parse(str, CultureInfo.InvariantCulture)) },
 		};
 
 		static Dictionary<Type, IFormatter> s_Instance = new Dictionary<Type, IFormatter>();

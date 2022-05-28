@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using UnityEngine;
 using Assert = UnityEngine.Assertions.Assert;
@@ -258,7 +259,7 @@ namespace ANovel.Core.Tests
 
 			public object Format(string value)
 			{
-				return value.Split(',').Select(x => int.Parse(x)).ToArray();
+				return value.Split(',').Select(x => int.Parse(x, CultureInfo.InvariantCulture)).ToArray();
 			}
 		}
 
@@ -267,7 +268,7 @@ namespace ANovel.Core.Tests
 		{
 			public object Format(string value)
 			{
-				var buf = value.Split(',').Select(x => int.Parse(x)).ToArray();
+				var buf = value.Split(',').Select(x => int.Parse(x, CultureInfo.InvariantCulture)).ToArray();
 				return new Vector3(buf[0], buf[1], buf[2]);
 			}
 		}
