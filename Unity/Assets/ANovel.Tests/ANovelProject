@@ -684,6 +684,35 @@
             ]
         },
         {
+            "Name": "test_meta_deine",
+            "Symbols": "TEST",
+            "LineType": "#",
+            "Description": "TestMetaDefineTest",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "first",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
             "Name": "bg",
             "Symbols": "",
             "LineType": "@",
@@ -3399,6 +3428,337 @@
                     "Description": "",
                     "Required": true,
                     "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_log",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestLogCommand",
+            "Arguments": [
+                {
+                    "Name": "message",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_macro_define",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestMacroDefineCommand",
+            "Arguments": [
+                {
+                    "Name": "message",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_preload",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestPreLoad",
+            "Arguments": [
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_sync",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestSync",
+            "Arguments": []
+        },
+        {
+            "Name": "test_prepare_wait",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestPrepareWaitTime",
+            "Arguments": [
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_trigger",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestTrigger",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_error",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestError",
+            "Arguments": []
+        },
+        {
+            "Name": "test_inject_param",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "InjectParamTestCommand",
+            "Arguments": [
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "item",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "flag",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "flag",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_default_formatter",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestDefaultFormatter",
+            "Arguments": [
+                {
+                    "Name": "key1",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key2",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key2",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key3",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key3",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key4",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_default_formatter",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "IgnoreCommand",
+            "Arguments": []
+        },
+        {
+            "Name": "test_custom_formatter",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestCustomFormatter",
+            "Arguments": [
+                {
+                    "Name": "key1",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "None",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key2",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "None",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key3",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key3",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_required",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestRequired",
+            "Arguments": [
+                {
+                    "Name": "required",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "optional",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
                     "InputOptions": []
                 }
             ]

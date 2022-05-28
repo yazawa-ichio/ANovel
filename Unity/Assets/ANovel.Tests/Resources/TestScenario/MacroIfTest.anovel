@@ -1,0 +1,55 @@
+
+#macro name="macro_if"
+&if condition="%condition%"
+@test_log message="condition if ok"
+&elsif condition=$"{condition}"
+@test_log message="condition elsif ok"
+&else
+@test_log message="condition else ok"
+&endif
+#endmacro
+
+#macro name="macro_if_count"
+&if condition=$"0 < {count}"
+	@test_log message=$"0 < {count}"
+	&if condition=$"1 < {count}"
+		@test_log message=$"1 < {count}"
+		&if condition=$"2 < {count}"
+			@test_log message=$"2 < {count}"
+			&if condition=$"3 < {count}"
+				@test_log message=$"3 < {count}"
+			&endif
+		&endif
+	&endif
+&endif
+#endmacro
+
+#macro name="macro_if_error"
+&if condition="false"
+	&if condition="true"
+&endif
+#endmacro
+
+@macro_if condition="true"
+condition if ok
+
+&val name="condition" value="true"
+@macro_if condition="false"
+condition elsif ok
+
+&val name="condition" value="false"
+@macro_if condition="false"
+condition else ok
+
+&val name="count" value="1"
+@macro_if_count
+0 < 1
+
+&val name="count" value="5"
+@macro_if_count
+0 < 5
+1 < 5
+2 < 5
+3 < 5
+
+@macro_if_error

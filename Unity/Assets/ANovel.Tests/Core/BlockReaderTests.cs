@@ -59,6 +59,39 @@ namespace ANovel.Core.Tests
 		}
 
 		[Test]
+		public void マクロ内Ifテスト()
+		{
+			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), new string[] { "TEST" });
+			reader.Evaluator.Init(new EnvData());
+			reader.Load("MacroIfTest", CancellationToken.None).Wait();
+			for (int i = 0; i < 5; i++)
+			{
+				TestIfMacro(reader);
+			}
+			Assert.AreEqual(5.ToString(), reader.Evaluator.Variables.Get("count").ToString());
+			NUnit.Framework.Assert.Throws<LineDataException>(() =>
+			{
+				reader.TryRead(out _);
+			});
+		}
+
+		void TestIfMacro(BlockReader reader)
+		{
+			Assert.IsTrue(reader.TryRead(out var block));
+			foreach (var cmd in block.Commands)
+			{
+				cmd.Execute();
+			}
+
+			var logs = block.Commands.OfType<TestLogCommand>().ToArray();
+			for (int i = 0; i < logs.Length; i++)
+			{
+				Assert.AreEqual(block.Text.GetLine(i), logs[i].Message, "ログの出力が不一致");
+			}
+			Assert.AreEqual(block.Text.LineCount, logs.Length, "行数が不一致" + block.LabelInfo.LineIndex);
+		}
+
+		[Test]
 		public void テキストブロック()
 		{
 			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), new string[] { "TEST" });

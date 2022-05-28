@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: EngineConfig
   m_EditorClassIdentifier: 
   m_DefaultSymbol: 1
-  m_CustomSymbols: []
+  m_CustomSymbols:
+  - TEST
   m_ProjectExport:
     m_ProjectRoot: Assets/ANovel.Tests/
     m_ScenarioPath: TestScenario
