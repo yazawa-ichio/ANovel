@@ -29,7 +29,7 @@ namespace ANovel.Core
 
 		public Func<Block, IEnvDataHolder, Task> OnLoad { get; set; }
 
-		public bool IsStop => m_BlockProcessor.IsStop;
+		public bool IsStop => !IsLock && m_BlockProcessor.IsStop;
 
 		public bool IsWaitNext => !IsLock && m_BlockProcessor.IsWaitNext;
 
@@ -96,7 +96,6 @@ namespace ANovel.Core
 				{
 					return;
 				}
-				await Task.Yield();
 				if (m_Cancellation != null)
 				{
 					await Jump(arg.Path, arg.Label, m_Cancellation.Token);

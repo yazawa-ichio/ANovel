@@ -30,6 +30,8 @@ namespace ANovel.Core
 		ICommand m_SyncCommand;
 		int m_Index;
 		List<ICommand> m_RunCommands;
+		bool m_DoProcess;
+		bool m_ScheduleDispose;
 
 		public BlockEntry(Block block, PreLoadScope preLoad)
 		{
@@ -39,6 +41,24 @@ namespace ANovel.Core
 		}
 
 		public void Process()
+		{
+			try
+			{
+				m_DoProcess = true;
+				ProcessImpl();
+			}
+			finally
+			{
+				m_DoProcess = false;
+				if (m_ScheduleDispose)
+				{
+					Dispose();
+				}
+			}
+
+		}
+
+		void ProcessImpl()
 		{
 			if (m_SyncCommand != null)
 			{
@@ -108,6 +128,11 @@ namespace ANovel.Core
 
 		public void Dispose()
 		{
+			if (m_DoProcess)
+			{
+				m_ScheduleDispose = true;
+				return;
+			}
 			PreLoad?.Dispose();
 			foreach (var cmd in Block.Commands)
 			{
