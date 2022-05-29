@@ -125,7 +125,7 @@ namespace ANovel.Core
 					}
 					else if (m_Stack.Count == 0)
 					{
-						throw new LineDataException(command.LineData, "");
+						throw new LineDataException(command.LineData, "not if scope");
 					}
 					else
 					{
