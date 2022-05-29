@@ -205,22 +205,5 @@ namespace ANovel.Core.Tests
 			}
 		}
 
-
-		class DummyLoader : IScenarioLoader
-		{
-			string m_Text;
-			public DummyLoader(string text)
-			{
-				m_Text = text;
-			}
-
-			public Task<string> Load(string path, CancellationToken token)
-			{
-				return Task.FromResult(m_Text);
-			}
-			public void Dispose() { }
-		}
-
-
 	}
 }

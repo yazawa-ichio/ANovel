@@ -2,27 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ANovel.Core.Tests
 {
 	public class VariableTest
 	{
-		class Loader : IScenarioLoader
-		{
-			string m_Text;
-			public Loader(string text)
-			{
-				m_Text = text;
-			}
-
-			public void Dispose() { }
-
-			public Task<string> Load(string path, CancellationToken token)
-			{
-				return Task.FromResult(m_Text);
-			}
-		}
 
 		[Test]
 		public void 変数の設定()
@@ -151,7 +135,7 @@ namespace ANovel.Core.Tests
 
 		IEvaluator Set(string value, byte[] save = null)
 		{
-			BlockReader reader = new BlockReader(new Loader(value), new string[] { "TEST" });
+			BlockReader reader = new BlockReader(new DummyLoader(value), new string[] { "TEST" });
 			if (save != null)
 			{
 				reader.Evaluator.Variables.Load(save);
