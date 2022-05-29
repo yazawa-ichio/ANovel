@@ -5,7 +5,13 @@ namespace ANovel.Core
 
 	public class EnvDataHook
 	{
+		ServiceContainer m_Container;
 		List<IEnvDataCustomProcessor> m_List = new List<IEnvDataCustomProcessor>();
+
+		public EnvDataHook(ServiceContainer container)
+		{
+			m_Container = container;
+		}
 
 		public void Add(IEnvDataCustomProcessor processor)
 		{
@@ -40,6 +46,7 @@ namespace ANovel.Core
 					block.Commands.AddRange(list);
 					foreach (var cmd in list)
 					{
+						cmd.SetContainer(m_Container);
 						cmd.SetMetaData(block.Meta);
 						cmd.UpdateEnvData(data);
 					}

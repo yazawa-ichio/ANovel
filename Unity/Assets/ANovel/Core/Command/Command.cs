@@ -12,6 +12,11 @@ namespace ANovel
 
 		protected IMetaData Meta { get; private set; }
 
+		void ICommand.SetContainer(IServiceContainer container)
+		{
+			Container = container;
+		}
+
 		void ICommand.SetMetaData(IMetaData meta)
 		{
 			Meta = meta;
@@ -21,14 +26,13 @@ namespace ANovel
 
 		protected virtual void UpdateEnvData(IEnvData data) { }
 
-		void ICommand.Initialize(IServiceContainer container)
+		void ICommand.Initialize(IPreLoader loader)
 		{
-			Container = container;
-			Event = container.Get<EventBroker>().Scoped();
+			Event = Get<EventBroker>().Scoped();
 			Event.Subscribe(this);
-			Cache = container.Get<IResourceCache>();
+			Cache = Get<IResourceCache>();
 			Initialize();
-			Preload(container.Get<IPreLoader>());
+			Preload(loader);
 		}
 
 		protected virtual void Initialize() { }

@@ -33,7 +33,7 @@ namespace ANovel.Core
 
 		public IEnvDataHolder Current => m_CurrentEnvData;
 
-		public EnvDataHook EnvDataHook { get; private set; } = new EnvDataHook();
+		public EnvDataHook EnvDataHook { get; private set; }
 
 		public bool IsStop => !m_Reader.CanRead && (m_StopCommand != null || (m_PreloadQueue.Count == 0 && m_CurrentBlock == null));
 
@@ -62,6 +62,7 @@ namespace ANovel.Core
 			m_Reader = reader;
 			m_Reader.Evaluator.SetEnvData(m_PreUpdateEnvData);
 			Container = container;
+			EnvDataHook = new EnvDataHook(container);
 			Cache = cache;
 			Container.Set<IHistory>(History);
 		}
@@ -141,6 +142,7 @@ namespace ANovel.Core
 			EnvDataHook.PreUpdate(m_CurrentEnvData, block);
 			foreach (var cmd in block.Commands)
 			{
+				cmd.SetContainer(Container);
 				cmd.SetMetaData(block.Meta);
 				cmd.UpdateEnvData(m_CurrentEnvData);
 			}
@@ -198,17 +200,17 @@ namespace ANovel.Core
 			EnvDataHook.PreUpdate(m_PreUpdateEnvData, block);
 			foreach (var cmd in block.Commands)
 			{
+				cmd.SetContainer(Container);
 				cmd.SetMetaData(block.Meta);
 				cmd.UpdateEnvData(m_PreUpdateEnvData);
 			}
 			EnvDataHook.PostUpdate(m_PreUpdateEnvData, block);
+
 			var diff = !block.SkipHistory ? m_PreUpdateEnvData.Diff() : new EnvDataDiff();
-			var container = Container.CreateChild();
 			var scope = new PreLoadScope(Cache);
-			container.Set<IPreLoader>(scope);
 			foreach (var cmd in block.Commands)
 			{
-				cmd.Initialize(container);
+				cmd.Initialize(scope);
 			}
 			m_PreloadQueue.Enqueue(new BlockPreloadEntry(block, scope, diff));
 			m_Reader.BranchController.Save(m_PreUpdateEnvData);

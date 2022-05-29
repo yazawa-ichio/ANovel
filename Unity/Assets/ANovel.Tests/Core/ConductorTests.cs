@@ -505,7 +505,6 @@ namespace ANovel.Core.Tests
 
 			protected override void Initialize()
 			{
-				Assert.IsTrue(TryGet<IPreLoader>(out _));
 				Assert.NotNull(Get<EventBroker>());
 			}
 

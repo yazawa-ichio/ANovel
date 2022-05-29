@@ -2,10 +2,11 @@
 {
 	public interface ICommand
 	{
+		void SetContainer(IServiceContainer container);
 		void SetMetaData(IMetaData meta);
 		void UpdateEnvData(IEnvData data);
 		bool IsPrepared();
-		void Initialize(IServiceContainer container);
+		void Initialize(IPreLoader loader);
 		bool IsSync();
 		bool IsEnd();
 		void Execute();
