@@ -3443,6 +3443,20 @@
                     "Required": false,
                     "InputType": "Bool",
                     "InputOptions": []
+                },
+                {
+                    "Name": "flag",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "has_val",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
                 }
             ]
         },
@@ -3478,6 +3492,20 @@
                     "Description": "",
                     "Required": false,
                     "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "flag",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "has_val",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
                     "InputOptions": []
                 }
             ]

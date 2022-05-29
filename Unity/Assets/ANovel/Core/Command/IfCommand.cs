@@ -13,6 +13,10 @@ namespace ANovel.Commands
 		string m_Right;
 		[Argument]
 		bool m_Not;
+		[Argument]
+		string m_Flag;
+		[Argument(KeyName = "has_val")]
+		string m_HasVal;
 
 		public abstract bool IsStartScope { get; }
 
@@ -33,6 +37,22 @@ namespace ANovel.Commands
 		{
 			if (string.IsNullOrEmpty(m_Condition))
 			{
+				if (!string.IsNullOrEmpty(m_Flag))
+				{
+					if (evaluator.Variables.TryGetValue(m_Flag, out var val) && val is bool ret)
+					{
+						return ret;
+					}
+					if (evaluator.GlobalVariables.TryGetValue(m_Flag, out val) && val is bool glocalRet)
+					{
+						return glocalRet;
+					}
+					return false;
+				}
+				if (!string.IsNullOrEmpty(m_HasVal))
+				{
+					return evaluator.Variables.Has(m_HasVal) || evaluator.GlobalVariables.Has(m_HasVal);
+				}
 				if (bool.TryParse(m_Left, out var left) && bool.TryParse(m_Right, out var right))
 				{
 					return left == right;
