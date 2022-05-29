@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ANovel.Core
 {
-	public class BlockProcessor
+	internal class BlockProcessor
 	{
 		enum State
 		{
@@ -56,16 +56,14 @@ namespace ANovel.Core
 		EnvData m_PreUpdateEnvData = new EnvData();
 		IStopCommand m_StopCommand;
 		BlockEntry m_CurrentBlock;
-		Evaluator m_Evaluator;
 
-		public BlockProcessor(BlockReader reader, ServiceContainer container, ResourceCache cache, Evaluator evaluator)
+		public BlockProcessor(BlockReader reader, ServiceContainer container, ResourceCache cache)
 		{
 			m_Reader = reader;
+			m_Reader.Evaluator.SetEnvData(m_PreUpdateEnvData);
 			Container = container;
 			Cache = cache;
 			Container.Set<IHistory>(History);
-			m_Evaluator = evaluator;
-			m_Evaluator?.SetEnvData(m_PreUpdateEnvData);
 		}
 
 		public void Reset()

@@ -43,6 +43,10 @@ namespace ANovel.Core
 		ScopeLocker m_Locker = new ScopeLocker();
 		ResourceCache m_Cache;
 
+		public Conductor(IScenarioLoader scenarioLoader, IResourceLoader loader, string[] symbols) : this(new BlockReader(scenarioLoader, symbols), loader)
+		{
+		}
+
 		public Conductor(BlockReader reader, IResourceLoader loader)
 		{
 			m_Cache = new ResourceCache(loader);
@@ -50,7 +54,7 @@ namespace ANovel.Core
 			Container.Set<IEvaluator>(reader.Evaluator);
 			Container.Set<IResourceCache>(m_Cache);
 			Container.Set(Event);
-			m_BlockProcessor = new BlockProcessor(reader, Container, m_Cache, reader.Evaluator);
+			m_BlockProcessor = new BlockProcessor(reader, Container, m_Cache);
 		}
 
 		public void Dispose()
