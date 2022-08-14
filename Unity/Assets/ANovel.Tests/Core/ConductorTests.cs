@@ -422,6 +422,11 @@ namespace ANovel.Core.Tests
 		{
 			public int LoadCount;
 
+			public void Dispose()
+			{
+
+			}
+
 			public Task<T> Load<T>(string path, CancellationToken token) where T : Object
 			{
 				LoadCount++;
@@ -434,7 +439,7 @@ namespace ANovel.Core.Tests
 				return System.Activator.CreateInstance<T>();
 			}
 
-			public void Unload(object obj)
+			public void Unload(string path, object obj)
 			{
 			}
 

@@ -63,7 +63,7 @@ namespace ANovel.Core
 		}
 
 		int m_UnloadCount;
-		public void Unload(object obj)
+		public void Unload(string path, object obj)
 		{
 			if (obj is Object asset)
 			{

@@ -170,6 +170,11 @@ namespace ANovel.Core.Tests
 
 			public int UnloadCount = 0;
 
+			public void Dispose()
+			{
+
+			}
+
 			public async Task<T> Load<T>(string path, CancellationToken token) where T : Object
 			{
 				LoadCount++;
@@ -187,7 +192,7 @@ namespace ANovel.Core.Tests
 				return Task.FromResult(System.Activator.CreateInstance<T>());
 			}
 
-			public void Unload(object obj)
+			public void Unload(string path, object obj)
 			{
 				UnloadCount++;
 			}

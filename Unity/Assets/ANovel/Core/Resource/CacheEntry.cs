@@ -85,7 +85,7 @@ namespace ANovel.Core
 				m_Loaded = true;
 				if (m_Disposed && m_Value != null)
 				{
-					m_Loader.Unload(m_Value);
+					m_Loader.Unload(Path, m_Value);
 					m_Value = null;
 				}
 			}
@@ -109,7 +109,7 @@ namespace ANovel.Core
 			m_CancellationTokenSource = null;
 			if (m_Value != null)
 			{
-				m_Loader.Unload(m_Value);
+				m_Loader.Unload(Path, m_Value);
 				m_Value = null;
 			}
 		}
