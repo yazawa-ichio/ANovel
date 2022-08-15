@@ -11,13 +11,13 @@ namespace ANovel.Commands
 		List<ICommand> m_RunCommands;
 		ICommand m_SyncCommand;
 
-		protected override void Initialize()
+		protected override void Prepare()
 		{
 			m_BatchCommands = ListPool<ICommand>.Pop();
 			m_RunCommands = ListPool<ICommand>.Pop();
 		}
 
-		public override void FinishBlock()
+		public override void Finish()
 		{
 			foreach (var cmd in m_BatchCommands)
 			{

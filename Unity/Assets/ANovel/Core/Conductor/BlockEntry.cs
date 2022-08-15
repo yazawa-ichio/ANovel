@@ -136,7 +136,7 @@ namespace ANovel.Core
 			PreLoad?.Dispose();
 			foreach (var cmd in Block.Commands)
 			{
-				cmd.FinishBlock();
+				cmd.Finish();
 			}
 			if (m_RunCommands != null)
 			{

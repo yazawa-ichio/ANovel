@@ -1,4 +1,6 @@
-﻿namespace ANovel.Core
+﻿using System.Collections.Generic;
+
+namespace ANovel.Core
 {
 	public abstract class Tag
 	{
@@ -6,10 +8,15 @@
 
 		public LineData LineData { get; private set; }
 
-		internal void Set(string name, in LineData data)
+		Dictionary<string, string> m_Dic;
+
+		public IReadOnlyDictionary<string, string> Dic => m_Dic;
+
+		internal void Set(string name, in LineData data, Dictionary<string, string> dic)
 		{
 			TagName = name;
 			LineData = data;
+			m_Dic = dic;
 		}
 
 	}

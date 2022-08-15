@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ANovel.Commands;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -23,7 +24,7 @@ namespace ANovel.Core
 			m_BranchController = new BranchController();
 		}
 
-		public void Provide(List<string> symbols, TagParam variables, List<Tag> ret)
+		public IEnumerable<Tag> Provide(List<string> symbols, TagParam variables)
 		{
 			if (m_Do) throw new InvalidOperationException("recursive call to macro is not allowed");
 			try
@@ -32,9 +33,12 @@ namespace ANovel.Core
 				foreach (var data in m_Line)
 				{
 					Assign(in data, variables);
-					if (m_Owner.TryProvide(symbols, m_Param, ret))
+					if (m_Owner.TryProvide(symbols, m_Param, out var ret))
 					{
-						continue;
+						foreach (var tag in ret)
+						{
+							yield return tag;
+						}
 					}
 					else
 					{
@@ -46,6 +50,10 @@ namespace ANovel.Core
 						if (TagEntry.TryGet(in data, m_Param.Name, symbols, out var entry))
 						{
 							var tag = entry.Create(in data, m_Param);
+							if (tag is IVariableCommand variableCommand)
+							{
+								variableCommand.UpdatVariables(m_Param.Evaluator);
+							}
 							if (tag is IBranchCommand branchCommand)
 							{
 								m_BranchController.BranchCommand(variables.Evaluator, branchCommand);
@@ -56,7 +64,7 @@ namespace ANovel.Core
 								m_BranchController.BranchEnd(branchEnd);
 								continue;
 							}
-							ret.Add(tag);
+							yield return tag;
 						}
 					}
 				}

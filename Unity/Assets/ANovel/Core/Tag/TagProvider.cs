@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using ANovel.Commands;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ANovel.Core
 {
 	public class TagProvider
 	{
+
 		TagParam m_Param = new TagParam();
 
 		public List<string> Symbols { get; private set; }
@@ -37,6 +39,11 @@ namespace ANovel.Core
 
 		public void Provide(in LineData data, List<Tag> ret)
 		{
+			ret.AddRange(Provide(data));
+		}
+
+		public IEnumerable<Tag> Provide(LineData data)
+		{
 
 			m_Param.Set(in data, Converters);
 
@@ -44,31 +51,39 @@ namespace ANovel.Core
 
 			if (BranchController.CheckIgnore(m_Param))
 			{
-				return;
+				yield break;
 			}
 
 			foreach (var macro in Macros)
 			{
-				if (macro.TryProvide(Symbols, m_Param, ret))
+				if (macro.TryProvide(Symbols, m_Param, out var ret))
 				{
-					return;
+					foreach (var tag in ret)
+					{
+						yield return tag;
+					}
+					yield break;
 				}
 			}
 
 			if (TagEntry.TryGet(in data, m_Param.Name, Symbols, out var entry))
 			{
 				var tag = entry.Create(in data, m_Param);
+				if (tag is IVariableCommand variableCommand)
+				{
+					variableCommand.UpdatVariables(m_Param.Evaluator);
+				}
 				if (tag is IBranchCommand branchCommand)
 				{
 					BranchController.BranchCommand(m_Param.Evaluator, branchCommand);
-					return;
+					yield break;
 				}
 				if (tag is IBranchEnd branchEnd)
 				{
 					BranchController.BranchEnd(branchEnd);
-					return;
+					yield break;
 				}
-				ret.Add(tag);
+				yield return tag;
 			}
 
 		}

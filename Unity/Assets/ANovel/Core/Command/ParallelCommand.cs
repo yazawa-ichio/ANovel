@@ -13,12 +13,12 @@ namespace ANovel.Commands
 
 		List<ICommand> m_RunCommands;
 
-		protected override void Initialize()
+		protected override void Prepare()
 		{
 			m_RunCommands = ListPool<ICommand>.Pop();
 		}
 
-		public override void FinishBlock()
+		public override void Finish()
 		{
 			ListPool<ICommand>.Push(m_RunCommands);
 			m_RunCommands = null;

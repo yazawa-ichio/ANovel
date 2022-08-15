@@ -66,7 +66,7 @@ namespace ANovel.Core.Tests
 			reader.Load("MacroIfTest", CancellationToken.None).Wait();
 			for (int i = 0; i < 5; i++)
 			{
-				TestIfMacro(reader);
+				TestMacro(reader);
 			}
 			Assert.AreEqual(5.ToString(), reader.Evaluator.Variables.Get("count").ToString());
 			NUnit.Framework.Assert.Throws<LineDataException>(() =>
@@ -75,7 +75,22 @@ namespace ANovel.Core.Tests
 			});
 		}
 
-		void TestIfMacro(BlockReader reader)
+		[Test]
+		public void マクロ内変数テスト()
+		{
+			var reader = new BlockReader(new ResourcesScenarioLoader("TestScenario"), new string[] { "TEST" });
+			reader.Evaluator.SetEnvData(new EnvData());
+			reader.Load("MacroVariableTest", CancellationToken.None).Wait();
+			for (int i = 0; i < 5; i++)
+			{
+				TestMacro(reader);
+			}
+			Assert.AreEqual(5.ToString(), reader.Evaluator.Variables.Get("count").ToString());
+			Assert.IsTrue(reader.TryRead(out var block));
+			Assert.IsNotNull(block.StopCommand);
+		}
+
+		void TestMacro(BlockReader reader)
 		{
 			Assert.IsTrue(reader.TryRead(out var block));
 			foreach (var cmd in block.Commands)

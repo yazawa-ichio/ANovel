@@ -1,0 +1,20 @@
+
+#macro name="macro_set_value"
+&val_add name="count"
+@test_log message=$"value:{count}"
+#endmacro
+
+@macro_set_value
+value:1
+
+@macro_set_value
+value:2
+
+@macro_set_value
+value:3
+
+@macro_set_value
+value:4
+
+@macro_set_value
+value:5

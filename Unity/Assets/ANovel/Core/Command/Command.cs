@@ -12,30 +12,25 @@ namespace ANovel
 
 		protected IMetaData Meta { get; private set; }
 
-		void ICommand.SetContainer(IServiceContainer container)
+		void ICommand.Init(IServiceContainer container, IMetaData meta, IEnvData data)
 		{
 			Container = container;
-		}
-
-		void ICommand.SetMetaData(IMetaData meta)
-		{
 			Meta = meta;
+			UpdateEnvData(data);
 		}
-
-		void ICommand.UpdateEnvData(IEnvData data) => UpdateEnvData(data);
 
 		protected virtual void UpdateEnvData(IEnvData data) { }
 
-		void ICommand.Initialize(IPreLoader loader)
+		void ICommand.Prepare(IPreLoader loader)
 		{
 			Event = Get<EventBroker>().Scoped();
 			Event.Subscribe(this);
 			Cache = Get<IResourceCache>();
-			Initialize();
+			Prepare();
 			Preload(loader);
 		}
 
-		protected virtual void Initialize() { }
+		protected virtual void Prepare() { }
 
 		protected virtual void Preload(IPreLoader loader) { }
 
@@ -57,11 +52,11 @@ namespace ANovel
 
 		protected virtual void TryNext() { }
 
-		void ICommand.FinishBlock()
+		void ICommand.Finish()
 		{
 			try
 			{
-				FinishBlock();
+				Finish();
 			}
 			finally
 			{
@@ -69,7 +64,7 @@ namespace ANovel
 			}
 		}
 
-		public virtual void FinishBlock() { }
+		public virtual void Finish() { }
 
 
 		protected T Get<T>()

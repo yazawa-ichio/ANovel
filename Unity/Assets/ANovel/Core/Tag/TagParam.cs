@@ -140,15 +140,9 @@ namespace ANovel.Core
 			}
 		}
 
-		Dictionary<string, string> m_ToDictionaryCache;
 		public Dictionary<string, string> ToDictionary()
 		{
-			if (m_ToDictionaryCache == null)
-			{
-				m_ToDictionaryCache = new Dictionary<string, string>(16);
-			}
-			m_ToDictionaryCache.Clear();
-			var ret = m_ToDictionaryCache;
+			var ret = new Dictionary<string, string>(m_Dic.Count);
 			foreach (var key in m_Dic.Keys)
 			{
 				ret[key] = GetValue(key);

@@ -27,7 +27,7 @@
 			}
 		}
 
-		public override void FinishBlock()
+		public override void Finish()
 		{
 			m_PlayHandle?.Dispose();
 		}

@@ -46,9 +46,7 @@ namespace ANovel.Core
 					block.Commands.AddRange(list);
 					foreach (var cmd in list)
 					{
-						cmd.SetContainer(m_Container);
-						cmd.SetMetaData(block.Meta);
-						cmd.UpdateEnvData(data);
+						cmd.Init(m_Container, block.Meta, data);
 					}
 				}
 			}

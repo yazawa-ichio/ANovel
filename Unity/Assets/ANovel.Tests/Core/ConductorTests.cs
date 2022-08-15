@@ -508,12 +508,12 @@ namespace ANovel.Core.Tests
 
 			public override bool IsEnd() => EndFlag;
 
-			protected override void Initialize()
+			protected override void Prepare()
 			{
 				Assert.NotNull(Get<EventBroker>());
 			}
 
-			public override void FinishBlock()
+			public override void Finish()
 			{
 				EndFlag = false;
 			}
@@ -528,7 +528,7 @@ namespace ANovel.Core.Tests
 
 			float m_Start;
 
-			protected override void Initialize()
+			protected override void Prepare()
 			{
 				m_Start = Time.time;
 			}

@@ -20,12 +20,12 @@ namespace ANovel.Core
 			m_Macro[name] = new Macro(this, line);
 		}
 
-		public bool TryProvide(List<string> symbols, TagParam param, List<Tag> ret)
+		public bool TryProvide(List<string> symbols, TagParam param, out IEnumerable<Tag> ret)
 		{
 			try
 			{
 				m_Check.Add(this);
-				return TryProvideImpl(symbols, param, ret, m_Check);
+				return TryProvideImpl(symbols, param, out ret, m_Check);
 			}
 			finally
 			{
@@ -33,23 +33,24 @@ namespace ANovel.Core
 			}
 		}
 
-		bool TryProvideImpl(List<string> symbols, TagParam param, List<Tag> ret, HashSet<MacroDefine> check)
+		bool TryProvideImpl(List<string> symbols, TagParam param, out IEnumerable<Tag> ret, HashSet<MacroDefine> check)
 		{
 			if (m_Macro.TryGetValue(param.Name, out var macro))
 			{
-				macro.Provide(symbols, param, ret);
+				ret = macro.Provide(symbols, param);
 				return true;
 			}
 			if (m_Depends != null)
 			{
 				foreach (var dep in m_Depends)
 				{
-					if (check.Add(dep) && dep.TryProvideImpl(symbols, param, ret, check))
+					if (check.Add(dep) && dep.TryProvideImpl(symbols, param, out ret, check))
 					{
 						return true;
 					}
 				}
 			}
+			ret = default;
 			return false;
 		}
 	}

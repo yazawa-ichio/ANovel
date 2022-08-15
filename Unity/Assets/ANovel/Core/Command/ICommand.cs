@@ -2,17 +2,15 @@
 {
 	public interface ICommand
 	{
-		void SetContainer(IServiceContainer container);
-		void SetMetaData(IMetaData meta);
-		void UpdateEnvData(IEnvData data);
 		bool IsPrepared();
-		void Initialize(IPreLoader loader);
+		void Init(IServiceContainer container, IMetaData meta, IEnvData data);
+		void Prepare(IPreLoader loader);
 		bool IsSync();
 		bool IsEnd();
 		void Execute();
 		void Update();
 		void TryNext();
-		void FinishBlock();
+		void Finish();
 	}
 
 	public interface ISystemCommand : ICommand

@@ -59,6 +59,10 @@ namespace ANovel.Commands
 			{
 				return check.CanAddScope;
 			}
+			if (command is IVariableCommand)
+			{
+				return false;
+			}
 			return true;
 		}
 

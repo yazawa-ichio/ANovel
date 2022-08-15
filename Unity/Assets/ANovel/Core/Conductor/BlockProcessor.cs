@@ -142,9 +142,7 @@ namespace ANovel.Core
 			EnvDataHook.PreUpdate(m_CurrentEnvData, block);
 			foreach (var cmd in block.Commands)
 			{
-				cmd.SetContainer(Container);
-				cmd.SetMetaData(block.Meta);
-				cmd.UpdateEnvData(m_CurrentEnvData);
+				cmd.Init(Container, block.Meta, m_CurrentEnvData);
 			}
 			EnvDataHook.PostUpdate(m_CurrentEnvData, block);
 			History.Add(m_CurrentEnvData, block, m_CurrentEnvData.Diff());
@@ -200,9 +198,7 @@ namespace ANovel.Core
 			EnvDataHook.PreUpdate(m_PreUpdateEnvData, block);
 			foreach (var cmd in block.Commands)
 			{
-				cmd.SetContainer(Container);
-				cmd.SetMetaData(block.Meta);
-				cmd.UpdateEnvData(m_PreUpdateEnvData);
+				cmd.Init(Container, block.Meta, m_PreUpdateEnvData);
 			}
 			EnvDataHook.PostUpdate(m_PreUpdateEnvData, block);
 
@@ -210,7 +206,7 @@ namespace ANovel.Core
 			var scope = new PreLoadScope(Cache);
 			foreach (var cmd in block.Commands)
 			{
-				cmd.Initialize(scope);
+				cmd.Prepare(scope);
 			}
 			m_PreloadQueue.Enqueue(new BlockPreloadEntry(block, scope, diff));
 			m_Reader.BranchController.Save(m_PreUpdateEnvData);
