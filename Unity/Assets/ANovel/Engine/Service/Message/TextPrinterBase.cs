@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ANovel.Core;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ANovel.Engine
@@ -7,11 +9,15 @@ namespace ANovel.Engine
 	{
 		Queue<char> m_Buffer = new Queue<char>();
 		float m_ShowTimer;
+		string m_Lang;
+		LocalizeTextEnvData[] m_LocalizeTexts;
 		protected ServiceContainer Container { get; private set; }
 
 		public bool IsProcessing { get; private set; }
 
 		public virtual float Speed { get; set; } = 0.05f;
+
+		protected virtual void SetChara(string name) { }
 
 		protected abstract void SetName(string name);
 
@@ -24,8 +30,9 @@ namespace ANovel.Engine
 			Container = container;
 		}
 
-		public virtual void Set(TextBlock text, IEnvDataHolder data)
+		public virtual void Set(TextBlock text, IEnvDataHolder data, IMetaData meta)
 		{
+			m_LocalizeTexts = null;
 			SetName("");
 			SetMessage("");
 			m_Buffer.Clear();
@@ -33,6 +40,11 @@ namespace ANovel.Engine
 			IsProcessing = true;
 			if (data.TryGetSingle<MessageEnvData>(out var message))
 			{
+				if (TryInitLocalizeText(meta, data))
+				{
+					message = GetLocalizedText(message);
+				}
+				SetChara(message.Chara);
 				SetName(message.Name);
 				foreach (var c in message.Message)
 				{
@@ -80,8 +92,23 @@ namespace ANovel.Engine
 
 		public virtual void Clear()
 		{
+			m_LocalizeTexts = null;
+			SetChara("");
 			SetName("");
 			SetMessage("");
+		}
+
+		public void ChangeLanguage(string lang)
+		{
+			m_Lang = lang;
+			if (m_LocalizeTexts != null)
+			{
+				m_Buffer.Clear();
+				IsProcessing = false;
+				var msg = GetLocalizedText(new MessageEnvData());
+				SetName(msg.Name);
+				SetMessage(msg.Message);
+			}
 		}
 
 		public virtual void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader)
@@ -92,16 +119,78 @@ namespace ANovel.Engine
 		{
 			if (data.TryGetSingle<MessageEnvData>(out var msg))
 			{
+				if (TryInitLocalizeText(meta, data))
+				{
+					msg = GetLocalizedText(msg);
+				}
+				SetChara(msg.Chara);
 				SetName(msg.Name);
 				SetMessage(msg.Message);
 			}
 			else
 			{
+				m_LocalizeTexts = null;
+				SetChara("");
 				SetName("");
 				SetMessage("");
 			}
 			m_Buffer.Clear();
 			IsProcessing = false;
+		}
+
+		bool TryInitLocalizeText(IMetaData meta, IEnvDataHolder data)
+		{
+			if (meta.TryGetSingle<LocalizeMetaData>(out var localize))
+			{
+				m_LocalizeTexts = data.GetAll<LocalizeTextEnvData>().Select(x => x.Value).ToArray();
+				return true;
+			}
+			return false;
+		}
+
+		protected bool TryGetLocalizedText(IMetaData meta, IEnvDataHolder data, out LocalizeTextEnvData current, out LocalizeTextEnvData[] texts)
+		{
+			current = default;
+			texts = null;
+			if (meta.TryGetSingle<LocalizeMetaData>(out var localize))
+			{
+				texts = data.GetAll<LocalizeTextEnvData>().Select(x => x.Value).ToArray();
+
+				return true;
+			}
+			return false;
+		}
+
+
+		protected MessageEnvData GetLocalizedText(MessageEnvData message)
+		{
+			var ret = new MessageEnvData
+			{
+				Chara = message.Chara,
+				Name = message.Name,
+				Message = message.Message,
+				RawText = message.RawText
+			};
+			LocalizeTextEnvData textEnvData;
+			if (m_LocalizeTexts.Any(x => x.Lang == m_Lang))
+			{
+				textEnvData = m_LocalizeTexts.FirstOrDefault(x => x.Lang == m_Lang);
+			}
+			else
+			{
+				textEnvData = m_LocalizeTexts.First(x => x.Default);
+			}
+			var localizedText = textEnvData.CreateText();
+			if (localizedText.TryParseName("【", "】", out _, out var dispName))
+			{
+				ret.Name = dispName;
+				ret.Message = localizedText.GetRange(1);
+			}
+			else
+			{
+				ret.Message = localizedText.Get();
+			}
+			return ret;
 		}
 
 	}

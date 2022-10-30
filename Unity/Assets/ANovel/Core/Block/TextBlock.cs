@@ -13,7 +13,7 @@ namespace ANovel
 		Extension,
 	}
 
-	public class TextBlock : IDisposable, ICustomMapSerialization
+	public class TextBlock : IDisposable, ICustomMapSerialization, ITextBlock
 	{
 		static ThreadLocal<StringBuilder> s_StringBuilder = new ThreadLocal<StringBuilder>(() => new StringBuilder());
 

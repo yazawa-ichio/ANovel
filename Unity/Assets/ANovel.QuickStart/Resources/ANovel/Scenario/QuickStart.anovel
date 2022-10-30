@@ -3,7 +3,11 @@
 ;キャラクターを定義
 #define_chara name="c1" dispname="キャラ1"
 
+#localize_data path="QuickStart_LocalizeData"
+
 *start
+
+;&localize_index index="0"
 
 ANovelのQuickStartです。
 

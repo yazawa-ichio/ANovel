@@ -14,6 +14,8 @@ namespace ANovel
 	{
 		[SerializeField]
 		EngineConfig m_Config;
+		[SerializeField]
+		string m_Language;
 
 		bool m_Initialized;
 		CancellationTokenSource m_Cancellation = new CancellationTokenSource();
@@ -67,6 +69,7 @@ namespace ANovel
 				ResourceLoader = new ResourceLoader("ANovel"),
 				ScenarioLoader = new ResourcesScenarioLoader("ANovel/Scenario"),
 				Time = new EngineTime(),
+				Language = m_Language,
 			};
 			action?.Invoke(setting);
 			Initialize(setting);
@@ -90,7 +93,7 @@ namespace ANovel
 			foreach (var service in m_Services)
 			{
 				m_Conductor.Container.Set(service.ServiceType, service);
-				service.Initialize(m_Conductor.Container);
+				service.Initialize(m_Conductor.Container, setting.Language);
 			}
 		}
 
@@ -196,6 +199,17 @@ namespace ANovel
 						await voice.ReplayVoice(log);
 					}
 				});
+			}
+		}
+
+		public void ChangeLanguage(string language)
+		{
+			if (m_Services != null)
+			{
+				foreach (var service in m_Services)
+				{
+					service.ChangeLanguage(language);
+				}
 			}
 		}
 

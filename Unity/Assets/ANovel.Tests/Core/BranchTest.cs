@@ -119,7 +119,7 @@ namespace ANovel.Core.Tests
 				Container = container;
 			}
 
-			public void Set(TextBlock text, IEnvDataHolder data)
+			public void Set(TextBlock text, IEnvDataHolder data, IMetaData meta)
 			{
 				Debug.Log("Set:" + text.Get());
 				TextBlock = text?.Clone();

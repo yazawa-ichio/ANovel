@@ -3,7 +3,7 @@
 	public interface ITextProcessor
 	{
 		bool IsProcessing { get; }
-		void Set(TextBlock text, IEnvDataHolder data);
+		void Set(TextBlock text, IEnvDataHolder data, IMetaData meta);
 		bool TryNext();
 		void Clear();
 	}

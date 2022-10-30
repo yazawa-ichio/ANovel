@@ -21,15 +21,14 @@ namespace ANovel.Engine
 
 		protected override void Initialize()
 		{
-			Event.Register(this);
 			m_TextPrinter?.Setup(Container);
 			m_Frame?.Init();
 			m_FaceWindow?.Init();
 		}
 
-		public void Set(TextBlock text, IEnvDataHolder data)
+		public void Set(TextBlock text, IEnvDataHolder data, IMetaData meta)
 		{
-			m_TextPrinter?.Set(text, data);
+			m_TextPrinter?.Set(text, data, meta);
 			if (data.TryGetSingle<MessageEnvData>(out var _))
 			{
 				m_FaceWindow.TryShow();
@@ -94,6 +93,10 @@ namespace ANovel.Engine
 			m_FaceWindow.Reset();
 		}
 
+		public override void ChangeLanguage(string language)
+		{
+			m_TextPrinter.ChangeLanguage(language);
+		}
 
 	}
 

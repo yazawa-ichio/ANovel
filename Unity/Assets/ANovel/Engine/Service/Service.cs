@@ -22,12 +22,13 @@ namespace ANovel.Engine
 	{
 		Type ServiceType { get; }
 		RegisterPriority Priority { get; }
-		void Initialize(ServiceContainer container);
+		void Initialize(ServiceContainer container, string language);
 		void OnUpdate(IEngineTime time);
 
 		Task PreRestore(RestoreData data, IPreLoader loader);
 		Task Restore(RestoreData data, IResourceCache cache);
 		Task PostRestore(RestoreData data);
+		void ChangeLanguage(string language);
 	}
 
 	public abstract class Service : MonoBehaviour, IService
@@ -54,11 +55,17 @@ namespace ANovel.Engine
 		protected virtual Task RestoreAync(IMetaData meta, IEnvDataHolder data, IResourceCache cache) => Task.FromResult(true);
 		protected virtual void PostRestore(IMetaData meta, IEnvDataHolder data) { }
 		protected virtual Task PostRestoreAsync(IMetaData meta, IEnvDataHolder data) => Task.FromResult(true);
+		public virtual void ChangeLanguage(string language) { }
 
-		void IService.Initialize(ServiceContainer container)
+		void IService.Initialize(ServiceContainer container, string language)
 		{
 			Container = container;
+			Event.Register(this);
 			Initialize();
+			if (!string.IsNullOrEmpty(language))
+			{
+				ChangeLanguage(language);
+			}
 		}
 
 		void IService.OnUpdate(IEngineTime time) => OnUpdate(time);

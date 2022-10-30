@@ -63,6 +63,7 @@ namespace ANovel.Core
 			m_Reader.Evaluator.SetEnvData(m_PreUpdateEnvData);
 			Container = container;
 			EnvDataHook = new EnvDataHook(container);
+			EnvDataHook.Add(new LocalizeEnvDataProcessor());
 			Cache = cache;
 			Container.Set<IHistory>(History);
 		}
@@ -159,7 +160,6 @@ namespace ANovel.Core
 				Text?.Clear();
 			}
 			m_State = State.WaitPreload;
-			//Process();
 		}
 
 		public Task Back(int num, Func<Block, IEnvDataHolder, Task> onLoad, CancellationToken token)
@@ -268,7 +268,7 @@ namespace ANovel.Core
 				if (Text != null && m_CurrentBlock.Block.Text != null)
 				{
 					m_State = State.ProcessText;
-					Text.Set(m_CurrentBlock.Block.Text, m_CurrentEnvData);
+					Text.Set(m_CurrentBlock.Block.Text, m_CurrentEnvData, m_CurrentBlock.Block.Meta);
 				}
 				else
 				{

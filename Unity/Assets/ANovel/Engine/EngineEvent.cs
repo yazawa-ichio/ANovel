@@ -3,5 +3,6 @@
 	public enum EngineEvent
 	{
 		Trigger,
+		ChangeLanguage,
 	}
 }

@@ -3,6 +3,40 @@
     "ResourcePath": "Resources/ANovel",
     "Tags": [
         {
+            "Name": "localize_data",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "LocalizeDataCommand",
+            "Arguments": [
+                {
+                    "Name": "type",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Auto",
+                        "Csv",
+                        "Tsv",
+                        "Json"
+                    ]
+                },
+                {
+                    "Name": "usekey",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
             "Name": "define_symbol",
             "Symbols": "",
             "LineType": "#",
@@ -3404,6 +3438,21 @@
             ]
         },
         {
+            "Name": "localize_index",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "LocalizeDataIndexCommand",
+            "Arguments": [
+                {
+                    "Name": "index",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
             "Name": "async",
             "Symbols": "",
             "LineType": "&",
@@ -3962,7 +4011,7 @@
                 "LineType": "#",
                 "RegisterTag": "define_bgm",
                 "Key": "@bgm_{name}",
-                "Replace": "@se path={path}",
+                "Replace": "@bgm path={path}",
                 "SecondaryKey": "",
                 "SecondaryKeyValue": "",
                 "Label": ""

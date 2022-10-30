@@ -120,6 +120,14 @@ namespace ANovel
 			return cur;
 		}
 
+
+		public static bool HasSingle<TValue>(this IEnvDataHolder self) where TValue : struct, IEnvValue
+		{
+			self = self.GetRoot();
+			var key = EvnDataTypePrefix<TValue>.TypeName;
+			return self.Has<TValue>(key);
+		}
+
 		public static bool TryGetSingle<TValue>(this IEnvDataHolder self, out TValue value) where TValue : struct, IEnvValue
 		{
 			self = self.GetRoot();
