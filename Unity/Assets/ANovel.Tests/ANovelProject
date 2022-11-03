@@ -3,6 +3,47 @@
     "ResourcePath": "",
     "Tags": [
         {
+            "Name": "localize_data",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "LocalizeDataCommand",
+            "Arguments": [
+                {
+                    "Name": "type",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Auto",
+                        "Csv",
+                        "Tsv",
+                        "Json"
+                    ]
+                },
+                {
+                    "Name": "usekey",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "usedefault",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
             "Name": "define_symbol",
             "Symbols": "",
             "LineType": "#",
@@ -4178,6 +4219,28 @@
             ]
         },
         {
+            "Name": "localize_data_index",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "LocalizeDataIndexCommand",
+            "Arguments": [
+                {
+                    "Name": "index",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
             "Name": "transition",
             "Symbols": "",
             "LineType": "&",
@@ -4322,7 +4385,7 @@
                 "LineType": "#",
                 "RegisterTag": "define_bgm",
                 "Key": "@bgm_{name}",
-                "Replace": "@se path={path}",
+                "Replace": "@bgm path={path}",
                 "SecondaryKey": "",
                 "SecondaryKeyValue": "",
                 "Label": ""
