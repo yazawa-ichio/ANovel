@@ -28,6 +28,13 @@
                     "InputOptions": []
                 },
                 {
+                    "Name": "usedefault",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
                     "Name": "path",
                     "Description": "",
                     "Required": true,
@@ -3438,21 +3445,6 @@
             ]
         },
         {
-            "Name": "localize_index",
-            "Symbols": "",
-            "LineType": "&",
-            "Description": "LocalizeDataIndexCommand",
-            "Arguments": [
-                {
-                    "Name": "index",
-                    "Description": "",
-                    "Required": true,
-                    "InputType": "Number",
-                    "InputOptions": []
-                }
-            ]
-        },
-        {
             "Name": "async",
             "Symbols": "",
             "LineType": "&",
@@ -3862,6 +3854,28 @@
                     "Description": "",
                     "Required": false,
                     "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "localize_data_index",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "LocalizeDataIndexCommand",
+            "Arguments": [
+                {
+                    "Name": "index",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
                     "InputOptions": []
                 }
             ]

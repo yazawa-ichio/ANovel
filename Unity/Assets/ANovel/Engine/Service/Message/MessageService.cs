@@ -21,14 +21,20 @@ namespace ANovel.Engine
 
 		protected override void Initialize()
 		{
-			m_TextPrinter?.Setup(Container);
-			m_Frame?.Init();
+			if (m_TextPrinter)
+			{
+				m_TextPrinter.Setup(Container);
+			}
+			m_Frame.Init();
 			m_FaceWindow?.Init();
 		}
 
 		public void Set(TextBlock text, IEnvDataHolder data, IMetaData meta)
 		{
-			m_TextPrinter?.Set(text, data, meta);
+			if (m_TextPrinter)
+			{
+				m_TextPrinter.Set(text, data, meta);
+			}
 			if (data.TryGetSingle<MessageEnvData>(out var _))
 			{
 				m_FaceWindow.TryShow();
@@ -38,18 +44,37 @@ namespace ANovel.Engine
 		protected override void OnUpdate(IEngineTime time)
 		{
 			m_Frame?.Update(time);
-			m_TextPrinter?.OnUpdate(time);
+			if (m_TextPrinter)
+			{
+				m_TextPrinter.OnUpdate(time);
+			}
 		}
 
 		public bool TryNext()
 		{
-			return m_TextPrinter?.TryNext() ?? true;
+			if (m_TextPrinter)
+			{
+				return m_TextPrinter.TryNext();
+			}
+			return true;
 		}
 
 		public void Clear()
 		{
-			m_TextPrinter?.Clear();
+			if (m_TextPrinter)
+			{
+				m_TextPrinter.Clear();
+			}
 			ResetFace();
+		}
+
+		public string GetLocalizeKey(TextBlock text)
+		{
+			if (m_TextPrinter)
+			{
+				return m_TextPrinter.GetLocalizeKey(text);
+			}
+			return "";
 		}
 
 		protected override void PreRestore(IMetaData meta, IEnvDataHolder data, IPreLoader loader)

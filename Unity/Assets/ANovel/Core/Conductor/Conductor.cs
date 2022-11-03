@@ -15,7 +15,15 @@ namespace ANovel.Core
 
 		public ServiceContainer Container { get; private set; } = new ServiceContainer();
 
-		public ITextProcessor Text { get => m_BlockProcessor.Text; set => m_BlockProcessor.Text = value; }
+		public ITextProcessor Text
+		{
+			get => m_BlockProcessor.Text;
+			set
+			{
+				Container.Set(value);
+				m_BlockProcessor.Text = value;
+			}
+		}
 
 		public EnvDataHook EnvDataHook => m_BlockProcessor.EnvDataHook;
 

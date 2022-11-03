@@ -143,6 +143,11 @@ namespace ANovel.Core.Tests
 			{
 				TextBlock = null;
 			}
+
+			public string GetLocalizeKey(TextBlock text)
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 	}

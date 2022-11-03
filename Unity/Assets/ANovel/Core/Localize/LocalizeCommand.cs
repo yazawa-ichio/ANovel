@@ -19,6 +19,8 @@ namespace ANovel.Core
 		ImportType m_Type = ImportType.Auto;
 		[Argument]
 		bool m_UseKey;
+		[Argument]
+		bool m_UseDefault = true;
 
 		LocalizeData m_Data;
 
@@ -50,38 +52,35 @@ namespace ANovel.Core
 
 		public override void Result(PreProcessResult result)
 		{
-			result.Meta.SetSingle(new LocalizeMetaData(m_Data, m_UseKey));
+			result.Meta.SetSingle(new LocalizeMetaData(m_Data, m_UseKey, m_UseDefault));
 		}
 	}
 
 
-	[TagName("localize_index")]
+	[TagName("localize_data_index")]
 	public class LocalizeDataIndexCommand : SystemCommand
 	{
-		[Argument(Required = true)]
+		[Argument]
 		int m_Index;
-
-		protected override void UpdateEnvData(IEnvData data)
-		{
-			data.TryGetSingle<LocalizeIndexEnvData>(out var envData);
-			envData.Index = m_Index;
-			data.SetSingle(envData);
-		}
-	}
-
-	[TagName("localize_key")]
-	public class LocalizeDataKeyCommand : SystemCommand
-	{
-		[Argument(Required = true)]
+		[Argument]
 		string m_Key;
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
 			if (Meta.TryGetSingle<LocalizeMetaData>(out var lang))
 			{
-				data.TryGetSingle<LocalizeIndexEnvData>(out var envData);
-				envData.Index = lang.GetKeyIndex(m_Key);
-				data.SetSingle(envData);
+				if (!string.IsNullOrEmpty(m_Key))
+				{
+					data.TryGetSingle<LocalizeIndexEnvData>(out var envData);
+					envData.Index = lang.GetKeyIndex(m_Key);
+					data.SetSingle(envData);
+				}
+				else
+				{
+					data.TryGetSingle<LocalizeIndexEnvData>(out var envData);
+					envData.Index = m_Index;
+					data.SetSingle(envData);
+				}
 			}
 		}
 	}

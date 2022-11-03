@@ -63,7 +63,7 @@ namespace ANovel.Core
 			m_Reader.Evaluator.SetEnvData(m_PreUpdateEnvData);
 			Container = container;
 			EnvDataHook = new EnvDataHook(container);
-			EnvDataHook.Add(new LocalizeEnvDataProcessor());
+			EnvDataHook.Add(new LocalizeEnvDataProcessor(Container));
 			Cache = cache;
 			Container.Set<IHistory>(History);
 		}

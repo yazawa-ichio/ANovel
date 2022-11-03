@@ -53,6 +53,15 @@ namespace ANovel.Engine
 			}
 		}
 
+		public virtual string GetLocalizeKey(TextBlock text)
+		{
+			if (text.TryParseName("【", "】", out var key, out var name))
+			{
+				return text.GetRange(1);
+			}
+			return text.Get();
+		}
+
 		public virtual void OnUpdate(IEngineTime time)
 		{
 			if (m_Buffer.Count > 0)
@@ -148,20 +157,6 @@ namespace ANovel.Engine
 			return false;
 		}
 
-		protected bool TryGetLocalizedText(IMetaData meta, IEnvDataHolder data, out LocalizeTextEnvData current, out LocalizeTextEnvData[] texts)
-		{
-			current = default;
-			texts = null;
-			if (meta.TryGetSingle<LocalizeMetaData>(out var localize))
-			{
-				texts = data.GetAll<LocalizeTextEnvData>().Select(x => x.Value).ToArray();
-
-				return true;
-			}
-			return false;
-		}
-
-
 		protected MessageEnvData GetLocalizedText(MessageEnvData message)
 		{
 			var ret = new MessageEnvData
@@ -176,9 +171,13 @@ namespace ANovel.Engine
 			{
 				textEnvData = m_LocalizeTexts.FirstOrDefault(x => x.Lang == m_Lang);
 			}
-			else
+			else if (m_LocalizeTexts.Any(x => x.Default))
 			{
 				textEnvData = m_LocalizeTexts.First(x => x.Default);
+			}
+			else
+			{
+				return ret;
 			}
 			var localizedText = textEnvData.CreateText();
 			if (localizedText.TryParseName("【", "】", out _, out var dispName))
