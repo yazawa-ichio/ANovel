@@ -27,8 +27,28 @@ namespace ANovel.Core
 			FilePath = filePath;
 			LabelInfo = label;
 			Commands = ListPool<ICommand>.Pop();
-			foreach (var cmd in commands)
+			int index = 0;
+			while (index < commands.Count)
 			{
+				ICommand cmd = commands[index++];
+				if (cmd is IScopeCommand batch)
+				{
+					bool batchEnd = false;
+					batch.BeginAddCommand();
+					while (index < commands.Count)
+					{
+						if (batch.AddCommand(commands[index++]))
+						{
+							batchEnd = true;
+							break;
+						}
+					}
+					if (!batchEnd)
+					{
+						throw new Exception("not found batch end");
+					}
+					batch.EndAddCommand();
+				}
 				Commands.Add(cmd);
 				if (cmd is IStopCommand stop)
 				{

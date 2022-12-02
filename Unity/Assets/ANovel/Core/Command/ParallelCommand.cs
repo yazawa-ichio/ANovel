@@ -13,12 +13,12 @@ namespace ANovel.Commands
 
 		List<ICommand> m_RunCommands;
 
-		protected override void Prepare()
+		protected override void BeginAddCommand()
 		{
 			m_RunCommands = ListPool<ICommand>.Pop();
 		}
 
-		public override void Finish()
+		protected override void PreScopeFinish()
 		{
 			ListPool<ICommand>.Push(m_RunCommands);
 			m_RunCommands = null;
@@ -82,7 +82,7 @@ namespace ANovel.Commands
 			}
 		}
 
-		protected override void AddScopeImpl(ICommand command)
+		protected override void OnAddCommand(ICommand command)
 		{
 			m_RunCommands.Add(command);
 		}

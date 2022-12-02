@@ -1,5 +1,4 @@
-﻿using ANovel.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ANovel.Core
@@ -76,22 +75,6 @@ namespace ANovel.Core
 			while (m_Index < commands.Count)
 			{
 				var cmd = commands[m_Index++];
-				if (cmd is IScopeCommand batch)
-				{
-					bool batchEnd = false;
-					while (m_Index < commands.Count)
-					{
-						if (batch.AddScope(commands[m_Index++]))
-						{
-							batchEnd = true;
-							break;
-						}
-					}
-					if (!batchEnd)
-					{
-						throw new Exception("not found batch end");
-					}
-				}
 				m_RunCommands.Add(cmd);
 				cmd.Execute();
 				if (cmd.IsSync() && !cmd.IsEnd())

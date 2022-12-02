@@ -43,19 +43,19 @@ namespace ANovel.Engine
 			return false;
 		}
 
-		protected override void Prepare()
+		protected override void BeginAddCommand()
 		{
 			m_RunCommands = ListPool<ICommand>.Pop();
 		}
 
-		public override void Finish()
+		protected override void ScopeFinish()
 		{
 			ListPool<ICommand>.Push(m_RunCommands);
 			m_RunCommands = null;
 			m_PlayHandle?.Dispose();
 		}
 
-		protected override void AddScopeImpl(ICommand command)
+		protected override void OnAddCommand(ICommand command)
 		{
 			m_RunCommands.Add(command);
 		}
@@ -70,7 +70,7 @@ namespace ANovel.Engine
 			return m_Sync;
 		}
 
-		protected override void UpdateEnvData(IEnvData data)
+		protected override void ScopeBeginUpdateEnvData(IEnvData data)
 		{
 			if (!m_Config.Copy)
 			{
@@ -78,7 +78,7 @@ namespace ANovel.Engine
 			}
 		}
 
-		protected override void Preload(IPreLoader loader)
+		protected override void PreloadImpl(IPreLoader loader)
 		{
 			if (!string.IsNullOrEmpty(m_Rule))
 			{
