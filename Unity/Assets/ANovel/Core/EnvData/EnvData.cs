@@ -133,6 +133,15 @@ namespace ANovel.Core
 			}
 		}
 
+		public void Merge(EnvData data)
+		{
+			EnsureEntry(data.m_Dic.Keys);
+			foreach (var entry in data.m_Dic)
+			{
+				m_Dic[entry.Key].Merge(entry.Value);
+			}
+		}
+
 		public EnvDataSnapshot SaveByInterface<TInterface>()
 		{
 			var data = new EnvDataSnapshot();

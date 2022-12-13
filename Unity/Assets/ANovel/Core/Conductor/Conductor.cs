@@ -237,8 +237,9 @@ namespace ANovel.Core
 					m_ErrorFlag = false;
 					await m_BlockProcessor.Restore(data, OnLoad, token);
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
+					UnityEngine.Debug.LogWarning(ex);
 					m_ErrorFlag = true;
 					throw;
 				}

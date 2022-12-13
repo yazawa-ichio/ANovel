@@ -8,8 +8,10 @@
 		public TextBlock Text;
 		public EnvDataDiff Diff;
 		public EnvDataSnapshot ExtensionSave;
+		public EnvDataSnapshot PlayingSave;
 
 		EnvData m_Extension;
+		EnvData m_PlayingEnvData;
 
 		BlockLabelInfo IHistoryLog.LabelInfo => LabelInfo;
 
@@ -31,10 +33,26 @@
 			}
 		}
 
+		IEnvDataHolder IHistoryLog.PlayingEnvData
+		{
+			get
+			{
+				if (m_PlayingEnvData == null)
+				{
+					m_PlayingEnvData = new EnvData();
+					if (m_PlayingEnvData != null)
+					{
+						m_PlayingEnvData.Load(PlayingSave);
+					}
+				}
+				return m_PlayingEnvData;
+			}
+		}
+
 		[UnityEngine.Scripting.Preserve]
 		public HistoryLog() { }
 
-		public HistoryLog(Block block, EnvDataDiff diff, EnvData extension)
+		public HistoryLog(Block block, EnvDataDiff diff, EnvData extension, EnvDataSnapshot playing)
 		{
 			FilePath = block.FilePath;
 			Text = block.Text?.Clone();
@@ -42,6 +60,7 @@
 			Diff = diff;
 			m_Extension = extension;
 			ExtensionSave = extension.Save();
+			PlayingSave = playing;
 		}
 
 	}

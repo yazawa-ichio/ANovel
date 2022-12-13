@@ -5,5 +5,6 @@
 		BlockLabelInfo LabelInfo { get; }
 		TextBlock Text { get; }
 		IEnvDataHolder Extension { get; }
+		IEnvDataHolder PlayingEnvData { get; }
 	}
 }

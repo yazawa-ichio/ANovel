@@ -7,6 +7,8 @@ namespace ANovel.Core
 	{
 		ServiceContainer m_Container;
 		List<IEnvDataCustomProcessor> m_List = new List<IEnvDataCustomProcessor>();
+		List<IPlayingEnvDataProcessor> m_PlayingList = new List<IPlayingEnvDataProcessor>();
+		EnvData m_PlayingData = new EnvData();
 
 		public EnvDataHook(ServiceContainer container)
 		{
@@ -22,6 +24,16 @@ namespace ANovel.Core
 		public void Remove(IEnvDataCustomProcessor processor)
 		{
 			m_List.Remove(processor);
+		}
+
+		public void Add(IPlayingEnvDataProcessor processor)
+		{
+			m_PlayingList.Add(processor);
+		}
+
+		public void Remove(IPlayingEnvDataProcessor processor)
+		{
+			m_PlayingList.Remove(processor);
 		}
 
 		public void PreUpdate(IEnvData data, Block block)
@@ -60,6 +72,24 @@ namespace ANovel.Core
 			}
 		}
 
+		public EnvDataSnapshot SavePlayingEnvData()
+		{
+			m_PlayingData.Clear();
+			foreach (var processor in m_PlayingList)
+			{
+				processor.Store(m_PlayingData);
+			}
+			return m_PlayingData.Save();
+		}
+
+		public void LoadPlayingEnvData(EnvDataSnapshot playingSave)
+		{
+			m_PlayingData.Load(playingSave);
+			foreach (var processor in m_PlayingList)
+			{
+				processor.Restore(m_PlayingData);
+			}
+		}
 	}
 
 }

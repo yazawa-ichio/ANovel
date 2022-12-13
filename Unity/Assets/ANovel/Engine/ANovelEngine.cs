@@ -10,7 +10,7 @@ using UnityEngine;
 namespace ANovel
 {
 
-	public class ANovelEngine : MonoBehaviour
+	public class ANovelEngine : MonoBehaviour, IPlayingEnvDataProcessor
 	{
 		[SerializeField]
 		EngineConfig m_Config;
@@ -89,6 +89,7 @@ namespace ANovel
 			m_Conductor.OnLoad = Load;
 			m_Conductor.Container.Set(m_Config);
 			m_Conductor.Event.Register(this);
+			m_Conductor.EnvDataHook.Add(this);
 			m_Services = GetComponentsInChildren<IService>(true).OrderBy(x => -(int)x.Priority).ToArray();
 			foreach (var service in m_Services)
 			{
@@ -213,6 +214,15 @@ namespace ANovel
 			}
 		}
 
+		public StoreData Store()
+		{
+			using (m_Locker.ExclusiveLock())
+			{
+				return m_Conductor.Store();
+			}
+		}
+
+
 		public async Task Restore(StoreData data)
 		{
 			using (m_Locker.ExclusiveLock())
@@ -256,5 +266,20 @@ namespace ANovel
 			OnStopCommand?.Invoke();
 		}
 
+		void IPlayingEnvDataProcessor.Store(IEnvData data)
+		{
+			foreach (var service in m_Services)
+			{
+				service.StorePlaying(data);
+			}
+		}
+
+		void IPlayingEnvDataProcessor.Restore(IEnvDataHolder data)
+		{
+			foreach (var service in m_Services)
+			{
+				service.RestorePlaying(data);
+			}
+		}
 	}
 }

@@ -14,6 +14,7 @@ namespace ANovel.Core
 		void DeleteAll(Func<string, object, bool> func);
 		IEnumerable<KeyValuePair<string, object>> GetAll();
 		void Clear();
+		void Merge(IEnvDataEntry data);
 	}
 
 	[UnityEngine.Scripting.Preserve]
@@ -250,15 +251,25 @@ namespace ANovel.Core
 			m_Dic.Clear();
 			m_Prev.Clear();
 			m_Ditry.Clear();
-			var snashort = data.Get<TValue>();
-			if (snashort == null)
+			var snapshot = data.Get<TValue>();
+			if (snapshot == null)
 			{
 				return;
 			}
-			foreach (var kvp in snashort)
+			foreach (var kvp in snapshot)
 			{
 				m_Dic[kvp.Key] = kvp.Value;
 				m_Prev[kvp.Key] = kvp.Value;
+			}
+		}
+
+
+		public void Merge(IEnvDataEntry data)
+		{
+			var _data = data as EnvDataEntry<TValue>;
+			foreach (var kvp in _data.m_Dic)
+			{
+				Set(kvp.Key, kvp.Value);
 			}
 		}
 
@@ -268,6 +279,7 @@ namespace ANovel.Core
 			m_Prev.Clear();
 			m_Ditry.Clear();
 		}
+
 	}
 
 }

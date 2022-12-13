@@ -53,5 +53,14 @@ namespace ANovel.Core
 			}
 		}
 
+		public static EnvDataSnapshot Marge(EnvDataSnapshot @base, EnvDataSnapshot snapshot)
+		{
+			var data = new EnvData();
+			data.Load(@base);
+			var append = new EnvData();
+			append.Load(snapshot);
+			data.Merge(append);
+			return data.Save();
+		}
 	}
 }

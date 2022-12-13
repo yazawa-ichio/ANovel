@@ -140,13 +140,14 @@ namespace ANovel.Core
 
 		void UpdateCurrent(Block block)
 		{
+			m_CurrentEnvData.DeleteAllByInterface<IBlockTemporaryEnvData>(x => x.Delete);
 			EnvDataHook.PreUpdate(m_CurrentEnvData, block);
 			foreach (var cmd in block.Commands)
 			{
 				cmd.Init(Container, block.Meta, m_CurrentEnvData);
 			}
 			EnvDataHook.PostUpdate(m_CurrentEnvData, block);
-			History.Add(m_CurrentEnvData, block, m_CurrentEnvData.Diff());
+			History.Add(m_CurrentEnvData, block, m_CurrentEnvData.Diff(), EnvDataHook.SavePlayingEnvData());
 		}
 
 		void PostSeek(Block block)
@@ -186,6 +187,7 @@ namespace ANovel.Core
 			var data = new StoreData
 			{
 				Label = History.CurrentLabel,
+				PlayingSave = History.CurrentPlayingSave,
 				Snapshot = snapshot,
 				Logs = History.Save(),
 			};
@@ -195,6 +197,7 @@ namespace ANovel.Core
 
 		void AddPreloadBlock(Block block)
 		{
+			m_PreUpdateEnvData.DeleteAllByInterface<IBlockTemporaryEnvData>(x => x.Delete);
 			EnvDataHook.PreUpdate(m_PreUpdateEnvData, block);
 			foreach (var cmd in block.Commands)
 			{
@@ -227,7 +230,7 @@ namespace ANovel.Core
 				Text?.Clear();
 			}
 			m_CurrentEnvData.Redo(preload.Diff);
-			History.Add(m_CurrentEnvData, preload.Block, preload.Diff);
+			History.Add(m_CurrentEnvData, preload.Block, preload.Diff, EnvDataHook.SavePlayingEnvData());
 			return true;
 		}
 
@@ -311,6 +314,7 @@ namespace ANovel.Core
 			{
 				Label = History.CurrentLabel,
 				Snapshot = m_CurrentEnvData.Save(),
+				PlayingSave = EnvDataHook.SavePlayingEnvData(),
 				Logs = History.Save(),
 			};
 		}
@@ -318,6 +322,8 @@ namespace ANovel.Core
 		public async Task Restore(StoreData data, Func<Block, IEnvDataHolder, Task> onLoad, CancellationToken token)
 		{
 			await Jump(data.Label, token);
+
+			var playingData = EnvDataSnapshot.Marge(data.Snapshot, data.PlayingSave);
 
 			m_CurrentEnvData.Load(data.Snapshot);
 			m_PreUpdateEnvData.Load(data.Snapshot);
@@ -336,6 +342,8 @@ namespace ANovel.Core
 			{
 				await onLoad(block, Current);
 			}
+
+			EnvDataHook.LoadPlayingEnvData(playingData);
 			ProcessPreload();
 		}
 

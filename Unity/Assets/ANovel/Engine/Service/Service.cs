@@ -28,6 +28,8 @@ namespace ANovel.Engine
 		Task PreRestore(RestoreData data, IPreLoader loader);
 		Task Restore(RestoreData data, IResourceCache cache);
 		Task PostRestore(RestoreData data);
+		void StorePlaying(IEnvData data);
+		void RestorePlaying(IEnvDataHolder data);
 		void ChangeLanguage(string language);
 	}
 
@@ -55,6 +57,8 @@ namespace ANovel.Engine
 		protected virtual Task RestoreAync(IMetaData meta, IEnvDataHolder data, IResourceCache cache) => Task.FromResult(true);
 		protected virtual void PostRestore(IMetaData meta, IEnvDataHolder data) { }
 		protected virtual Task PostRestoreAsync(IMetaData meta, IEnvDataHolder data) => Task.FromResult(true);
+		protected virtual void StorePlaying(IEnvData data) { }
+		protected virtual void RestorePlaying(IEnvDataHolder data) { }
 		public virtual void ChangeLanguage(string language) { }
 
 		void IService.Initialize(ServiceContainer container, string language)
@@ -88,6 +92,15 @@ namespace ANovel.Engine
 			return PostRestoreAsync(data.Meta, data.Env);
 		}
 
+		void IService.StorePlaying(IEnvData data)
+		{
+			StorePlaying(data);
+		}
+
+		void IService.RestorePlaying(IEnvDataHolder data)
+		{
+			RestorePlaying(data);
+		}
 	}
 
 }
