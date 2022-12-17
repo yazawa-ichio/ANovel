@@ -4393,6 +4393,15 @@
             },
             {
                 "LineType": "#",
+                "RegisterTag": "define_chara",
+                "TargetTag": "chara",
+                "Argument": "name",
+                "Value": "{dispname}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
                 "RegisterTag": "define_chara_face",
                 "TargetTag": "chara",
                 "Argument": "face",
@@ -4447,6 +4456,15 @@
             },
             {
                 "LineType": "#",
+                "RegisterTag": "define_chara",
+                "TargetTag": "chara_face_window",
+                "Argument": "name",
+                "Value": "{dispname}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
                 "RegisterTag": "define_chara_face",
                 "TargetTag": "chara_change",
                 "Argument": "face",
@@ -4478,6 +4496,24 @@
                 "TargetTag": "chara_change",
                 "Argument": "face",
                 "Value": "{key}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "TargetTag": "chara_hide",
+                "Argument": "name",
+                "Value": "{dispname}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "TargetTag": "chara_control",
+                "Argument": "name",
+                "Value": "{dispname}",
                 "SecondaryKey": "",
                 "SecondaryKeyValue": ""
             }

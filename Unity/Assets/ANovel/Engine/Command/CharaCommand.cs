@@ -21,6 +21,7 @@ namespace ANovel.Engine
 
 
 	[TagName("chara")]
+	[ArgumentValueDefine(typeof(DefineCharaCommand), "name", "{dispname}")]
 	[ArgumentValueDefine(typeof(DefineCharaFaceCommand), "face", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
 	[ArgumentValueDefine(typeof(DefineCharaPoseCommand), "pose", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
 	[ArgumentValueDefine(typeof(DefineCharaLevelCommand), "level", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
@@ -88,6 +89,7 @@ namespace ANovel.Engine
 	}
 
 	[TagName("chara_face_window")]
+	[ArgumentValueDefine(typeof(DefineCharaCommand), "name", "{dispname}")]
 	public class CharaParamCommand : Command
 	{
 		protected PathConfig Path => Get<EngineConfig>().Path;
@@ -170,6 +172,7 @@ namespace ANovel.Engine
 	}
 
 	[TagName("chara_hide")]
+	[ArgumentValueDefine(typeof(DefineCharaCommand), "name", "{dispname}")]
 	public class CharaHideCommand : CharaCommandBase
 	{
 		[Argument(Required = true)]
@@ -263,6 +266,7 @@ namespace ANovel.Engine
 	}
 
 	[TagName("chara_control")]
+	[ArgumentValueDefine(typeof(DefineCharaCommand), "name", "{dispname}")]
 	public class CharaControlCommand : CharaCommandBase
 	{
 		[Argument]
