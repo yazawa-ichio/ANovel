@@ -209,6 +209,7 @@ namespace ANovel.Engine
 				m_Playing.RemoveAt(0);
 			}
 			m_Action?.Dispose();
+			m_Action = null;
 		}
 
 		public void Stop(ImageParamType type)
@@ -227,6 +228,8 @@ namespace ANovel.Engine
 
 		public IPlayHandle PlayAnim(ImageObjectParamAnimConfig[] configs)
 		{
+			m_Action?.Dispose();
+			m_Action = null;
 			return new CombinePlayHandle(configs.Select(x => PlayAnim(x)));
 		}
 
@@ -250,7 +253,7 @@ namespace ANovel.Engine
 
 		public ActionPlayingHandle PlayAction(IActionData data)
 		{
-			m_Action?.Dispose();
+			StopAll();
 			return m_Action = new ActionPlayingHandle(data, this);
 		}
 

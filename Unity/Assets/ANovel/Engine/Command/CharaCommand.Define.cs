@@ -144,11 +144,11 @@ namespace ANovel.Engine
 	[ReplaceTagDefine("@{dispname}", "@chara name=\"{name}\"")]
 	[ReplaceTagDefine("@{dispname}", "@chara_hide name=\"{name}\"", SecondaryKey = "hide")]
 	[ReplaceTagDefine("@{dispname}", "@chara_change name=\"{name}\"", SecondaryKey = "change")]
-	[ReplaceTagDefine("@{dispname}", "@chara_control name=\"{name}\"", SecondaryKey = "control")]
+	[ReplaceTagDefine("@{dispname}", "@chara_layout name=\"{name}\"", SecondaryKey = "layout")]
 	[ReplaceTagDefine("@{dispname}", "@chara name=\"{name}\"", Label = "{name}({dispname})")]
 	[ReplaceTagDefine("@{dispname}", "@chara_hide name=\"{name}\"", SecondaryKey = "hide", Label = "{name}({dispname})")]
 	[ReplaceTagDefine("@{dispname}", "@chara_change name=\"{name}\"", SecondaryKey = "change", Label = "{name}({dispname})")]
-	[ReplaceTagDefine("@{dispname}", "@chara_control name=\"{name}\"", SecondaryKey = "control", Label = "{name}({dispname})")]
+	[ReplaceTagDefine("@{dispname}", "@chara_layout name=\"{name}\"", SecondaryKey = "layout", Label = "{name}({dispname})")]
 	[ReplaceTagDefine("@{dispname}", "@chara_action name=\"{name}\"", SecondaryKey = "action", Label = "{name}({dispname})")]
 	public class DefineCharaCommand : DefineCharaBaseCommand
 	{

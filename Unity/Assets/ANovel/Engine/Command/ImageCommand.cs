@@ -184,8 +184,8 @@ namespace ANovel.Engine
 
 	}
 
-	[TagName("image_control")]
-	public class ImageControlCommand : ImageCommandBase
+	[TagName("image_layout")]
+	public class ImageLayoutCommand : ImageCommandBase
 	{
 		[Argument]
 		string m_Name = null;
@@ -200,6 +200,7 @@ namespace ANovel.Engine
 		protected override void UpdateEnvData(IEnvData data)
 		{
 			data = data.Prefixed(Category.Image);
+			data.Delete<ImageActionEnvData>(m_Name);
 			if (data.TryGet<ImageObjectEnvData>(m_Name, out var image))
 			{
 				LayoutConfig.UpdateEvnData(m_Name, data, m_Layout);

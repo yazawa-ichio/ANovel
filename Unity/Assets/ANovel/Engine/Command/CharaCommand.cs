@@ -265,9 +265,9 @@ namespace ANovel.Engine
 
 	}
 
-	[TagName("chara_control")]
+	[TagName("chara_layout")]
 	[ArgumentValueDefine(typeof(DefineCharaCommand), "name", "{dispname}")]
-	public class CharaControlCommand : CharaCommandBase
+	public class CharaLayoutCommand : CharaCommandBase
 	{
 		[Argument]
 		string m_Name = null;
@@ -282,6 +282,7 @@ namespace ANovel.Engine
 		protected override void UpdateEnvData(IEnvData data)
 		{
 			data = data.Prefixed(Category.Chara);
+			data.Delete<ImageActionEnvData>(m_Name);
 			if (data.TryGet<ImageObjectEnvData>(m_Name, out var image))
 			{
 				LayoutConfig.UpdateEvnData(m_Name, data, m_Layout);

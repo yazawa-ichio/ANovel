@@ -123,8 +123,8 @@ namespace ANovel.Engine
 
 	}
 
-	[TagName("bg_control")]
-	public class BGControlCommand : BGCommandBase
+	[TagName("bg_layout")]
+	public class BGLayoutCommand : BGCommandBase
 	{
 		[InjectArgument]
 		PlayAnimConfig m_Config = new PlayAnimConfig();
@@ -134,6 +134,7 @@ namespace ANovel.Engine
 		protected override void UpdateEnvData(IEnvData data)
 		{
 			data = data.Prefixed(Category.Bg);
+			data.Delete<ImageActionEnvData>(EnvKey);
 			if (data.Has<ImageObjectEnvData>(EnvKey))
 			{
 				LayoutConfig.UpdateEvnData(EnvKey, data, m_Layout);
