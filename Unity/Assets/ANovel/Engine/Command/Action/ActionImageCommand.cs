@@ -75,6 +75,7 @@ namespace ANovel.Engine
 
 
 	[TagName("bg_action")]
+	[ArgumentValueDefine(typeof(ActionDefine), "param", "{name}")]
 	public class ActionBgCommand : ImageObjectActionCommandBase
 	{
 		public override string TargetName => BGCommandBase.EnvKey;
@@ -83,6 +84,7 @@ namespace ANovel.Engine
 	}
 
 	[TagName("chara_action")]
+	[ArgumentValueDefine(typeof(ActionDefine), "param", "{name}")]
 	public class ActionCharaCommand : ImageObjectActionCommandBase
 	{
 		[Argument(Required = true)]
@@ -94,6 +96,7 @@ namespace ANovel.Engine
 	}
 
 	[TagName("image_action")]
+	[ArgumentValueDefine(typeof(ActionDefine), "param", "{name}")]
 	public class ActionImageCommand : ImageObjectActionCommandBase
 	{
 		[Argument(Required = true)]

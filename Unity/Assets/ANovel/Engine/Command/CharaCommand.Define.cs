@@ -159,8 +159,6 @@ namespace ANovel.Engine
 	}
 
 	[TagName("define_chara_face")]
-	[ArgumentValueDefine("chara", "face", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
-	[ArgumentValueDefine("chara_change", "face", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
 	public class DefineCharaFaceCommand : PreProcess
 	{
 		[Argument(Required = true)]
@@ -176,8 +174,6 @@ namespace ANovel.Engine
 	}
 
 	[TagName("define_chara_pose")]
-	[ArgumentValueDefine("chara", "pose", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
-	[ArgumentValueDefine("chara_change", "pose", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
 	public class DefineCharaPoseCommand : PreProcess
 	{
 		[Argument(Required = true)]
@@ -193,7 +189,6 @@ namespace ANovel.Engine
 	}
 
 	[TagName("define_chara_level")]
-	[ArgumentValueDefine("chara", "level", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
 	public class DefineCharaLevelCommand : PreProcess
 	{
 		[Argument(Required = true)]
@@ -264,8 +259,6 @@ namespace ANovel.Engine
 #endif
 
 	[TagName("define_chara_common_pose")]
-	[ArgumentValueDefine("chara", "pose", "{key}")]
-	[ArgumentValueDefine("chara_change", "pose", "{key}")]
 	public class DefineCharaCommonPoseCommand : PreProcess
 	{
 		[InjectArgument]
@@ -283,8 +276,6 @@ namespace ANovel.Engine
 	}
 
 	[TagName("define_chara_common_face")]
-	[ArgumentValueDefine("chara", "face", "{key}")]
-	[ArgumentValueDefine("chara_change", "face", "{key}")]
 	public class DefineCharaCommonFaceCommand : PreProcess
 	{
 		[InjectArgument]
@@ -302,7 +293,6 @@ namespace ANovel.Engine
 	}
 
 	[TagName("define_chara_common_level")]
-	[ArgumentValueDefine("chara", "level", "{key}")]
 	public class DefineCharaCommonLevelCommand : PreProcess
 	{
 		[InjectArgument]

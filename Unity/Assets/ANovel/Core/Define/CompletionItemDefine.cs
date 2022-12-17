@@ -86,19 +86,27 @@ namespace ANovel.Core.Define
 				{
 					continue;
 				}
-				var defines = type.GetCustomAttributes(typeof(ArgumentValueDefineAttribute), false).Cast<ArgumentValueDefineAttribute>();
 				if (tag == null)
 				{
 					continue;
 				}
-				var token = Token.Get(type);
+				var defines = type.GetCustomAttributes(typeof(ArgumentValueDefineAttribute), false).Cast<ArgumentValueDefineAttribute>();
 				foreach (var define in defines)
 				{
+					var registerTag = define.TargetTag.GetCustomAttributes(typeof(TagNameAttribute), false).FirstOrDefault() as TagNameAttribute;
+					if (!string.IsNullOrEmpty(registerTag.Symbol) && !symbols.Contains(registerTag.Symbol))
+					{
+						continue;
+					}
+					if (registerTag == null)
+					{
+						continue;
+					}
 					yield return new ArgumentValueDefine
 					{
-						LineType = token.ToString(),
-						RegisterTag = tag.Name,
-						TargetTag = define.TargetTag,
+						LineType = Token.Get(define.TargetTag).ToString(),
+						RegisterTag = registerTag.Name,
+						TargetTag = tag.Name,
 						Argument = define.Argument,
 						Value = define.Value,
 						SecondaryKey = define.SecondaryKey,

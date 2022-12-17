@@ -154,6 +154,28 @@
             "Arguments": []
         },
         {
+            "Name": "action",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "ActionDefine",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "endaction",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "EndActionDefine",
+            "Arguments": []
+        },
+        {
             "Name": "define_chara",
             "Symbols": "",
             "LineType": "#",
@@ -720,6 +742,307 @@
                     "Description": "",
                     "Required": false,
                     "InputType": "Rate",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "action_wait",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ActionWaitCommand",
+            "Arguments": [
+                {
+                    "Name": "time",
+                    "Description": "指定時間",
+                    "Required": true,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "bg_action",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ActionBgCommand",
+            "Arguments": [
+                {
+                    "Name": "param",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "cont",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "chara_action",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ActionCharaCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "param",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "cont",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "image_action",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ActionImageCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "param",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "cont",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "action_layout",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ActionLayoutCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "w",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "h",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "color",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Color",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "screenmatch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "None",
+                        "Fit",
+                        "Expand",
+                        "Shrink"
+                    ]
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scalex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scaley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "angley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglez",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "opacity",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
                     "InputOptions": []
                 }
             ]
@@ -4014,6 +4337,15 @@
             },
             {
                 "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
+                "Replace": "@chara_action name=\"{name}\"",
+                "SecondaryKey": "action",
+                "SecondaryKeyValue": "",
+                "Label": "{name}({dispname})"
+            },
+            {
+                "LineType": "#",
                 "RegisterTag": "define_se",
                 "Key": "@se_{name}",
                 "Replace": "@se path={path}",
@@ -4034,6 +4366,33 @@
         "ArgumentValue": [
             {
                 "LineType": "#",
+                "RegisterTag": "action",
+                "TargetTag": "bg_action",
+                "Argument": "param",
+                "Value": "{name}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "action",
+                "TargetTag": "chara_action",
+                "Argument": "param",
+                "Value": "{name}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "action",
+                "TargetTag": "image_action",
+                "Argument": "param",
+                "Value": "{name}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
                 "RegisterTag": "define_chara_face",
                 "TargetTag": "chara",
                 "Argument": "face",
@@ -4043,26 +4402,8 @@
             },
             {
                 "LineType": "#",
-                "RegisterTag": "define_chara_face",
-                "TargetTag": "chara_change",
-                "Argument": "face",
-                "Value": "{key}",
-                "SecondaryKey": "name",
-                "SecondaryKeyValue": "{name}"
-            },
-            {
-                "LineType": "#",
                 "RegisterTag": "define_chara_pose",
                 "TargetTag": "chara",
-                "Argument": "pose",
-                "Value": "{key}",
-                "SecondaryKey": "name",
-                "SecondaryKeyValue": "{name}"
-            },
-            {
-                "LineType": "#",
-                "RegisterTag": "define_chara_pose",
-                "TargetTag": "chara_change",
                 "Argument": "pose",
                 "Value": "{key}",
                 "SecondaryKey": "name",
@@ -4088,26 +4429,8 @@
             },
             {
                 "LineType": "#",
-                "RegisterTag": "define_chara_common_pose",
-                "TargetTag": "chara_change",
-                "Argument": "pose",
-                "Value": "{key}",
-                "SecondaryKey": "",
-                "SecondaryKeyValue": ""
-            },
-            {
-                "LineType": "#",
                 "RegisterTag": "define_chara_common_face",
                 "TargetTag": "chara",
-                "Argument": "face",
-                "Value": "{key}",
-                "SecondaryKey": "",
-                "SecondaryKeyValue": ""
-            },
-            {
-                "LineType": "#",
-                "RegisterTag": "define_chara_common_face",
-                "TargetTag": "chara_change",
                 "Argument": "face",
                 "Value": "{key}",
                 "SecondaryKey": "",
@@ -4118,6 +4441,42 @@
                 "RegisterTag": "define_chara_common_level",
                 "TargetTag": "chara",
                 "Argument": "level",
+                "Value": "{key}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_face",
+                "TargetTag": "chara_change",
+                "Argument": "face",
+                "Value": "{key}",
+                "SecondaryKey": "name",
+                "SecondaryKeyValue": "{name}"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_pose",
+                "TargetTag": "chara_change",
+                "Argument": "pose",
+                "Value": "{key}",
+                "SecondaryKey": "name",
+                "SecondaryKeyValue": "{name}"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_common_pose",
+                "TargetTag": "chara_change",
+                "Argument": "pose",
+                "Value": "{key}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_common_face",
+                "TargetTag": "chara_change",
+                "Argument": "face",
                 "Value": "{key}",
                 "SecondaryKey": "",
                 "SecondaryKeyValue": ""

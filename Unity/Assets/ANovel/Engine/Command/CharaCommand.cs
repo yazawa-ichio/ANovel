@@ -21,6 +21,12 @@ namespace ANovel.Engine
 
 
 	[TagName("chara")]
+	[ArgumentValueDefine(typeof(DefineCharaFaceCommand), "face", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
+	[ArgumentValueDefine(typeof(DefineCharaPoseCommand), "pose", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
+	[ArgumentValueDefine(typeof(DefineCharaLevelCommand), "level", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
+	[ArgumentValueDefine(typeof(DefineCharaCommonPoseCommand), "pose", "{key}")]
+	[ArgumentValueDefine(typeof(DefineCharaCommonFaceCommand), "face", "{key}")]
+	[ArgumentValueDefine(typeof(DefineCharaCommonLevelCommand), "level", "{key}")]
 	public class CharaShowCommand : CharaCommandBase
 	{
 		[Argument(Required = true)]
@@ -112,6 +118,10 @@ namespace ANovel.Engine
 	}
 
 	[TagName("chara_change")]
+	[ArgumentValueDefine(typeof(DefineCharaFaceCommand), "face", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
+	[ArgumentValueDefine(typeof(DefineCharaPoseCommand), "pose", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
+	[ArgumentValueDefine(typeof(DefineCharaCommonPoseCommand), "pose", "{key}")]
+	[ArgumentValueDefine(typeof(DefineCharaCommonFaceCommand), "face", "{key}")]
 	public class CharaChangeCommand : CharaCommandBase
 	{
 		[Argument(Required = true)]
