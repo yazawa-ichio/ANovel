@@ -40,6 +40,11 @@ namespace ANovel.QuickStart
 			{
 				m_Engine.TryNext();
 			}
+			if (Input.GetKeyDown(KeyCode.B))
+			{
+				_ = m_Engine.Back();
+			}
+
 		}
 	}
 }
