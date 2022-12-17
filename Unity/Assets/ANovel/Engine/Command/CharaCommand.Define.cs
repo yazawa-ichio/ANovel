@@ -77,6 +77,10 @@ namespace ANovel.Engine
 				{
 					param.Name = "chara_control";
 				}
+				else if (param.ContainsKey("action"))
+				{
+					param.Name = "chara_action";
+				}
 				else
 				{
 					param.Name = "chara";
@@ -145,6 +149,7 @@ namespace ANovel.Engine
 	[ReplaceTagDefine("@{dispname}", "@chara_hide name=\"{name}\"", SecondaryKey = "hide", Label = "{name}({dispname})")]
 	[ReplaceTagDefine("@{dispname}", "@chara_change name=\"{name}\"", SecondaryKey = "change", Label = "{name}({dispname})")]
 	[ReplaceTagDefine("@{dispname}", "@chara_control name=\"{name}\"", SecondaryKey = "control", Label = "{name}({dispname})")]
+	[ReplaceTagDefine("@{dispname}", "@chara_action name=\"{name}\"", SecondaryKey = "action", Label = "{name}({dispname})")]
 	public class DefineCharaCommand : DefineCharaBaseCommand
 	{
 		[InjectArgument]

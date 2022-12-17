@@ -41,7 +41,7 @@ namespace ANovel.Engine
 			{
 				if (!m_Images.TryGetValue(name, out var image))
 				{
-					m_Images[name] = image = new ImageController(m_Container);
+					m_Images[name] = image = new ImageController(name, m_Container);
 				}
 				return image.Show(config, layout);
 			}
@@ -50,7 +50,7 @@ namespace ANovel.Engine
 			{
 				if (!m_Images.TryGetValue(name, out var image))
 				{
-					m_Images[name] = image = new ImageController(m_Container);
+					m_Images[name] = image = new ImageController(name, m_Container);
 				}
 				return image.Change(config);
 			}
@@ -59,7 +59,7 @@ namespace ANovel.Engine
 			{
 				if (!m_Images.TryGetValue(name, out var image))
 				{
-					m_Images[name] = image = new ImageController(m_Container);
+					m_Images[name] = image = new ImageController(name, m_Container);
 				}
 				return image.Hide(config);
 			}
@@ -69,6 +69,15 @@ namespace ANovel.Engine
 				if (m_Images.TryGetValue(name, out var image))
 				{
 					return image.PlayAnim(config, layout);
+				}
+				throw new Exception($"image not found {name}");
+			}
+
+			public ActionPlayingHandle PlayAction(string name, ref ImageActionEnvData data)
+			{
+				if (m_Images.TryGetValue(name, out var image))
+				{
+					return image.PlayAction(data.Value);
 				}
 				throw new Exception($"image not found {name}");
 			}
@@ -117,6 +126,28 @@ namespace ANovel.Engine
 						CharaMetaData.Get(meta, kvp.Key).UpdateLayout(chara, layout);
 					}
 					Show(kvp.Key, config, layout);
+					if (data.TryGet<ImageActionEnvData>(kvp.Key, out var action))
+					{
+						PlayAction(kvp.Key, ref action);
+					}
+				}
+			}
+
+			public void StorePlaying(IEnvData data)
+			{
+				data = data.Prefixed(m_Category);
+				foreach (var controller in m_Images.Values)
+				{
+					controller.StorePlaying(data);
+				}
+			}
+
+			public void RestorePlaying(IEnvDataHolder data)
+			{
+				data = data.Prefixed(m_Category);
+				foreach (var controller in m_Images.Values)
+				{
+					controller.RestorePlaying(data);
 				}
 			}
 

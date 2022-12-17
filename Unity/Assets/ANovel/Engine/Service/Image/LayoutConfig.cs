@@ -41,6 +41,28 @@ namespace ANovel.Engine
 
 		public string Level;
 
+		public LayoutConfig Clone()
+		{
+			return new LayoutConfig
+			{
+				PosX = PosX,
+				PosY = PosY,
+				PosZ = PosZ,
+				ScreenMatch = ScreenMatch,
+				Scale = Scale,
+				ScaleX = ScaleX,
+				ScaleY = ScaleY,
+				Width = Width,
+				Height = Height,
+				AngleX = AngleX,
+				AngleY = AngleY,
+				AngleZ = AngleZ,
+				Color = Color,
+				Opacity = Opacity,
+				Level = Level,
+			};
+		}
+
 		public ImageLayout GetLayout(ImageLayout layout, ICacheHandle<Texture> texture, Vector2 screenSize)
 		{
 			Vector2? baseSize = null;
