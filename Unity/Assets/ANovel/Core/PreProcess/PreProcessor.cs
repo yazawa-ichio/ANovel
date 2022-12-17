@@ -111,9 +111,9 @@ namespace ANovel.Core
 					//if (depth > 0) throw new LineDataException(data, "not allow nest import" + depth);
 					import.Import(await RunImpl(depth + 1, import.Path, null, token));
 				}
-				if (process is MacroScope macro)
+				if (process is IPreProcessScope scope)
 				{
-					ProcessMacroScope(data, macro);
+					ProcessScope(data, scope);
 				}
 				if (process is IImportText importText)
 				{
@@ -277,7 +277,7 @@ namespace ANovel.Core
 			}
 		}
 
-		void ProcessMacroScope(LineData cur, MacroScope scope)
+		void ProcessScope(LineData cur, IPreProcessScope scope)
 		{
 			LineData data = default;
 			int skipStart = cur.Index;
@@ -285,29 +285,29 @@ namespace ANovel.Core
 			{
 				if (data.Type == LineType.Label || data.Type == LineType.Text)
 				{
-					throw new LineDataException(in data, $"not allowed {data.Type} in macro scope");
+					throw new LineDataException(in data, $"not allowed {data.Type} in scope");
 				}
 				else if (data.Type == LineType.PreProcess)
 				{
 					var process = ReadTag(in data);
-					if (process is EndMacroScope)
-					{
-						Current.Result.SkipScopes.Add(new SkipScope(skipStart, data.Index));
-						return;
-					}
-					else if (process.GetType() == typeof(IfScope))
+					if (process.GetType() == typeof(IfScope))
 					{
 						ProcessIfScope(data, (IfScope)process);
 						continue;
 					}
-					throw new LineDataException(in data, "PreProcess is not allowed except for if scope in macro scope");
+					if (scope.IsEnd(process))
+					{
+						Current.Result.SkipScopes.Add(new SkipScope(skipStart, data.Index));
+						return;
+					}
 				}
 				else if (data.Type == LineType.Command || data.Type == LineType.SystemCommand)
 				{
 					scope.Add(in data);
 				}
 			}
-			throw new LineDataException(cur, "macro not end");
+			throw new LineDataException(cur, "scope not end");
 		}
+
 	}
 }

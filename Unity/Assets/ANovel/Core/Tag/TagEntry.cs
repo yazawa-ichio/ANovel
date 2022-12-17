@@ -95,7 +95,7 @@ namespace ANovel.Core
 			return Create(in data, param.ToDictionary());
 		}
 
-		public Tag Create(in LineData data, Dictionary<string, string> dic)
+		public Tag Create(in LineData data, IReadOnlyDictionary<string, string> dic)
 		{
 			Prepare();
 			var tag = (Tag)Activator.CreateInstance(m_Type);

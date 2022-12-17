@@ -8,11 +8,11 @@ namespace ANovel.Core
 
 		public LineData LineData { get; private set; }
 
-		Dictionary<string, string> m_Dic;
+		IReadOnlyDictionary<string, string> m_Dic;
 
 		public IReadOnlyDictionary<string, string> Dic => m_Dic;
 
-		internal void Set(string name, in LineData data, Dictionary<string, string> dic)
+		internal void Set(string name, in LineData data, IReadOnlyDictionary<string, string> dic)
 		{
 			TagName = name;
 			LineData = data;
