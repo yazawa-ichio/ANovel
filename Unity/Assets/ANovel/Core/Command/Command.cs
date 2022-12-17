@@ -4,13 +4,13 @@ namespace ANovel
 {
 	public abstract class Command : Tag, ICommand
 	{
-		protected IServiceContainer Container { get; private set; }
+		protected internal IServiceContainer Container { get; private set; }
 
 		protected ScopedEventBroker Event { get; private set; }
 
 		protected IResourceCache Cache { get; private set; }
 
-		protected IMetaData Meta { get; private set; }
+		protected internal IMetaData Meta { get; private set; }
 
 		void ICommand.Init(IServiceContainer container, IMetaData meta, IEnvData data)
 		{
