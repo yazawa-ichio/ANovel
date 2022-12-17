@@ -73,9 +73,9 @@ namespace ANovel.Engine
 				{
 					param.Name = "chara_change";
 				}
-				else if (param.ContainsKey("control"))
+				else if (param.ContainsKey("layout"))
 				{
-					param.Name = "chara_control";
+					param.Name = "chara_layout";
 				}
 				else if (param.ContainsKey("action"))
 				{
