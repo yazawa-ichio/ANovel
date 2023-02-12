@@ -1,4 +1,4 @@
-using ANovel.Commands;
+﻿using ANovel.Commands;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,17 +15,29 @@ namespace ANovel.Core
 
 		public ServiceContainer Container { get; private set; } = new ServiceContainer();
 
-		public ITextProcessor Text { get => m_BlockProcessor.Text; set => m_BlockProcessor.Text = value; }
+		public ITextProcessor Text
+		{
+			get => m_BlockProcessor.Text;
+			set
+			{
+				Container.Set(value);
+				m_BlockProcessor.Text = value;
+			}
+		}
 
 		public EnvDataHook EnvDataHook => m_BlockProcessor.EnvDataHook;
 
 		public IHistory History => m_BlockProcessor.History;
 
+		public IVariableContainer Variables => Container.Get<IEvaluator>().Variables;
+
+		public IVariableContainer GlobalVariables => Container.Get<IEvaluator>().GlobalVariables;
+
 		public event Action<Exception> OnError;
 
 		public Func<Block, IEnvDataHolder, Task> OnLoad { get; set; }
 
-		public bool IsStop => !m_Reader.CanRead && m_BlockProcessor.IsStop;
+		public bool IsStop => !IsLock && m_BlockProcessor.IsStop;
 
 		public bool IsWaitNext => !IsLock && m_BlockProcessor.IsWaitNext;
 
@@ -33,21 +45,24 @@ namespace ANovel.Core
 
 		public bool HasError => m_ErrorFlag;
 
-		BlockReader m_Reader;
 		bool m_ErrorFlag;
 		CancellationTokenSource m_Cancellation = new CancellationTokenSource();
 		BlockProcessor m_BlockProcessor;
 		ScopeLocker m_Locker = new ScopeLocker();
 		ResourceCache m_Cache;
 
+		public Conductor(IScenarioLoader scenarioLoader, IResourceLoader loader, string[] symbols) : this(new BlockReader(scenarioLoader, symbols), loader)
+		{
+		}
+
 		public Conductor(BlockReader reader, IResourceLoader loader)
 		{
-			m_Reader = reader;
 			m_Cache = new ResourceCache(loader);
 			Event.Register(this);
+			Container.Set<IEvaluator>(reader.Evaluator);
 			Container.Set<IResourceCache>(m_Cache);
 			Container.Set(Event);
-			m_BlockProcessor = new BlockProcessor(Container, m_Cache);
+			m_BlockProcessor = new BlockProcessor(reader, Container, m_Cache);
 		}
 
 		public void Dispose()
@@ -93,7 +108,6 @@ namespace ANovel.Core
 				{
 					return;
 				}
-				await Task.Yield();
 				if (m_Cancellation != null)
 				{
 					await Jump(arg.Path, arg.Label, m_Cancellation.Token);
@@ -124,9 +138,7 @@ namespace ANovel.Core
 			{
 				try
 				{
-					var result = await m_Reader.Load(label.FileName, token);
-					m_Reader.Seek(label);
-					m_BlockProcessor.PostJump(result);
+					await m_BlockProcessor.Jump(label, token);
 				}
 				catch (Exception)
 				{
@@ -148,26 +160,9 @@ namespace ANovel.Core
 		{
 			using (m_Locker.ExclusiveLock())
 			{
-				m_Reader.Seek(m_BlockProcessor.CurrentLabel);
-				bool first = true;
-				Block prevBlock = null;
-				while (m_Reader.TryRead(out var block))
+				if (await m_BlockProcessor.Seek(match, OnLoad, token))
 				{
-					if (!first && match(block))
-					{
-						if (OnLoad != null)
-						{
-							await OnLoad(prevBlock, m_BlockProcessor.Current);
-						}
-						m_BlockProcessor.PostSeek(block);
-						return;
-					}
-					else
-					{
-						first = false;
-						m_BlockProcessor.UpdateCurrent(block);
-						prevBlock = block;
-					}
+					return;
 				}
 				m_ErrorFlag = true;
 				throw new Exception($"not found seek target");
@@ -177,12 +172,7 @@ namespace ANovel.Core
 		public Task Back(int num, CancellationToken token)
 		{
 			m_Locker.CheckLock();
-			var data = m_BlockProcessor.Back(num);
-			if (data != null)
-			{
-				return Restore(data, token);
-			}
-			return Task.FromResult(true);
+			return m_BlockProcessor.Back(num, OnLoad, token);
 		}
 
 		public Task Back(IHistoryLog log, CancellationToken token)
@@ -199,7 +189,6 @@ namespace ANovel.Core
 			}
 			try
 			{
-				ProcessPreload();
 				m_BlockProcessor.Process();
 			}
 			catch (Exception ex)
@@ -212,21 +201,6 @@ namespace ANovel.Core
 				else
 				{
 					throw;
-				}
-			}
-		}
-
-		void ProcessPreload()
-		{
-			while (m_Reader.CanRead && m_BlockProcessor.CanPreload)
-			{
-				if (m_Reader.TryRead(out var block))
-				{
-					m_BlockProcessor.AddPreloadBlock(block);
-				}
-				else
-				{
-					return;
 				}
 			}
 		}
@@ -261,20 +235,11 @@ namespace ANovel.Core
 				try
 				{
 					m_ErrorFlag = false;
-					await JumpImpl(data.Label, token);
-					if (!m_Reader.TryRead(out var block))
-					{
-						throw new Exception("");
-					}
-					m_BlockProcessor.Restore(data, block);
-					if (OnLoad != null)
-					{
-						await OnLoad(block, m_BlockProcessor.Current);
-					}
-					ProcessPreload();
+					await m_BlockProcessor.Restore(data, OnLoad, token);
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
+					UnityEngine.Debug.LogWarning(ex);
 					m_ErrorFlag = true;
 					throw;
 				}

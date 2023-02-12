@@ -1,17 +1,16 @@
-namespace ANovel
+﻿namespace ANovel
 {
 	public interface ICommand
 	{
-		void SetMetaData(IMetaData meta);
-		void UpdateEnvData(IEnvData data);
 		bool IsPrepared();
-		void Initialize(IServiceContainer container);
+		void Init(IServiceContainer container, IMetaData meta, IEnvData data);
+		void Prepare(IPreLoader loader);
 		bool IsSync();
 		bool IsEnd();
 		void Execute();
 		void Update();
 		void TryNext();
-		void FinishBlock();
+		void Finish();
 	}
 
 	public interface ISystemCommand : ICommand

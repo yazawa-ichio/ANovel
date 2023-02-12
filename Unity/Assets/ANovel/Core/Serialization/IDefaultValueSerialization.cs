@@ -1,4 +1,4 @@
-namespace ANovel.Serialization
+﻿namespace ANovel.Serialization
 {
 	public interface IDefaultValueSerialization
 	{

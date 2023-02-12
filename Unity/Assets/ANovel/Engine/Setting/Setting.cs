@@ -1,4 +1,4 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 using System.Collections.Generic;
 
 namespace ANovel.Engine
@@ -10,6 +10,7 @@ namespace ANovel.Engine
 		public IEngineTime Time = new EngineTime();
 		public bool UseDefaultTextEnvDataProcessor = true;
 		public List<IEnvDataCustomProcessor> EnvDataCustomProcessor = new List<IEnvDataCustomProcessor>();
+		public string Language;
 
 		public Conductor CreateConductor(EngineConfig config)
 		{

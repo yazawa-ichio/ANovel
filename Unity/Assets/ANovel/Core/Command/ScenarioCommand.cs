@@ -1,4 +1,4 @@
-namespace ANovel.Commands
+﻿namespace ANovel.Commands
 {
 
 	public enum ScenarioEvent
@@ -43,7 +43,7 @@ namespace ANovel.Commands
 
 		protected override void Execute()
 		{
-			Event.Publish(ScenarioEvent.Stop);
+			Event?.Publish(ScenarioEvent.Stop);
 		}
 
 	}

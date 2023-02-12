@@ -1,4 +1,4 @@
-using ANovel.Core.Define;
+﻿using ANovel.Core.Define;
 using System;
 using System.Reflection;
 
@@ -121,5 +121,3 @@ namespace ANovel.Core
 		}
 	}
 }
-
-

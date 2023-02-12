@@ -1,4 +1,4 @@
-using ANovel.Core.Define;
+﻿using ANovel.Core.Define;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +38,7 @@ namespace ANovel.Core
 			m_Attr.TryGetIgnoreKeys(out m_Ignores);
 		}
 
-		public void Set(Tag tag, Dictionary<string, string> param)
+		public void Set(Tag tag, IReadOnlyDictionary<string, string> param)
 		{
 			var target = GetTarget(tag) ?? SetTarget(tag);
 			m_TargetEntry.Set(tag, target, param, m_Targets, m_Ignores);

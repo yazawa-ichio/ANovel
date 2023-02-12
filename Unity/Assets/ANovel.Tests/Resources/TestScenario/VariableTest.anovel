@@ -1,0 +1,111 @@
+
+#macro name="val_and_replace"
+@test_log message=$"%m%_{m}"
+#endmacro
+
+;変数と値の連結＋途中での削除
+&val name="test_1" value="1"
+&val name="test_2" value="2"
+&val name="test_3" value="3"
+@test_log message=$"test_{test_1}"
+@test_log message=$"test_{test_2}"
+@test_log message=$"test_{test_3}"
+
+&val_del_all
+
+test_1
+test_2
+test_3
+
+;マクロ内での変数利用
+&val name="m" value="true"
+@val_and_replace m="l"
+l_True
+
+&val name="m" value="12.52"
+@val_and_replace m="l"
+l_12.52
+
+;変数置き換えを変数設定で利用する
+&val name="ret" value="end"
+&val name="a" value="b"
+&val name=$"{a}" value="c"
+&val name=$"{b}" value=$"{ret}"
+@test_log message=$"{c}"
+end
+
+;$がない場合は無効
+&val name="test" value="bb"
+@test_log message="{test}"
+{test}
+
+;フォーマット
+&val name="format" value="123.456"
+@test_log message=$"bb_{format:F1}"
+bb_123.5
+
+&val name="format" value="123"
+@test_log message=$"cc_{format:0000}"
+cc_0123
+
+;evalで計算を評価
+&val_eval name="e" value="1 + 1"
+@test_log message=$"{e}"
+2
+
+&val_eval name="e" value="1 + 1.1"
+@test_log message=$"{e}"
+2.1
+
+&val_eval name="e" value="2.4 + 3.1" type="Int"
+@test_log message=$"{e}"
+5
+
+&val_eval name="e" value="2 > 1"
+@test_log message=$"{e}"
+True
+
+&val_eval name="e" value="2 < 1"
+@test_log message=$"{e}"
+False
+
+;Realにすると1 or 0になる
+&val_eval name="e" value="2 > 1" type="Real"
+@test_log message=$"{e}"
+1
+
+&val_eval name="e" value="2 < 1" type="Real"
+@test_log message=$"{e}"
+0
+
+;evalで変数を利用する
+&val_add name="x" value="2"
+&val_add name="y" value="10"
+&val_eval name="e1" value=$"{x} == {y}"
+&val_eval name="e2" value=$"{x} != {y}"
+&val_eval name="e3" value=$"{x} * {y}"
+&val_eval name="e4" value=$"{x} / {y}"
+&val_eval name="e5" value=$"{y} / {x}"
+@test_log message=$"{e1}"
+@test_log message=$"{e2}"
+@test_log message=$"{e3}"
+@test_log message=$"{e4}"
+@test_log message=$"{e5}"
+False
+True
+20
+0.2
+5
+
+;evalで同じ変数を更新する
+&val_del_all
+&val name="x" value="10"
+&val_eval name="x" value=$"{x} - 2"
+@test_log message=$"{x}"
+8
+
+;Globalとの優先
+&val name="a" value="1"
+&val name="a" value="2" global="true"
+@test_log message=$"{a}"
+1

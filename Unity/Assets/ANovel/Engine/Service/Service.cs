@@ -1,4 +1,4 @@
-//using ANovel.Core;
+﻿//using ANovel.Core;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -22,12 +22,15 @@ namespace ANovel.Engine
 	{
 		Type ServiceType { get; }
 		RegisterPriority Priority { get; }
-		void Initialize(ServiceContainer container);
+		void Initialize(ServiceContainer container, string language);
 		void OnUpdate(IEngineTime time);
 
 		Task PreRestore(RestoreData data, IPreLoader loader);
 		Task Restore(RestoreData data, IResourceCache cache);
 		Task PostRestore(RestoreData data);
+		void StorePlaying(IEnvData data);
+		void RestorePlaying(IEnvDataHolder data);
+		void ChangeLanguage(string language);
 	}
 
 	public abstract class Service : MonoBehaviour, IService
@@ -54,11 +57,19 @@ namespace ANovel.Engine
 		protected virtual Task RestoreAync(IMetaData meta, IEnvDataHolder data, IResourceCache cache) => Task.FromResult(true);
 		protected virtual void PostRestore(IMetaData meta, IEnvDataHolder data) { }
 		protected virtual Task PostRestoreAsync(IMetaData meta, IEnvDataHolder data) => Task.FromResult(true);
+		protected virtual void StorePlaying(IEnvData data) { }
+		protected virtual void RestorePlaying(IEnvDataHolder data) { }
+		public virtual void ChangeLanguage(string language) { }
 
-		void IService.Initialize(ServiceContainer container)
+		void IService.Initialize(ServiceContainer container, string language)
 		{
 			Container = container;
+			Event.Register(this);
 			Initialize();
+			if (!string.IsNullOrEmpty(language))
+			{
+				ChangeLanguage(language);
+			}
 		}
 
 		void IService.OnUpdate(IEngineTime time) => OnUpdate(time);
@@ -81,6 +92,15 @@ namespace ANovel.Engine
 			return PostRestoreAsync(data.Meta, data.Env);
 		}
 
+		void IService.StorePlaying(IEnvData data)
+		{
+			StorePlaying(data);
+		}
+
+		void IService.RestorePlaying(IEnvDataHolder data)
+		{
+			RestorePlaying(data);
+		}
 	}
 
 }

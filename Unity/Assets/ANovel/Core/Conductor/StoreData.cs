@@ -1,4 +1,4 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 
 namespace ANovel
 {
@@ -6,6 +6,7 @@ namespace ANovel
 	{
 		public BlockLabelInfo Label;
 		public EnvDataSnapshot Snapshot;
+		public EnvDataSnapshot PlayingSave;
 		public HistoryLog[] Logs;
 
 		public byte[] Save() => Packer.Pack(this);

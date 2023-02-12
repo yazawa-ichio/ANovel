@@ -1,37 +1,36 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 
 namespace ANovel
 {
 	public abstract class Command : Tag, ICommand
 	{
-		protected IServiceContainer Container { get; private set; }
+		protected internal IServiceContainer Container { get; private set; }
 
 		protected ScopedEventBroker Event { get; private set; }
 
 		protected IResourceCache Cache { get; private set; }
 
-		protected IMetaData Meta { get; private set; }
+		protected internal IMetaData Meta { get; private set; }
 
-		void ICommand.SetMetaData(IMetaData meta)
+		void ICommand.Init(IServiceContainer container, IMetaData meta, IEnvData data)
 		{
+			Container = container;
 			Meta = meta;
+			UpdateEnvData(data);
 		}
-
-		void ICommand.UpdateEnvData(IEnvData data) => UpdateEnvData(data);
 
 		protected virtual void UpdateEnvData(IEnvData data) { }
 
-		void ICommand.Initialize(IServiceContainer container)
+		void ICommand.Prepare(IPreLoader loader)
 		{
-			Container = container;
-			Event = container.Get<EventBroker>().Scoped();
+			Event = Get<EventBroker>().Scoped();
 			Event.Subscribe(this);
-			Cache = container.Get<IResourceCache>();
-			Initialize();
-			Preload(container.Get<IPreLoader>());
+			Cache = Get<IResourceCache>();
+			Prepare();
+			Preload(loader);
 		}
 
-		protected virtual void Initialize() { }
+		protected virtual void Prepare() { }
 
 		protected virtual void Preload(IPreLoader loader) { }
 
@@ -53,11 +52,11 @@ namespace ANovel
 
 		protected virtual void TryNext() { }
 
-		void ICommand.FinishBlock()
+		void ICommand.Finish()
 		{
 			try
 			{
-				FinishBlock();
+				Finish();
 			}
 			finally
 			{
@@ -65,7 +64,7 @@ namespace ANovel
 			}
 		}
 
-		public virtual void FinishBlock() { }
+		public virtual void Finish() { }
 
 
 		protected T Get<T>()

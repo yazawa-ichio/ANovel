@@ -1,0 +1,70 @@
+
+
+&val name="count" value="0"
+&val name="disp" value=$"count:{count}"
+count:0
+
+*Loop1
+
+&val name="disp" value=$"count:{count}"
+@test_log message=$"count:{count}"
+
+&if left="1" right=$"{count}"
+count:1
+&elseif condition=$"2 == {count}"
+count:2
+&elseif condition=$"3 == {count}"
+count:3
+&else
+count:0
+&endif
+
+&if condition=$"{count} < 3"
+&val name="return_label" value="Loop1"
+&jump label="Increment"
+&endif
+
+&val name="disp" value=$"count:{count}"
+@test_log message=$"count:{count}"
+
+count:3
+
+
+*Loop2
+
+&if has_val="end" not
+&flag name="end" off
+&endif
+
+&if flag="first" not
+	&flag name="first"
+	&val name="disp" value="first"
+first
+&else
+	&if flag="second" not
+		&flag name="second"
+		&val name="disp" value="second"
+second
+		&jump label="Loop2"
+	&elseif has_val="third" not
+		&val name="third" value="bbb"
+		&val name="disp" value="bbb"
+bbb
+	&elseif has_val="second"
+		&flag name="end"
+	&endif
+&endif
+
+&if condition=$"{end}" not
+&jump label="Loop2"
+&endif
+
+&val name="disp" value="end"
+@test_log message=$"end"
+end
+
+&stop
+
+*Increment
+&val_add name="count"
+&jump label=$"{return_label}"

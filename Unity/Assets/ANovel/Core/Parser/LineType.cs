@@ -1,4 +1,4 @@
-
+﻿
 namespace ANovel.Core
 {
 	public enum LineType

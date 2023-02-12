@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -91,6 +91,8 @@ namespace ANovel.Core
 				entry.Dispose();
 			}
 			m_Dic.Clear();
+			m_Loader?.Dispose();
+			m_Loader = null;
 		}
 
 	}

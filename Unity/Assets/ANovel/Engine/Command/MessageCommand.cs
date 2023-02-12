@@ -1,4 +1,4 @@
-namespace ANovel.Engine
+﻿namespace ANovel.Engine
 {
 	public class MessageCommandBase : Command
 	{
@@ -23,7 +23,7 @@ namespace ANovel.Engine
 			}
 		}
 
-		public override void FinishBlock()
+		public override void Finish()
 		{
 			m_PlayHandle?.Dispose();
 		}

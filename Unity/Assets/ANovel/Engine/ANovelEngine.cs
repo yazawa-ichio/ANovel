@@ -1,4 +1,4 @@
-using ANovel.Commands;
+﻿using ANovel.Commands;
 using ANovel.Core;
 using ANovel.Engine;
 using System;
@@ -10,10 +10,12 @@ using UnityEngine;
 namespace ANovel
 {
 
-	public class ANovelEngine : MonoBehaviour
+	public class ANovelEngine : MonoBehaviour, IPlayingEnvDataProcessor
 	{
 		[SerializeField]
 		EngineConfig m_Config;
+		[SerializeField]
+		string m_Language;
 
 		bool m_Initialized;
 		CancellationTokenSource m_Cancellation = new CancellationTokenSource();
@@ -30,6 +32,8 @@ namespace ANovel
 		public ServiceContainer Container => m_Conductor.Container;
 
 		public IHistory History => m_Conductor.History;
+
+		public IVariableContainer GlobalVariables => m_Conductor.GlobalVariables;
 
 		public event Action<Exception> OnError;
 
@@ -67,6 +71,7 @@ namespace ANovel
 				ResourceLoader = new ResourceLoader("ANovel"),
 				ScenarioLoader = new ResourcesScenarioLoader("ANovel/Scenario"),
 				Time = new EngineTime(),
+				Language = m_Language,
 			};
 			action?.Invoke(setting);
 			Initialize(setting);
@@ -86,11 +91,12 @@ namespace ANovel
 			m_Conductor.OnLoad = Load;
 			m_Conductor.Container.Set(m_Config);
 			m_Conductor.Event.Register(this);
+			m_Conductor.EnvDataHook.Add(this);
 			m_Services = GetComponentsInChildren<IService>(true).OrderBy(x => -(int)x.Priority).ToArray();
 			foreach (var service in m_Services)
 			{
 				m_Conductor.Container.Set(service.ServiceType, service);
-				service.Initialize(m_Conductor.Container);
+				service.Initialize(m_Conductor.Container, setting.Language);
 			}
 		}
 
@@ -199,6 +205,26 @@ namespace ANovel
 			}
 		}
 
+		public void ChangeLanguage(string language)
+		{
+			if (m_Services != null)
+			{
+				foreach (var service in m_Services)
+				{
+					service.ChangeLanguage(language);
+				}
+			}
+		}
+
+		public StoreData Store()
+		{
+			using (m_Locker.ExclusiveLock())
+			{
+				return m_Conductor.Store();
+			}
+		}
+
+
 		public async Task Restore(StoreData data)
 		{
 			using (m_Locker.ExclusiveLock())
@@ -242,5 +268,20 @@ namespace ANovel
 			OnStopCommand?.Invoke();
 		}
 
+		void IPlayingEnvDataProcessor.Store(IEnvData data)
+		{
+			foreach (var service in m_Services)
+			{
+				service.StorePlaying(data);
+			}
+		}
+
+		void IPlayingEnvDataProcessor.Restore(IEnvDataHolder data)
+		{
+			foreach (var service in m_Services)
+			{
+				service.RestorePlaying(data);
+			}
+		}
 	}
 }

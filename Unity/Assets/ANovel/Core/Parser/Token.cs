@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace ANovel.Core
 {
@@ -21,6 +21,8 @@ namespace ANovel.Core
 
 		public const string TextBlockScope = "```";
 		public const char TextBlockValueSeparater = ':';
+
+		public const char Evaluate = '$';
 
 		public static bool IsEmptyOrTab(char c)
 		{

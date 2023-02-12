@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ANovel.Engine
@@ -63,6 +63,11 @@ namespace ANovel.Engine
 			return m_Images[category].PlayAnim(name, config, layout);
 		}
 
+		public ActionPlayingHandle PlayAction(Category category, string name, ref ImageActionEnvData data)
+		{
+			return m_Images[category].PlayAction(name, ref data);
+		}
+
 		public void SetOrder(Category category, string name, long autoOrder)
 		{
 			m_Images[category].SetOrder(name, autoOrder);
@@ -81,6 +86,22 @@ namespace ANovel.Engine
 			foreach (var image in m_Images.Values)
 			{
 				image.Restore(meta, data, cache);
+			}
+		}
+
+		protected override void StorePlaying(IEnvData data)
+		{
+			foreach (var image in m_Images.Values)
+			{
+				image.StorePlaying(data);
+			}
+		}
+
+		protected override void RestorePlaying(IEnvDataHolder data)
+		{
+			foreach (var image in m_Images.Values)
+			{
+				image.RestorePlaying(data);
 			}
 		}
 

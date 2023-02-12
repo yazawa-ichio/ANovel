@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace ANovel
 {
@@ -27,7 +27,7 @@ namespace ANovel
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 	public class ArgumentValueDefineAttribute : Attribute
 	{
-		public string TargetTag { get; private set; }
+		public Type TargetTag { get; private set; }
 
 		public string Argument { get; private set; }
 
@@ -37,9 +37,9 @@ namespace ANovel
 
 		public string SecondaryKeyValue { get; set; }
 
-		public ArgumentValueDefineAttribute(string targetTag, string argument, string value)
+		public ArgumentValueDefineAttribute(Type targetTag, string argument, string value)
 		{
-			TargetTag = targetTag.ToLower();
+			TargetTag = targetTag;
 			Argument = argument.ToLower();
 			Value = value;
 		}

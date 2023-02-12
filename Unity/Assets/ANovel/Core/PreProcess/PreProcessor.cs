@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,9 +36,9 @@ namespace ANovel.Core
 			public Queue<LineData> Temp = new Queue<LineData>();
 			public PreProcessResult Result;
 
-			public Entry(string path, List<string> symbols, string text, PreProcessResult result)
+			public Entry(string path, List<string> symbols, IEvaluator evaluator, string text, PreProcessResult result)
 			{
-				Provider = new TagProvider(symbols);
+				Provider = new TagProvider(evaluator, symbols);
 				Reader = new LineReader(path, text);
 				Result = result;
 			}
@@ -46,6 +46,7 @@ namespace ANovel.Core
 		}
 
 		IScenarioLoader m_Loader;
+		IEvaluator m_Evaluator;
 		Dictionary<string, PreProcessResult> m_Cache = new Dictionary<string, PreProcessResult>();
 		string[] m_Symbols;
 		List<Tag> m_Tags = new List<Tag>();
@@ -53,9 +54,10 @@ namespace ANovel.Core
 
 		Entry Current => m_Stack.Peek();
 
-		public PreProcessor(IScenarioLoader loader, string[] symbols)
+		public PreProcessor(IScenarioLoader loader, IEvaluator evaluator, string[] symbols)
 		{
 			m_Loader = loader;
+			m_Evaluator = evaluator;
 			m_Symbols = symbols ?? Array.Empty<string>();
 		}
 
@@ -86,7 +88,7 @@ namespace ANovel.Core
 			{
 				text = await m_Loader.Load(path, token);
 			}
-			var entry = new Entry(path, result.Symbols, text, result);
+			var entry = new Entry(path, result.Symbols, m_Evaluator, text, result);
 			m_Stack.Push(entry);
 			LineData data = default;
 			while (TryReadData(ref data))
@@ -109,9 +111,9 @@ namespace ANovel.Core
 					//if (depth > 0) throw new LineDataException(data, "not allow nest import" + depth);
 					import.Import(await RunImpl(depth + 1, import.Path, null, token));
 				}
-				if (process is MacroScope macro)
+				if (process is IPreProcessScope scope)
 				{
-					ProcessMacroScope(data, macro);
+					ProcessScope(data, scope);
 				}
 				if (process is IImportText importText)
 				{
@@ -275,7 +277,7 @@ namespace ANovel.Core
 			}
 		}
 
-		void ProcessMacroScope(LineData cur, MacroScope scope)
+		void ProcessScope(LineData cur, IPreProcessScope scope)
 		{
 			LineData data = default;
 			int skipStart = cur.Index;
@@ -283,29 +285,29 @@ namespace ANovel.Core
 			{
 				if (data.Type == LineType.Label || data.Type == LineType.Text)
 				{
-					throw new LineDataException(in data, $"not allowed {data.Type} in macro scope");
+					throw new LineDataException(in data, $"not allowed {data.Type} in scope");
 				}
 				else if (data.Type == LineType.PreProcess)
 				{
 					var process = ReadTag(in data);
-					if (process is EndMacroScope)
-					{
-						Current.Result.SkipScopes.Add(new SkipScope(skipStart, data.Index));
-						return;
-					}
-					else if (process.GetType() == typeof(IfScope))
+					if (process.GetType() == typeof(IfScope))
 					{
 						ProcessIfScope(data, (IfScope)process);
 						continue;
 					}
-					throw new LineDataException(in data, "PreProcess is not allowed except for if scope in macro scope");
+					if (scope.IsEnd(process))
+					{
+						Current.Result.SkipScopes.Add(new SkipScope(skipStart, data.Index));
+						return;
+					}
 				}
 				else if (data.Type == LineType.Command || data.Type == LineType.SystemCommand)
 				{
 					scope.Add(in data);
 				}
 			}
-			throw new LineDataException(cur, "macro not end");
+			throw new LineDataException(cur, "scope not end");
 		}
+
 	}
 }

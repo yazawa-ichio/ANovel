@@ -1,4 +1,4 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 using System.Collections.Generic;
 
 namespace ANovel.Engine
@@ -37,12 +37,15 @@ namespace ANovel.Engine
 			"chara",
 			"chara_change",
 			"chara_face_window",
+			"chara_hide",
+			"chara_control",
 		};
 
 		public void Convert(TagParam param)
 		{
 			if (ConvertList.Contains(param.Name) && !param.ContainsKey("@pre_convert_chara_common_meta"))
 			{
+				ConvertParam(param, "name", DispNameToName);
 				ConvertParam(param, "face", Face);
 				ConvertParam(param, "pose", Pose);
 				ConvertParam(param, "level", Level);
@@ -51,10 +54,11 @@ namespace ANovel.Engine
 
 		public void PreConvert(TagParam param)
 		{
+			ConvertParam(param, "name", DispNameToName);
 			ConvertParam(param, "face", Face);
 			ConvertParam(param, "pose", Pose);
 			ConvertParam(param, "level", Level);
-			param["@pre_convert_chara_common_meta"] = "true";
+			param.AddValue("@pre_convert_chara_common_meta", "true");
 		}
 
 		void ConvertParam(TagParam param, string key, IEnumerable<DefineCharaParam> defParamList)
@@ -65,7 +69,7 @@ namespace ANovel.Engine
 				{
 					if (param.ContainsKey(defParam.Key) || param.ContainsKey(defParam.Value))
 					{
-						param[key] = defParam.Value;
+						param.AddValue(key, defParam.Value);
 						return;
 					}
 				}
@@ -77,9 +81,33 @@ namespace ANovel.Engine
 				{
 					if (param.ContainsKey(value))
 					{
-						param[key] = defParam.Value;
+						param.AddValue(key, defParam.Value);
 						return;
 					}
+				}
+			}
+		}
+
+		void ConvertParam(TagParam param, string key, Dictionary<string, string> dic)
+		{
+			if (!param.ContainsKey(key))
+			{
+				foreach (var defParam in dic)
+				{
+					if (param.ContainsKey(defParam.Key) || param.ContainsKey(defParam.Value))
+					{
+						param.AddValue(key, defParam.Value);
+						return;
+					}
+				}
+			}
+			else
+			{
+				var value = param[key];
+				if (dic.TryGetValue(value, out var name))
+				{
+					param.AddValue(key, name);
+					return;
 				}
 			}
 		}

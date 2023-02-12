@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 #if UNITY_5_3_OR_NEWER
@@ -63,7 +63,7 @@ namespace ANovel.Core
 		}
 
 		int m_UnloadCount;
-		public void Unload(object obj)
+		public void Unload(string path, object obj)
 		{
 			if (obj is Object asset)
 			{

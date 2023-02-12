@@ -1,4 +1,4 @@
-namespace ANovel.Engine
+﻿namespace ANovel.Engine
 {
 
 	[TagName("wait")]
@@ -25,7 +25,7 @@ namespace ANovel.Engine
 			m_PlayHandle = new FloatFadeHandle(1, 1f, m_Time.ToSecond());
 		}
 
-		public override void FinishBlock()
+		public override void Finish()
 		{
 			m_PlayHandle?.Dispose();
 		}

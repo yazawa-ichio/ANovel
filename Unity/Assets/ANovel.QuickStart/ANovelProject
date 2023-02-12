@@ -3,6 +3,47 @@
     "ResourcePath": "Resources/ANovel",
     "Tags": [
         {
+            "Name": "localize_data",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "LocalizeDataCommand",
+            "Arguments": [
+                {
+                    "Name": "type",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Auto",
+                        "Csv",
+                        "Tsv",
+                        "Json"
+                    ]
+                },
+                {
+                    "Name": "usekey",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "usedefault",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
             "Name": "define_symbol",
             "Symbols": "",
             "LineType": "#",
@@ -110,6 +151,28 @@
             "Symbols": "",
             "LineType": "#",
             "Description": "EndMacroScope",
+            "Arguments": []
+        },
+        {
+            "Name": "action",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "ActionDefine",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "endaction",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "EndActionDefine",
             "Arguments": []
         },
         {
@@ -679,6 +742,307 @@
                     "Description": "",
                     "Required": false,
                     "InputType": "Rate",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "action_wait",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ActionWaitCommand",
+            "Arguments": [
+                {
+                    "Name": "time",
+                    "Description": "指定時間",
+                    "Required": true,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "bg_action",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ActionBgCommand",
+            "Arguments": [
+                {
+                    "Name": "param",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "cont",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "chara_action",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ActionCharaCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "param",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "cont",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "image_action",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ActionImageCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "param",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "cont",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "action_layout",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ActionLayoutCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "w",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "h",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "color",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Color",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "screenmatch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "None",
+                        "Fit",
+                        "Expand",
+                        "Shrink"
+                    ]
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scalex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scaley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "angley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglez",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "opacity",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
                     "InputOptions": []
                 }
             ]
@@ -3411,6 +3775,120 @@
             "Arguments": []
         },
         {
+            "Name": "if",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "IfCommand",
+            "Arguments": [
+                {
+                    "Name": "condition",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "left",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "right",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "not",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "flag",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "has_val",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "elsif",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "ElseIfCommand",
+            "Arguments": [
+                {
+                    "Name": "condition",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "left",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "right",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "not",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "flag",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "has_val",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "else",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "ElseCommand",
+            "Arguments": []
+        },
+        {
+            "Name": "endif",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "EndIfCommand",
+            "Arguments": []
+        },
+        {
             "Name": "parallel",
             "Symbols": "",
             "LineType": "&",
@@ -3490,6 +3968,240 @@
             "LineType": "&",
             "Description": "スコープを終了します。汎用コマンドです",
             "Arguments": []
+        },
+        {
+            "Name": "val",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableSetCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "type",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Bool",
+                        "Int",
+                        "Real",
+                        "String"
+                    ]
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "val_eval",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableEvalCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "type",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Bool",
+                        "Int",
+                        "Real",
+                        "String"
+                    ]
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "val_add",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableAddCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "allow_empty",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "flag",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableFlagCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "on",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "off",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "val_del",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableDeleteCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "val_del_all",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableDeleteAllCommand",
+            "Arguments": [
+                {
+                    "Name": "prefix",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "suffix",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "contains",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "localize_data_index",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "LocalizeDataIndexCommand",
+            "Arguments": [
+                {
+                    "Name": "index",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
         },
         {
             "Name": "transition",
@@ -3582,6 +4294,15 @@
                 "LineType": "#",
                 "RegisterTag": "define_chara",
                 "Key": "@{dispname}",
+                "Replace": "@chara_control name=\"{name}\"",
+                "SecondaryKey": "control",
+                "SecondaryKeyValue": "",
+                "Label": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
                 "Replace": "@chara name=\"{name}\"",
                 "SecondaryKey": "",
                 "SecondaryKeyValue": "",
@@ -3607,6 +4328,24 @@
             },
             {
                 "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
+                "Replace": "@chara_control name=\"{name}\"",
+                "SecondaryKey": "control",
+                "SecondaryKeyValue": "",
+                "Label": "{name}({dispname})"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
+                "Replace": "@chara_action name=\"{name}\"",
+                "SecondaryKey": "action",
+                "SecondaryKeyValue": "",
+                "Label": "{name}({dispname})"
+            },
+            {
+                "LineType": "#",
                 "RegisterTag": "define_se",
                 "Key": "@se_{name}",
                 "Replace": "@se path={path}",
@@ -3618,7 +4357,7 @@
                 "LineType": "#",
                 "RegisterTag": "define_bgm",
                 "Key": "@bgm_{name}",
-                "Replace": "@se path={path}",
+                "Replace": "@bgm path={path}",
                 "SecondaryKey": "",
                 "SecondaryKeyValue": "",
                 "Label": ""
@@ -3627,6 +4366,42 @@
         "ArgumentValue": [
             {
                 "LineType": "#",
+                "RegisterTag": "action",
+                "TargetTag": "bg_action",
+                "Argument": "param",
+                "Value": "{name}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "action",
+                "TargetTag": "chara_action",
+                "Argument": "param",
+                "Value": "{name}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "action",
+                "TargetTag": "image_action",
+                "Argument": "param",
+                "Value": "{name}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "TargetTag": "chara",
+                "Argument": "name",
+                "Value": "{dispname}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
                 "RegisterTag": "define_chara_face",
                 "TargetTag": "chara",
                 "Argument": "face",
@@ -3636,26 +4411,8 @@
             },
             {
                 "LineType": "#",
-                "RegisterTag": "define_chara_face",
-                "TargetTag": "chara_change",
-                "Argument": "face",
-                "Value": "{key}",
-                "SecondaryKey": "name",
-                "SecondaryKeyValue": "{name}"
-            },
-            {
-                "LineType": "#",
                 "RegisterTag": "define_chara_pose",
                 "TargetTag": "chara",
-                "Argument": "pose",
-                "Value": "{key}",
-                "SecondaryKey": "name",
-                "SecondaryKeyValue": "{name}"
-            },
-            {
-                "LineType": "#",
-                "RegisterTag": "define_chara_pose",
-                "TargetTag": "chara_change",
                 "Argument": "pose",
                 "Value": "{key}",
                 "SecondaryKey": "name",
@@ -3681,26 +4438,8 @@
             },
             {
                 "LineType": "#",
-                "RegisterTag": "define_chara_common_pose",
-                "TargetTag": "chara_change",
-                "Argument": "pose",
-                "Value": "{key}",
-                "SecondaryKey": "",
-                "SecondaryKeyValue": ""
-            },
-            {
-                "LineType": "#",
                 "RegisterTag": "define_chara_common_face",
                 "TargetTag": "chara",
-                "Argument": "face",
-                "Value": "{key}",
-                "SecondaryKey": "",
-                "SecondaryKeyValue": ""
-            },
-            {
-                "LineType": "#",
-                "RegisterTag": "define_chara_common_face",
-                "TargetTag": "chara_change",
                 "Argument": "face",
                 "Value": "{key}",
                 "SecondaryKey": "",
@@ -3712,6 +4451,69 @@
                 "TargetTag": "chara",
                 "Argument": "level",
                 "Value": "{key}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "TargetTag": "chara_face_window",
+                "Argument": "name",
+                "Value": "{dispname}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_face",
+                "TargetTag": "chara_change",
+                "Argument": "face",
+                "Value": "{key}",
+                "SecondaryKey": "name",
+                "SecondaryKeyValue": "{name}"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_pose",
+                "TargetTag": "chara_change",
+                "Argument": "pose",
+                "Value": "{key}",
+                "SecondaryKey": "name",
+                "SecondaryKeyValue": "{name}"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_common_pose",
+                "TargetTag": "chara_change",
+                "Argument": "pose",
+                "Value": "{key}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_common_face",
+                "TargetTag": "chara_change",
+                "Argument": "face",
+                "Value": "{key}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "TargetTag": "chara_hide",
+                "Argument": "name",
+                "Value": "{dispname}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "TargetTag": "chara_control",
+                "Argument": "name",
+                "Value": "{dispname}",
                 "SecondaryKey": "",
                 "SecondaryKeyValue": ""
             }

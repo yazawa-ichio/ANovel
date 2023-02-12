@@ -1,4 +1,4 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 using System.Collections.Generic;
 
 namespace ANovel.Commands
@@ -11,13 +11,13 @@ namespace ANovel.Commands
 		List<ICommand> m_RunCommands;
 		ICommand m_SyncCommand;
 
-		protected override void Initialize()
+		protected override void BeginAddCommand()
 		{
 			m_BatchCommands = ListPool<ICommand>.Pop();
 			m_RunCommands = ListPool<ICommand>.Pop();
 		}
 
-		public override void FinishBlock()
+		protected override void PreScopeFinish()
 		{
 			foreach (var cmd in m_BatchCommands)
 			{
@@ -99,7 +99,7 @@ namespace ANovel.Commands
 			}
 		}
 
-		protected override void AddScopeImpl(ICommand command)
+		protected override void OnAddCommand(ICommand command)
 		{
 			m_BatchCommands.Add(command);
 		}

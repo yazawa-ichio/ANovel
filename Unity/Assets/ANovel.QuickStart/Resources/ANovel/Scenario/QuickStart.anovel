@@ -3,7 +3,11 @@
 ;キャラクターを定義
 #define_chara name="c1" dispname="キャラ1"
 
+#localize_data path="QuickStart_LocalizeData"
+
 *start
+
+;&localize_index index="0"
 
 ANovelのQuickStartです。
 
@@ -22,10 +26,10 @@ ANovelのQuickStartです。
 キャラの表示
 
 &async
-@キャラ1 control x="300" time="200" sync
-@キャラ1 control x="100" time="200" sync
-@キャラ1 control x="300" time="200" sync
-@キャラ1 control x="200" time="200" sync
+@キャラ1 layout x="300" time="200" sync
+@キャラ1 layout x="100" time="200" sync
+@キャラ1 layout x="300" time="200" sync
+@キャラ1 layout x="200" time="200" sync
 &end
 
 ```
@@ -44,8 +48,8 @@ ANovelのQuickStartです。
 
 一括で表示する
 
-@image_control name="i1" x=-500 time="1000"
-@キャラ1 control x="500" time="1000"
+@image_layout name="i1" x=-500 time="1000"
+@キャラ1 layout x="500" time="1000"
 
 ;captureをfalseにすると動きながら切り替えが出来ます。
 &transition copy="false" capture="false" time="1000"

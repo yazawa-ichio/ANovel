@@ -1,4 +1,4 @@
-using ANovel.Commands;
+﻿using ANovel.Commands;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -18,24 +18,28 @@ namespace ANovel.Core
 		List<ICommand> m_Commands = new List<ICommand>();
 		LabelData m_Label = new LabelData();
 		bool m_Stop;
+		Evaluator m_Evaluator = new Evaluator();
+		bool m_Load;
+
+		public Evaluator Evaluator => m_Evaluator;
 
 		public int LineIndex => m_LineReader.Index;
 
 		public bool CanRead => !m_Stop && m_LineReader != null && !m_LineReader.EndOfFile;
 
-		public BlockReader(IScenarioLoader loader) : this(loader, Array.Empty<string>())
-		{
-		}
+		public BranchController BranchController => m_TagProvider.BranchController;
 
 		public BlockReader(IScenarioLoader loader, string[] symbols)
 		{
 			m_Loader = loader;
-			m_PreProcessor = new PreProcessor(loader, symbols);
-			m_TagProvider = new TagProvider();
+			m_Evaluator = new Evaluator();
+			m_PreProcessor = new PreProcessor(loader, m_Evaluator, symbols);
+			var symbolsList = new List<string>();
 			if (symbols != null)
 			{
-				m_TagProvider.Symbols.AddRange(symbols);
+				symbolsList.AddRange(symbols);
 			}
+			m_TagProvider = new TagProvider(m_Evaluator, symbolsList);
 		}
 
 		public async Task<PreProcessResult> Load(string path, CancellationToken token)
@@ -46,11 +50,16 @@ namespace ANovel.Core
 			m_LineReader = new LineReader(path, text);
 			m_PreProcess = await m_PreProcessor.Run(path, text, token);
 			m_TagProvider.Setup(m_PreProcess);
+			m_Load = true;
 			return m_PreProcess;
 		}
 
 		public bool TryRead(out Block block)
 		{
+			if (!m_Load)
+			{
+				throw new InvalidOperationException("not load scenario");
+			}
 			block = null;
 			if (!CanRead)
 			{
@@ -82,6 +91,10 @@ namespace ANovel.Core
 				if (endBlock)
 				{
 					break;
+				}
+				if (m_TagProvider.BranchController.IsSkip)
+				{
+					continue;
 				}
 				if (data.Type == LineType.Text)
 				{
@@ -143,6 +156,10 @@ namespace ANovel.Core
 
 		void OnLabel(in LineData data, bool first)
 		{
+			if (m_TagProvider.BranchController.IsIfScope)
+			{
+				throw new LineDataException(in data, "label is not allow if scope");
+			}
 			if (!first)
 			{
 				throw new LineDataException(in data, "label is text block top only");

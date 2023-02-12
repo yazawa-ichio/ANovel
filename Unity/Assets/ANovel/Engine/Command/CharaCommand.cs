@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Category = ANovel.Engine.ImageService.Category;
 
 namespace ANovel.Engine
@@ -21,6 +21,13 @@ namespace ANovel.Engine
 
 
 	[TagName("chara")]
+	[ArgumentValueDefine(typeof(DefineCharaCommand), "name", "{dispname}")]
+	[ArgumentValueDefine(typeof(DefineCharaFaceCommand), "face", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
+	[ArgumentValueDefine(typeof(DefineCharaPoseCommand), "pose", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
+	[ArgumentValueDefine(typeof(DefineCharaLevelCommand), "level", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
+	[ArgumentValueDefine(typeof(DefineCharaCommonPoseCommand), "pose", "{key}")]
+	[ArgumentValueDefine(typeof(DefineCharaCommonFaceCommand), "face", "{key}")]
+	[ArgumentValueDefine(typeof(DefineCharaCommonLevelCommand), "level", "{key}")]
 	public class CharaShowCommand : CharaCommandBase
 	{
 		[Argument(Required = true)]
@@ -82,6 +89,7 @@ namespace ANovel.Engine
 	}
 
 	[TagName("chara_face_window")]
+	[ArgumentValueDefine(typeof(DefineCharaCommand), "name", "{dispname}")]
 	public class CharaParamCommand : Command
 	{
 		protected PathConfig Path => Get<EngineConfig>().Path;
@@ -112,6 +120,10 @@ namespace ANovel.Engine
 	}
 
 	[TagName("chara_change")]
+	[ArgumentValueDefine(typeof(DefineCharaFaceCommand), "face", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
+	[ArgumentValueDefine(typeof(DefineCharaPoseCommand), "pose", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
+	[ArgumentValueDefine(typeof(DefineCharaCommonPoseCommand), "pose", "{key}")]
+	[ArgumentValueDefine(typeof(DefineCharaCommonFaceCommand), "face", "{key}")]
 	public class CharaChangeCommand : CharaCommandBase
 	{
 		[Argument(Required = true)]
@@ -160,6 +172,7 @@ namespace ANovel.Engine
 	}
 
 	[TagName("chara_hide")]
+	[ArgumentValueDefine(typeof(DefineCharaCommand), "name", "{dispname}")]
 	public class CharaHideCommand : CharaCommandBase
 	{
 		[Argument(Required = true)]
@@ -252,8 +265,9 @@ namespace ANovel.Engine
 
 	}
 
-	[TagName("chara_control")]
-	public class CharaControlCommand : CharaCommandBase
+	[TagName("chara_layout")]
+	[ArgumentValueDefine(typeof(DefineCharaCommand), "name", "{dispname}")]
+	public class CharaLayoutCommand : CharaCommandBase
 	{
 		[Argument]
 		string m_Name = null;
@@ -268,6 +282,7 @@ namespace ANovel.Engine
 		protected override void UpdateEnvData(IEnvData data)
 		{
 			data = data.Prefixed(Category.Chara);
+			data.Delete<ImageActionEnvData>(m_Name);
 			if (data.TryGet<ImageObjectEnvData>(m_Name, out var image))
 			{
 				LayoutConfig.UpdateEvnData(m_Name, data, m_Layout);

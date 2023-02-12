@@ -1,16 +1,18 @@
-using System;
+﻿using System;
 
 namespace ANovel.Engine
 {
 	public partial class ImageController
 	{
+		string m_Name;
 		ServiceContainer m_Container;
 		Image m_Current;
 		Image m_Prev;
 		IScreenService Screen => m_Container.Get<IScreenService>();
 
-		public ImageController(ServiceContainer container)
+		public ImageController(string name, ServiceContainer container)
 		{
+			m_Name = name;
 			m_Container = container;
 		}
 
@@ -43,7 +45,7 @@ namespace ANovel.Engine
 		{
 			if (m_Current == null)
 			{
-				m_Current = new Image(m_Container, Screen.CurrentId);
+				m_Current = new Image(m_Name, m_Container, Screen.CurrentId);
 			}
 			return m_Current.Show(config, layout);
 		}
@@ -75,10 +77,38 @@ namespace ANovel.Engine
 			return m_Current.PlayAnim(config, layout);
 		}
 
+
+		public ActionPlayingHandle PlayAction(IActionData data)
+		{
+			if (m_Current == null)
+			{
+				throw new Exception($"play target not found ");
+			}
+			return m_Current.PlayAction(data);
+		}
+
 		public void SetOrder(long autoOrder)
 		{
 			if (m_Current == null) return;
 			m_Current.SetOrder(autoOrder);
+		}
+
+		public void StorePlaying(IEnvData data)
+		{
+			if (m_Current == null)
+			{
+				return;
+			}
+			m_Current.StorePlaying(data);
+		}
+
+		public void RestorePlaying(IEnvDataHolder data)
+		{
+			if (m_Current == null)
+			{
+				return;
+			}
+			m_Current.RestorePlaying(data);
 		}
 
 	}

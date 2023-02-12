@@ -1,4 +1,4 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 using System.Collections.Generic;
 
 namespace ANovel.Engine
@@ -73,15 +73,19 @@ namespace ANovel.Engine
 				{
 					param.Name = "chara_change";
 				}
-				else if (param.ContainsKey("control"))
+				else if (param.ContainsKey("layout"))
 				{
-					param.Name = "chara_control";
+					param.Name = "chara_layout";
+				}
+				else if (param.ContainsKey("action"))
+				{
+					param.Name = "chara_action";
 				}
 				else
 				{
 					param.Name = "chara";
 				}
-				param["name"] = m_Name;
+				param.AddValue("name", m_Name);
 			}
 		}
 
@@ -94,7 +98,7 @@ namespace ANovel.Engine
 
 					if (param.ContainsKey(defParam.Key) || param.ContainsKey(defParam.Value))
 					{
-						param[key] = defParam.Value;
+						param.AddValue(key, defParam.Value);
 						return;
 					}
 				}
@@ -106,7 +110,7 @@ namespace ANovel.Engine
 				{
 					if (param.ContainsKey(value))
 					{
-						param[key] = defParam.Value;
+						param.AddValue(key, defParam.Value);
 						return;
 					}
 				}
@@ -140,11 +144,12 @@ namespace ANovel.Engine
 	[ReplaceTagDefine("@{dispname}", "@chara name=\"{name}\"")]
 	[ReplaceTagDefine("@{dispname}", "@chara_hide name=\"{name}\"", SecondaryKey = "hide")]
 	[ReplaceTagDefine("@{dispname}", "@chara_change name=\"{name}\"", SecondaryKey = "change")]
-	[ReplaceTagDefine("@{dispname}", "@chara_control name=\"{name}\"", SecondaryKey = "control")]
+	[ReplaceTagDefine("@{dispname}", "@chara_layout name=\"{name}\"", SecondaryKey = "layout")]
 	[ReplaceTagDefine("@{dispname}", "@chara name=\"{name}\"", Label = "{name}({dispname})")]
 	[ReplaceTagDefine("@{dispname}", "@chara_hide name=\"{name}\"", SecondaryKey = "hide", Label = "{name}({dispname})")]
 	[ReplaceTagDefine("@{dispname}", "@chara_change name=\"{name}\"", SecondaryKey = "change", Label = "{name}({dispname})")]
-	[ReplaceTagDefine("@{dispname}", "@chara_control name=\"{name}\"", SecondaryKey = "control", Label = "{name}({dispname})")]
+	[ReplaceTagDefine("@{dispname}", "@chara_layout name=\"{name}\"", SecondaryKey = "layout", Label = "{name}({dispname})")]
+	[ReplaceTagDefine("@{dispname}", "@chara_action name=\"{name}\"", SecondaryKey = "action", Label = "{name}({dispname})")]
 	public class DefineCharaCommand : DefineCharaBaseCommand
 	{
 		[InjectArgument]
@@ -154,8 +159,6 @@ namespace ANovel.Engine
 	}
 
 	[TagName("define_chara_face")]
-	[ArgumentValueDefine("chara", "face", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
-	[ArgumentValueDefine("chara_change", "face", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
 	public class DefineCharaFaceCommand : PreProcess
 	{
 		[Argument(Required = true)]
@@ -171,8 +174,6 @@ namespace ANovel.Engine
 	}
 
 	[TagName("define_chara_pose")]
-	[ArgumentValueDefine("chara", "pose", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
-	[ArgumentValueDefine("chara_change", "pose", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
 	public class DefineCharaPoseCommand : PreProcess
 	{
 		[Argument(Required = true)]
@@ -188,7 +189,6 @@ namespace ANovel.Engine
 	}
 
 	[TagName("define_chara_level")]
-	[ArgumentValueDefine("chara", "level", "{key}", SecondaryKey = "name", SecondaryKeyValue = "{name}")]
 	public class DefineCharaLevelCommand : PreProcess
 	{
 		[Argument(Required = true)]
@@ -259,8 +259,6 @@ namespace ANovel.Engine
 #endif
 
 	[TagName("define_chara_common_pose")]
-	[ArgumentValueDefine("chara", "pose", "{key}")]
-	[ArgumentValueDefine("chara_change", "pose", "{key}")]
 	public class DefineCharaCommonPoseCommand : PreProcess
 	{
 		[InjectArgument]
@@ -278,8 +276,6 @@ namespace ANovel.Engine
 	}
 
 	[TagName("define_chara_common_face")]
-	[ArgumentValueDefine("chara", "face", "{key}")]
-	[ArgumentValueDefine("chara_change", "face", "{key}")]
 	public class DefineCharaCommonFaceCommand : PreProcess
 	{
 		[InjectArgument]
@@ -297,7 +293,6 @@ namespace ANovel.Engine
 	}
 
 	[TagName("define_chara_common_level")]
-	[ArgumentValueDefine("chara", "level", "{key}")]
 	public class DefineCharaCommonLevelCommand : PreProcess
 	{
 		[InjectArgument]

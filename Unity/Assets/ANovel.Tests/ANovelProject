@@ -1,0 +1,4521 @@
+{
+    "ScenarioPath": "TestScenario",
+    "ResourcePath": "",
+    "Tags": [
+        {
+            "Name": "localize_data",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "LocalizeDataCommand",
+            "Arguments": [
+                {
+                    "Name": "type",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Auto",
+                        "Csv",
+                        "Tsv",
+                        "Json"
+                    ]
+                },
+                {
+                    "Name": "usekey",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "usedefault",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "define_symbol",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "DefineSymbol",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "if",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "IfScope",
+            "Arguments": [
+                {
+                    "Name": "condition",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "not",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "elseif",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "ElseIfScope",
+            "Arguments": [
+                {
+                    "Name": "condition",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "not",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "else",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "ElseScope",
+            "Arguments": []
+        },
+        {
+            "Name": "endif",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "EndIfScope",
+            "Arguments": []
+        },
+        {
+            "Name": "import",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "ImportCommand",
+            "Arguments": [
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "macro",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "MacroScope",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "endmacro",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "EndMacroScope",
+            "Arguments": []
+        },
+        {
+            "Name": "test_meta_deine",
+            "Symbols": "TEST",
+            "LineType": "#",
+            "Description": "TestMetaDefineTest",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "first",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "define_chara",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "DefineCharaCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "dispname",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowpath",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "defaultface",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "defaultpose",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowx",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowy",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowz",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowscale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "define_chara_face",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "DefineCharaFaceCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "define_chara_pose",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "DefineCharaPoseCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "offsetx",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "offsety",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "offsetz",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowx",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowy",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowz",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowscale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "define_chara_level",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "DefineCharaLevelCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "offsetx",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "offsety",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "offsetz",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "define_chara_common",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "DefineCharaCommonCommand",
+            "Arguments": [
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowpath",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "defaultface",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "defaultpose",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowscale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "define_chara_common_pose",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "DefineCharaCommonPoseCommand",
+            "Arguments": [
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "offsetx",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "offsety",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "offsetz",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowx",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowy",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowz",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindowscale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "define_chara_common_face",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "DefineCharaCommonFaceCommand",
+            "Arguments": [
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "define_chara_common_level",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "DefineCharaCommonLevelCommand",
+            "Arguments": [
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "offsetx",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "offsety",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "offsetz",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "define_autovoice",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "自動ボイス再生の定義です",
+            "Arguments": [
+                {
+                    "Name": "path",
+                    "Description": "再生するボイスのパスです。{}で囲った以下の要素が置換されます\n{FILE_NAME}ファイル名です\n{BLOCK_INDEX}ラベルからのテキスト毎のインデックスです\n{INDEX}ボイスの再生にインクリメントされるインデックスです\n{LABEL}現在のラベルです\n{CHARA}キャラのIDです\n{CHARA_INDEX}キャラの発言毎にインクリメントされるインデックスです\n{DISP_NAME}キャラの表示名です\n",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "resetonjump",
+                    "Description": "Jump時にインデックス等をリセットします",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "charaindex",
+                    "Description": "CHARA_INDEXを利用するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "define_se",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "SE情報を定義します",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "group",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "volume",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "pitch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "pan",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "define_bgm",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "BGM情報を定義します",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "group",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "volume",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "pitch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "pan",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_log",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestLogCommand",
+            "Arguments": [
+                {
+                    "Name": "message",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_macro_define",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestMacroDefineCommand",
+            "Arguments": [
+                {
+                    "Name": "message",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_preload",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestPreLoad",
+            "Arguments": [
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_sync",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestSync",
+            "Arguments": []
+        },
+        {
+            "Name": "test_prepare_wait",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestPrepareWaitTime",
+            "Arguments": [
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_trigger",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestTrigger",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_error",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestError",
+            "Arguments": []
+        },
+        {
+            "Name": "test_inject_param",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "InjectParamTestCommand",
+            "Arguments": [
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "item",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "flag",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "flag",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_default_formatter",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestDefaultFormatter",
+            "Arguments": [
+                {
+                    "Name": "key1",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key2",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key2",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key3",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key3",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key4",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_default_formatter",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "IgnoreCommand",
+            "Arguments": []
+        },
+        {
+            "Name": "test_custom_formatter",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestCustomFormatter",
+            "Arguments": [
+                {
+                    "Name": "key1",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "None",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key2",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "None",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key3",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key3",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "test_required",
+            "Symbols": "TEST",
+            "LineType": "@",
+            "Description": "TestRequired",
+            "Arguments": [
+                {
+                    "Name": "required",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "optional",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "bg",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "BGShowCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Bg",
+                        "*"
+                    ]
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Rule",
+                        "*"
+                    ]
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "w",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "h",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "color",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Color",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "screenmatch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "None",
+                        "Fit",
+                        "Expand",
+                        "Shrink"
+                    ]
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scalex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scaley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "angley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglez",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "opacity",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "bg_change",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "BGChangeCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Bg",
+                        "*"
+                    ]
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Rule",
+                        "*"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "bg_hide",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "BGHideCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Rule",
+                        "*"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "bg_control",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "BGControlCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "w",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "h",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "color",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Color",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "screenmatch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "None",
+                        "Fit",
+                        "Expand",
+                        "Shrink"
+                    ]
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scalex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scaley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "angley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglez",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "opacity",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "chara",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "CharaShowCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "front",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindow",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "pose",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "face",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "level",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Rule",
+                        "*"
+                    ]
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "w",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "h",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "color",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Color",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "screenmatch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "None",
+                        "Fit",
+                        "Expand",
+                        "Shrink"
+                    ]
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scalex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scaley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "angley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglez",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "opacity",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "level",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "chara_face_window",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "CharaParamCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "pose",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "face",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "level",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "chara_change",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "CharaChangeCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "front",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "facewindow",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "pose",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "face",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "level",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Rule",
+                        "*"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "chara_hide",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "CharaHideCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "clear",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Rule",
+                        "*"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "chara_hide_all",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "CharaHideAllCommand",
+            "Arguments": [
+                {
+                    "Name": "clear",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "level",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Rule",
+                        "*"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "chara_control",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "CharaControlCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "front",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "w",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "h",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "color",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Color",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "screenmatch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "None",
+                        "Fit",
+                        "Expand",
+                        "Shrink"
+                    ]
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scalex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scaley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "angley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglez",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "opacity",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "face_window_show",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "FaceWindowShowCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "face_window_hide",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "FaceWindowHideCommand",
+            "Arguments": []
+        },
+        {
+            "Name": "image",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ImageShowCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "front",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Image",
+                        "*"
+                    ]
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Rule",
+                        "*"
+                    ]
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "w",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "h",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "color",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Color",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "screenmatch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "None",
+                        "Fit",
+                        "Expand",
+                        "Shrink"
+                    ]
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scalex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scaley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "angley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglez",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "opacity",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "level",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "image_change",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ImageChangeCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "front",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Image",
+                        "*"
+                    ]
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Rule",
+                        "*"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "image_hide",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ImageHideCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Rule",
+                        "*"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "image_hide_all",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ImageHideAllCommand",
+            "Arguments": [
+                {
+                    "Name": "level",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Rule",
+                        "*"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "image_control",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ImageControlCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "front",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                },
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "z",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "w",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "h",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "color",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Color",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "screenmatch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "None",
+                        "Fit",
+                        "Expand",
+                        "Shrink"
+                    ]
+                },
+                {
+                    "Name": "scale",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scalex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "scaley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglex",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "angley",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "anglez",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "opacity",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "message_show",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "MessageShowCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "message_hide",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "MessageHideCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "se",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "SePlayCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "group",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "slot",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Se",
+                        "*"
+                    ]
+                },
+                {
+                    "Name": "volume",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "loop",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                },
+                {
+                    "Name": "pitch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "pan",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "se_stop",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "SeStopCommand",
+            "Arguments": [
+                {
+                    "Name": "slot",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "se_stop_all",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "SeStopAllCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "se_volume",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "SeVolumeCommand",
+            "Arguments": [
+                {
+                    "Name": "slot",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "volume",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "bgm",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "BgmPlayCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "slot",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "group",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "crossfade",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "stopeasing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Bgm",
+                        "*"
+                    ]
+                },
+                {
+                    "Name": "volume",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "loop",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                },
+                {
+                    "Name": "pitch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "pan",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "bgm_volume",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "BgmVolumeCommand",
+            "Arguments": [
+                {
+                    "Name": "slot",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "volume",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "bgm_stop",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "BgmStopCommand",
+            "Arguments": [
+                {
+                    "Name": "slot",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "voice",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "VoicePlayCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "group",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "slot",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Path",
+                    "InputOptions": [
+                        "Voice",
+                        "*"
+                    ]
+                },
+                {
+                    "Name": "volume",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                },
+                {
+                    "Name": "pitch",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "pan",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "voice_stop",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "VoiceStopCommand",
+            "Arguments": [
+                {
+                    "Name": "slot",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "voice_stop_all",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "VoiceStopAllCommand",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "easing",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Linear",
+                        "QuadraticEaseIn",
+                        "QuadraticEaseOut",
+                        "QuadraticEaseInOut",
+                        "CubicEaseIn",
+                        "CubicEaseOut",
+                        "CubicEaseInOut",
+                        "QuarticEaseIn",
+                        "QuarticEaseOut",
+                        "QuarticEaseInOut",
+                        "QuinticEaseIn",
+                        "QuinticEaseOut",
+                        "QuinticEaseInOut",
+                        "SineEaseIn",
+                        "SineEaseOut",
+                        "SineEaseInOut",
+                        "CircularEaseIn",
+                        "CircularEaseOut",
+                        "CircularEaseInOut",
+                        "ExponentialEaseIn",
+                        "ExponentialEaseOut",
+                        "ExponentialEaseInOut",
+                        "ElasticEaseIn",
+                        "ElasticEaseOut",
+                        "ElasticEaseInOut",
+                        "BackEaseIn",
+                        "BackEaseOut",
+                        "BackEaseInOut",
+                        "BounceEaseIn",
+                        "BounceEaseOut",
+                        "BounceEaseInOut"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "autovoice",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "AutoVoiceCommand",
+            "Arguments": [
+                {
+                    "Name": "enabled",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "index",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "autovoice_reset",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "AutoVoiceResetCommand",
+            "Arguments": [
+                {
+                    "Name": "common",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "chara",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "autovoice_skip",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "SkipAutoVoiceCommand",
+            "Arguments": []
+        },
+        {
+            "Name": "wait",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "指定時間停止します",
+            "Arguments": [
+                {
+                    "Name": "time",
+                    "Description": "指定時間",
+                    "Required": true,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "wait_click",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "WaitClickCommand",
+            "Arguments": []
+        },
+        {
+            "Name": "wait_trig",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "WaitTriggerCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "async",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "スコープを非同期実行します",
+            "Arguments": []
+        },
+        {
+            "Name": "if",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "IfCommand",
+            "Arguments": [
+                {
+                    "Name": "condition",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "left",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "right",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "not",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "flag",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "has_val",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "elseif",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "ElseIfCommand",
+            "Arguments": [
+                {
+                    "Name": "condition",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "left",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "right",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "not",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "flag",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "has_val",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "else",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "ElseCommand",
+            "Arguments": []
+        },
+        {
+            "Name": "endif",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "EndIfCommand",
+            "Arguments": []
+        },
+        {
+            "Name": "parallel",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "コマンドを並列実行します",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "同期待ちを行うか？\n空の場合は実行中のコマンドから同期するか判断します",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "stop",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "シナリオの読み込みを停止します",
+            "Arguments": [
+                {
+                    "Name": "cleartext",
+                    "Description": "テキストをクリアします",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "jump",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "シナリオをジャンプします",
+            "Arguments": [
+                {
+                    "Name": "cleartext",
+                    "Description": "テキストをクリアします",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "遷移先のファイルパスです",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "label",
+                    "Description": "遷移先のラベルです",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "endblock",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "ブロックを終了します",
+            "Arguments": [
+                {
+                    "Name": "cansave",
+                    "Description": "セーブ可能にするか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "end",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "スコープを終了します。汎用コマンドです",
+            "Arguments": []
+        },
+        {
+            "Name": "val",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableSetCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "type",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Bool",
+                        "Int",
+                        "Real",
+                        "String"
+                    ]
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "val_eval",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableEvalCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "type",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Bool",
+                        "Int",
+                        "Real",
+                        "String"
+                    ]
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "val_add",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableAddCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "value",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "allow_empty",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "flag",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableFlagCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "on",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "off",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "val_del",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableDeleteCommand",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "val_del_all",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "VariableDeleteAllCommand",
+            "Arguments": [
+                {
+                    "Name": "prefix",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "suffix",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "contains",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "global",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "localize_data_index",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "LocalizeDataIndexCommand",
+            "Arguments": [
+                {
+                    "Name": "index",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "key",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "transition",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "画面切り替えを行います",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "capture",
+                    "Description": "現在の画面をキャプチャーして切り替えます",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "copy",
+                    "Description": "現在の情報を切り替え先にコピーします",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        }
+    ],
+    "CompletionItem": {
+        "ReplaceTag": [
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
+                "Replace": "@chara name=\"{name}\"",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": "",
+                "Label": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
+                "Replace": "@chara_hide name=\"{name}\"",
+                "SecondaryKey": "hide",
+                "SecondaryKeyValue": "",
+                "Label": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
+                "Replace": "@chara_change name=\"{name}\"",
+                "SecondaryKey": "change",
+                "SecondaryKeyValue": "",
+                "Label": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
+                "Replace": "@chara_control name=\"{name}\"",
+                "SecondaryKey": "control",
+                "SecondaryKeyValue": "",
+                "Label": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
+                "Replace": "@chara name=\"{name}\"",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": "",
+                "Label": "{name}({dispname})"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
+                "Replace": "@chara_hide name=\"{name}\"",
+                "SecondaryKey": "hide",
+                "SecondaryKeyValue": "",
+                "Label": "{name}({dispname})"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
+                "Replace": "@chara_change name=\"{name}\"",
+                "SecondaryKey": "change",
+                "SecondaryKeyValue": "",
+                "Label": "{name}({dispname})"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara",
+                "Key": "@{dispname}",
+                "Replace": "@chara_control name=\"{name}\"",
+                "SecondaryKey": "control",
+                "SecondaryKeyValue": "",
+                "Label": "{name}({dispname})"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_se",
+                "Key": "@se_{name}",
+                "Replace": "@se path={path}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": "",
+                "Label": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_bgm",
+                "Key": "@bgm_{name}",
+                "Replace": "@bgm path={path}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": "",
+                "Label": ""
+            }
+        ],
+        "ArgumentValue": [
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_face",
+                "TargetTag": "chara",
+                "Argument": "face",
+                "Value": "{key}",
+                "SecondaryKey": "name",
+                "SecondaryKeyValue": "{name}"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_face",
+                "TargetTag": "chara_change",
+                "Argument": "face",
+                "Value": "{key}",
+                "SecondaryKey": "name",
+                "SecondaryKeyValue": "{name}"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_pose",
+                "TargetTag": "chara",
+                "Argument": "pose",
+                "Value": "{key}",
+                "SecondaryKey": "name",
+                "SecondaryKeyValue": "{name}"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_pose",
+                "TargetTag": "chara_change",
+                "Argument": "pose",
+                "Value": "{key}",
+                "SecondaryKey": "name",
+                "SecondaryKeyValue": "{name}"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_level",
+                "TargetTag": "chara",
+                "Argument": "level",
+                "Value": "{key}",
+                "SecondaryKey": "name",
+                "SecondaryKeyValue": "{name}"
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_common_pose",
+                "TargetTag": "chara",
+                "Argument": "pose",
+                "Value": "{key}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_common_pose",
+                "TargetTag": "chara_change",
+                "Argument": "pose",
+                "Value": "{key}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_common_face",
+                "TargetTag": "chara",
+                "Argument": "face",
+                "Value": "{key}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_common_face",
+                "TargetTag": "chara_change",
+                "Argument": "face",
+                "Value": "{key}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            },
+            {
+                "LineType": "#",
+                "RegisterTag": "define_chara_common_level",
+                "TargetTag": "chara",
+                "Argument": "level",
+                "Value": "{key}",
+                "SecondaryKey": "",
+                "SecondaryKeyValue": ""
+            }
+        ]
+    },
+    "Paths": [
+        {
+            "Category": "Chara",
+            "RootPath": "Chara/"
+        },
+        {
+            "Category": "CharaFaceWindow",
+            "RootPath": "Chara/"
+        },
+        {
+            "Category": "Bg",
+            "RootPath": "Bg/"
+        },
+        {
+            "Category": "Image",
+            "RootPath": "Image/"
+        },
+        {
+            "Category": "Rule",
+            "RootPath": "Rule/"
+        },
+        {
+            "Category": "Bgm",
+            "RootPath": "Sound/BGM/"
+        },
+        {
+            "Category": "Se",
+            "RootPath": "Sound/SE/"
+        },
+        {
+            "Category": "Voice",
+            "RootPath": "Sound/Voice/"
+        }
+    ]
+}

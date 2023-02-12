@@ -1,0 +1,30 @@
+
+#import path="CircleImport"
+
+#if condition="SKIP_MACRO_LOG_DEFINE" not
+
+#macro name="macrolog"
+#if condition="SKIP_MACRO_LOG" not
+@test_log message="%m%"
+#endif
+#endmacro
+
+#endif
+
+#macro name="macrolog2"
+#if condition="SKIP_MACRO_LOG" not
+@test_log message="%m%"
+#endif
+#endmacro
+
+#macro name="definelog"
+#if condition="MACRO_LOG"
+@test_macro_define message="Define MACRO_LOG"
+#elseif condition="SKIP_MACRO_LOG_DEFINE"
+@test_macro_define message="Define SKIP_MACRO_LOG_DEFINE"
+#elseif condition="SKIP_MACRO_LOG"
+@test_macro_define message="Define SKIP_MACRO_LOG"
+#else
+@test_macro_define message="No Define"
+#endif
+#endmacro

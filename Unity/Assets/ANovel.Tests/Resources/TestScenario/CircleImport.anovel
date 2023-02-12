@@ -1,0 +1,12 @@
+
+#import path="MacroSet"
+
+#if condition="IMMEDIATE_DEFINE" not
+	;define_symbolは即時反映される
+	#define_symbol name="IMMEDIATE_DEFINE"
+	#if condition="IMMEDIATE_DEFINE"
+		#macro name="dep_macrolog"
+		@macrolog2 m="dep"
+		#endmacro
+	#endif
+#endif

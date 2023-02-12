@@ -1,4 +1,4 @@
-using ANovel.Serialization;
+﻿using ANovel.Serialization;
 using UnityEngine;
 
 namespace ANovel.Engine
@@ -31,6 +31,8 @@ namespace ANovel.Engine
 			data.Delete<LayoutSizeEnvData>(name);
 			data.Delete<LayoutColorEnvData>(name);
 			data.Delete<LayoutLevelEnvData>(name);
+
+			data.Delete<ImageActionEnvData>(name);
 		}
 
 		public static LayoutConfig Restore(string name, IEnvDataHolder data)

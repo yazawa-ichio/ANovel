@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace ANovel
 {
@@ -53,6 +53,8 @@ namespace ANovel
 		public Millisecond AddSecond(int second) => new Millisecond(second * 1000 + Value);
 
 		public Millisecond AddSecond(float second) => new Millisecond((int)(second * 1000) + Value);
+
+		public Millisecond Add(Millisecond millisecond) => new Millisecond(millisecond.Value + Value);
 
 	}
 

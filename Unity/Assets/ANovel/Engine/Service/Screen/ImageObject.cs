@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +24,7 @@ namespace ANovel.Engine
 		ICacheHandle<Texture> m_RuleTexHandle;
 		FloatFadeHandle m_TransitionHandle;
 		List<ParamPlayHandle> m_Playing = new List<ParamPlayHandle>();
+		ActionPlayingHandle m_Action;
 		IEngineTime m_Time;
 
 		public ILevel Level { get; private set; }
@@ -37,6 +38,8 @@ namespace ANovel.Engine
 			get => m_Image.enabled;
 			set => m_Image.enabled = true;
 		}
+
+		public Vector2 ScreenSize { get; private set; }
 
 		public Vector2? TexSize { get; private set; }
 
@@ -158,6 +161,7 @@ namespace ANovel.Engine
 			return layout;
 		}
 
+
 		public void SetOrder(long? order)
 		{
 			if (order.HasValue)
@@ -167,11 +171,12 @@ namespace ANovel.Engine
 			}
 		}
 
-		public void SetLayout(ImageLayout layout)
+		public void SetLayout(ImageLayout layout, Vector2 screenSize)
 		{
 			StopAll();
 			m_Layout = layout;
 			m_LayoutDirty = true;
+			ScreenSize = screenSize;
 			ApplyLayout();
 		}
 
@@ -194,6 +199,7 @@ namespace ANovel.Engine
 			}
 		}
 
+
 		void StopAll()
 		{
 			m_LayoutDirty = true;
@@ -202,6 +208,8 @@ namespace ANovel.Engine
 				m_Playing[0].Handle?.Dispose();
 				m_Playing.RemoveAt(0);
 			}
+			m_Action?.Dispose();
+			m_Action = null;
 		}
 
 		public void Stop(ImageParamType type)
@@ -220,6 +228,8 @@ namespace ANovel.Engine
 
 		public IPlayHandle PlayAnim(ImageObjectParamAnimConfig[] configs)
 		{
+			m_Action?.Dispose();
+			m_Action = null;
 			return new CombinePlayHandle(configs.Select(x => PlayAnim(x)));
 		}
 
@@ -239,6 +249,12 @@ namespace ANovel.Engine
 				Handle = handle,
 			});
 			return handle;
+		}
+
+		public ActionPlayingHandle PlayAction(IActionData data)
+		{
+			StopAll();
+			return m_Action = new ActionPlayingHandle(data, this);
 		}
 
 		public void SetParam(ImageParamType type, float value)
@@ -264,6 +280,7 @@ namespace ANovel.Engine
 				}
 			}
 			m_TransitionHandle?.Update(deltaTime);
+			m_Action?.Update(deltaTime);
 		}
 
 		void ResetParam()
@@ -309,7 +326,7 @@ namespace ANovel.Engine
 			StopAll();
 			m_MainTexHandle = src.m_MainTexHandle?.Duplicate();
 			m_Material.Copy(src.m_Material);
-			SetLayout(src.GetLayout());
+			SetLayout(src.GetLayout(), src.ScreenSize);
 			if (copyPlaying)
 			{
 				foreach (var playing in src.m_Playing)
@@ -327,9 +344,39 @@ namespace ANovel.Engine
 						Handle = handle,
 					});
 				}
+				if (src.m_Action != null && src.m_Action.IsPlaying)
+				{
+					m_Action = src.m_Action.Copy(this);
+				}
 			}
 		}
 
+
+		public void StorePlaying(string name, IEnvData data)
+		{
+			if (m_Action != null && m_Action.IsPlaying)
+			{
+				data.Set(name, new ActionTimeEnvData
+				{
+					Time = m_Action.Time
+				});
+			}
+		}
+
+		public void RestorePlaying(string name, IEnvDataHolder data)
+		{
+			if (data.TryGet<ActionTimeEnvData>(name, out var time))
+			{
+				if (m_Action != null)
+				{
+					m_Action.Update(time.Time);
+				}
+			}
+			else
+			{
+				m_Action?.Dispose();
+			}
+		}
 
 	}
 }

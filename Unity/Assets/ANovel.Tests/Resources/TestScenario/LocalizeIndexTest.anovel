@@ -1,0 +1,26 @@
+
+#localize_data path="LocalizeIndexTestData"
+
+1
+
+2
+
+3
+
+4
+
+&localize_data_index index="6"
+
+7
+
+8
+
+9
+
+&localize_data_index key="3"
+
+3
+
+4
+
+5

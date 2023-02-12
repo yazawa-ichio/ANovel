@@ -1,4 +1,4 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 using System;
 using System.Collections.Generic;
 
@@ -35,6 +35,17 @@ namespace ANovel
 		public static IEnumerable<string> GetKeys<TValue>(this IEnvData self, Func<TValue, bool> func = null) where TValue : struct, IEnvValue
 		{
 			foreach (var kvp in self.GetAll<TValue>())
+			{
+				if (func == null || func(kvp.Value))
+				{
+					yield return kvp.Key;
+				}
+			}
+		}
+
+		public static IEnumerable<string> GetKeysByInterface<TInterface>(this IEnvData self, Func<TInterface, bool> func = null) where TInterface : class
+		{
+			foreach (var kvp in self.GetAllByInterface<TInterface>())
 			{
 				if (func == null || func(kvp.Value))
 				{
@@ -107,6 +118,14 @@ namespace ANovel
 				cur = cur.GetParent();
 			}
 			return cur;
+		}
+
+
+		public static bool HasSingle<TValue>(this IEnvDataHolder self) where TValue : struct, IEnvValue
+		{
+			self = self.GetRoot();
+			var key = EvnDataTypePrefix<TValue>.TypeName;
+			return self.Has<TValue>(key);
 		}
 
 		public static bool TryGetSingle<TValue>(this IEnvDataHolder self, out TValue value) where TValue : struct, IEnvValue

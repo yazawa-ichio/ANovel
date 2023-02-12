@@ -1,5 +1,4 @@
-using ANovel.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ANovel.Core
@@ -30,6 +29,8 @@ namespace ANovel.Core
 		ICommand m_SyncCommand;
 		int m_Index;
 		List<ICommand> m_RunCommands;
+		bool m_DoProcess;
+		bool m_ScheduleDispose;
 
 		public BlockEntry(Block block, PreLoadScope preLoad)
 		{
@@ -39,6 +40,24 @@ namespace ANovel.Core
 		}
 
 		public void Process()
+		{
+			try
+			{
+				m_DoProcess = true;
+				ProcessImpl();
+			}
+			finally
+			{
+				m_DoProcess = false;
+				if (m_ScheduleDispose)
+				{
+					Dispose();
+				}
+			}
+
+		}
+
+		void ProcessImpl()
 		{
 			if (m_SyncCommand != null)
 			{
@@ -56,22 +75,6 @@ namespace ANovel.Core
 			while (m_Index < commands.Count)
 			{
 				var cmd = commands[m_Index++];
-				if (cmd is IScopeCommand batch)
-				{
-					bool batchEnd = false;
-					while (m_Index < commands.Count)
-					{
-						if (batch.AddScope(commands[m_Index++]))
-						{
-							batchEnd = true;
-							break;
-						}
-					}
-					if (!batchEnd)
-					{
-						throw new Exception("not found batch end");
-					}
-				}
 				m_RunCommands.Add(cmd);
 				cmd.Execute();
 				if (cmd.IsSync() && !cmd.IsEnd())
@@ -108,10 +111,15 @@ namespace ANovel.Core
 
 		public void Dispose()
 		{
+			if (m_DoProcess)
+			{
+				m_ScheduleDispose = true;
+				return;
+			}
 			PreLoad?.Dispose();
 			foreach (var cmd in Block.Commands)
 			{
-				cmd.FinishBlock();
+				cmd.Finish();
 			}
 			if (m_RunCommands != null)
 			{

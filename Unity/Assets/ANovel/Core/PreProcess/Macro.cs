@@ -1,5 +1,7 @@
+﻿using ANovel.Commands;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ANovel.Core
 {
@@ -11,16 +13,18 @@ namespace ANovel.Core
 
 		TagParam m_Param = new TagParam();
 		List<string> m_ParamKeys = new List<string>();
-		List<string> m_ParamValues = new List<string>();
+		List<TagParam.ValueEntry> m_ParamValues = new List<TagParam.ValueEntry>();
 		bool m_Do;
+		BranchController m_BranchController;
 
 		public Macro(MacroDefine owner, LineData[] line)
 		{
 			m_Owner = owner;
 			m_Line = line;
+			m_BranchController = new BranchController();
 		}
 
-		public void Provide(List<string> symbols, Dictionary<string, string> variables, List<Tag> ret)
+		public IEnumerable<Tag> Provide(List<string> symbols, TagParam variables)
 		{
 			if (m_Do) throw new InvalidOperationException("recursive call to macro is not allowed");
 			try
@@ -29,17 +33,44 @@ namespace ANovel.Core
 				foreach (var data in m_Line)
 				{
 					Assign(in data, variables);
-					if (m_Owner.TryProvide(symbols, m_Param, ret))
+					if (m_Owner.TryProvide(symbols, m_Param, out var ret))
 					{
-						continue;
+						foreach (var tag in ret)
+						{
+							yield return tag;
+						}
 					}
 					else
 					{
+						m_BranchController.TryPrepare(m_Param);
+						if (m_BranchController.CheckIgnore(m_Param))
+						{
+							continue;
+						}
 						if (TagEntry.TryGet(in data, m_Param.Name, symbols, out var entry))
 						{
-							ret.Add(entry.Create(in data, m_Param));
+							var tag = entry.Create(in data, m_Param);
+							if (tag is IVariableCommand variableCommand)
+							{
+								variableCommand.UpdatVariables(m_Param.Evaluator);
+							}
+							if (tag is IBranchCommand branchCommand)
+							{
+								m_BranchController.BranchCommand(variables.Evaluator, branchCommand);
+								continue;
+							}
+							if (tag is IBranchEnd branchEnd)
+							{
+								m_BranchController.BranchEnd(branchEnd);
+								continue;
+							}
+							yield return tag;
 						}
 					}
+				}
+				if (m_Line.Length > 0)
+				{
+					m_BranchController.CheckFinish(variables.Data);
 				}
 			}
 			finally
@@ -48,10 +79,15 @@ namespace ANovel.Core
 			}
 		}
 
-		void Assign(in LineData data, Dictionary<string, string> variables)
+
+		void Assign(in LineData data, TagParam variables)
 		{
+			m_Param.Evaluator = variables.Evaluator;
 			m_Param.Set(in data, m_Owner.m_Converters);
-			foreach (var kvp in m_Param)
+
+			m_ParamKeys.Clear();
+			m_ParamValues.Clear();
+			foreach (var kvp in m_Param.m_Dic)
 			{
 				m_ParamKeys.Add(kvp.Key);
 				m_ParamValues.Add(kvp.Value);
@@ -59,23 +95,76 @@ namespace ANovel.Core
 			for (int i = 0; i < m_ParamValues.Count; i++)
 			{
 				var val = m_ParamValues[i];
-				if (val == null || val.Length < 3)
+				if (val.Value == null || !val.Value.Contains("%"))
 				{
 					continue;
 				}
-				if (val[0] == '%' && val[val.Length - 1] == '%')
+				var ret = Replace(val.Value, variables);
+				if (string.IsNullOrEmpty(ret))
 				{
-					val = val.Substring(1, val.Length - 2);
-					if (variables.TryGetValue(val, out var replace))
-					{
-						m_Param[m_ParamKeys[i]] = replace;
-					}
-					else
-					{
-						m_Param[m_ParamKeys[i]] = null;
-					}
+					ret = null;
+				}
+				if (val.UseEvaluator)
+				{
+					m_Param.AddValueWithEvaluator(m_ParamKeys[i], ret);
+				}
+				else
+				{
+					m_Param.AddValue(m_ParamKeys[i], ret);
 				}
 			}
+		}
+
+		StringBuilder m_Body = new StringBuilder();
+		StringBuilder m_Key = new StringBuilder();
+		string Replace(string value, TagParam variables)
+		{
+			var ret = m_Body.Clear();
+			for (int i = 0; i < value.Length; i++)
+			{
+				char c = value[i];
+				if (c == '%')
+				{
+					i++;
+					if (i < value.Length && value[i] == '%')
+					{
+						ret.Append(c);
+						continue;
+					}
+					ret.Append(GetValue(ref i, value, variables));
+				}
+				else
+				{
+					ret.Append(c);
+				}
+			}
+			return ret.ToString();
+		}
+
+		string GetValue(ref int i, string path, TagParam variables)
+		{
+			var key = m_Key.Clear();
+			bool end = false;
+			while (i < path.Length)
+			{
+				var c = path[i];
+				if (c == '%')
+				{
+					end = true;
+					break;
+				}
+				key.Append(c);
+				i++;
+			}
+			if (variables.TryGetValue(key.ToString(), out var ret))
+			{
+				return ret;
+			}
+			if (end)
+			{
+				return "";
+			}
+			return key.ToString();
 		}
 
 	}

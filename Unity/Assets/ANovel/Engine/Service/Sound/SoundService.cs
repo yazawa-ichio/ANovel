@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,7 +51,6 @@ namespace ANovel.Engine
 
 			m_Pool = new ComponentPool<AudioSource>(m_Root);
 			Mixer = GetComponent<IAudioMixerProvider>();
-			Event.Register(this);
 		}
 
 

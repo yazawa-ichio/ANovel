@@ -1,4 +1,4 @@
-using ANovel.Serialization;
+﻿using ANovel.Serialization;
 
 namespace ANovel.Engine
 {
@@ -9,6 +9,7 @@ namespace ANovel.Engine
 		public string Name;
 		public string Chara;
 		public string Message;
+		public string RawText;
 	}
 
 	public struct MessageStatusEnvData : IEnvValue, IDefaultValueSerialization

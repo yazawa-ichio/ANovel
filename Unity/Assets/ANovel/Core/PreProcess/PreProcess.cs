@@ -1,4 +1,4 @@
-namespace ANovel.Core
+﻿namespace ANovel.Core
 {
 	public abstract class PreProcess : Tag
 	{

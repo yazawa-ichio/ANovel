@@ -1,5 +1,6 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ANovel.Engine
@@ -116,6 +117,20 @@ namespace ANovel.Engine
 				return list.ToArray();
 			}
 		}
+
+		public IEnumerable<(ImageParamType type, float from, float to)> GetDiff(ImageLayout next)
+		{
+			foreach (var type in s_Types)
+			{
+				var f = Get(type);
+				var t = next.Get(type);
+				if (t != f)
+				{
+					yield return (type, f, t);
+				}
+			}
+		}
+
 
 
 	}

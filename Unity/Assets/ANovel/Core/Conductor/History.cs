@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +16,18 @@ namespace ANovel.Core
 
 		LinkedList<HistoryLog> m_LogList = new LinkedList<HistoryLog>();
 
+		public TextBlock CurrentText
+		{
+			get
+			{
+				if (m_LogList.Count > 0)
+				{
+					return m_LogList.Last.Value.Text;
+				}
+				return default;
+			}
+		}
+
 		public BlockLabelInfo CurrentLabel
 		{
 			get
@@ -28,7 +40,19 @@ namespace ANovel.Core
 			}
 		}
 
-		public void Add(EnvData envData, Block block, EnvDataDiff diff)
+		public EnvDataSnapshot CurrentPlayingSave
+		{
+			get
+			{
+				if (m_LogList.Count > 0)
+				{
+					return m_LogList.Last.Value.PlayingSave;
+				}
+				return default;
+			}
+		}
+
+		public void Add(EnvData envData, Block block, EnvDataDiff diff, EnvDataSnapshot playing)
 		{
 			if (block.SkipHistory)
 			{
@@ -40,8 +64,8 @@ namespace ANovel.Core
 			// 必要であればExtensionに情報を入れる
 			OnAdd?.Invoke(e);
 			var _diff = CanRollback ? diff : null;
-			var log = new HistoryLog(block, _diff, extension);
-
+			var _playing = CanRollback ? playing : null;
+			var log = new HistoryLog(block, _diff, extension, _playing);
 			if (m_LogList.Count >= MaxLogCount)
 			{
 				m_LogList.RemoveFirst();

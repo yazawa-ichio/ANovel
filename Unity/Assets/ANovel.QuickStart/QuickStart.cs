@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -40,6 +40,11 @@ namespace ANovel.QuickStart
 			{
 				m_Engine.TryNext();
 			}
+			if (Input.GetKeyDown(KeyCode.B))
+			{
+				_ = m_Engine.Back();
+			}
+
 		}
 	}
 }

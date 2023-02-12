@@ -1,5 +1,0 @@
-namespace ANovel.Engine
-{
-
-
-}

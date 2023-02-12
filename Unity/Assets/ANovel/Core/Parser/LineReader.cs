@@ -1,4 +1,4 @@
-namespace ANovel.Core
+﻿namespace ANovel.Core
 {
 
 	public class LineReader
@@ -11,7 +11,7 @@ namespace ANovel.Core
 
 		public string Path => m_Name;
 
-		public bool EndOfFile => m_Index >= m_Line.Length;
+		public bool EndOfFile => m_Index > m_Line.Length;
 
 		public LineReader(string name, string text)
 		{
@@ -55,6 +55,12 @@ namespace ANovel.Core
 					data = new LineData(m_Name, line, index, type);
 					return true;
 				}
+			}
+			if (m_Index == m_Line.Length)
+			{
+				var index = m_Index++;
+				data = new LineData("stop", "&stop", index, LineType.SystemCommand);
+				return true;
 			}
 			return false;
 		}

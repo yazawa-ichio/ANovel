@@ -1,4 +1,4 @@
-namespace ANovel
+﻿namespace ANovel
 {
 	//　演出毎にもうちょっと細分化したい
 

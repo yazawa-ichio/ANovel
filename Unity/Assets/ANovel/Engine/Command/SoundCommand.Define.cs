@@ -1,4 +1,4 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 
 namespace ANovel.Engine
 {
@@ -70,7 +70,7 @@ namespace ANovel.Engine
 
 	[TagName("define_bgm")]
 	[Description("BGM情報を定義します")]
-	[ReplaceTagDefine("@bgm_{name}", "@se path={path}")]
+	[ReplaceTagDefine("@bgm_{name}", "@bgm path={path}")]
 	public class DefineBgmCommand : PreProcess
 	{
 		[InjectArgument]

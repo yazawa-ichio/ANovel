@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ANovel.Core
 {
 	[TagName("macro")]
-	public class MacroScope : PreProcess
+	public class MacroScope : PreProcess, IPreProcessScope
 	{
 		[Argument(Required = true)]
 		string m_Name = default;
@@ -13,6 +13,11 @@ namespace ANovel.Core
 		public void Add(in LineData data)
 		{
 			m_List.Add(data);
+		}
+
+		public bool IsEnd(PreProcess tag)
+		{
+			return tag is EndMacroScope;
 		}
 
 		public override void Result(PreProcessResult result)

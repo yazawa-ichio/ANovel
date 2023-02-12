@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace ANovel.Engine
 {
@@ -11,14 +11,16 @@ namespace ANovel.Engine
 
 			public IScreenId Id { get; private set; }
 
+			string m_Name;
 			ServiceContainer m_Container;
 			ImageObject m_Current;
 			ImageObject m_Prev;
 			IPlayHandle m_Playing;
 			string m_Level;
 
-			public Image(ServiceContainer container, IScreenId id)
+			public Image(string name, ServiceContainer container, IScreenId id)
 			{
+				m_Name = name;
 				m_Container = container;
 				Id = id;
 			}
@@ -35,7 +37,7 @@ namespace ANovel.Engine
 					{
 						m_Current = Pool.Get(level);
 					}
-					m_Current.SetLayout(layout.GetLayout(m_Current.GetLayout(current: false), config.Texture, Screen.Size));
+					m_Current.SetLayout(layout.GetLayout(m_Current.GetLayout(current: false), config.Texture, Screen.Size), Screen.Size);
 					m_Current.SetConfig(config);
 					return FloatFadeHandle.Empty;
 				}
@@ -43,21 +45,21 @@ namespace ANovel.Engine
 				{
 					m_Current = Pool.Get(level);
 					m_Current.SetLevel(level);
-					m_Current.SetLayout(layout.GetLayout(m_Current.GetLayout(), config.Texture, Screen.Size));
+					m_Current.SetLayout(layout.GetLayout(m_Current.GetLayout(), config.Texture, Screen.Size), Screen.Size);
 					return m_Playing = m_Current.Transition(config);
 				}
 				var cur = m_Current.GetLayout();
 				var next = layout.GetLayout(cur, config.Texture, Screen.Size);
 				if (cur.CanTransition(in next))
 				{
-					m_Current.SetLayout(next);
+					m_Current.SetLayout(next, Screen.Size);
 					return m_Playing = m_Current.Transition(config);
 				}
 				else
 				{
 					m_Prev = m_Current;
 					m_Current = Pool.Get(level);
-					m_Current.SetLayout(next);
+					m_Current.SetLayout(next, Screen.Size);
 					var hide = m_Prev.Transition(new ImageObjectConfig
 					{
 						Time = config.Time,
@@ -124,6 +126,15 @@ namespace ANovel.Engine
 				return m_Current.PlayAnim(cur.GetAnims(config.Time, config.Easing, next));
 			}
 
+			public ActionPlayingHandle PlayAction(IActionData data)
+			{
+				if (m_Current == null)
+				{
+					return ActionPlayingHandle.Empty;
+				}
+				return m_Current.PlayAction(data);
+			}
+
 			public void SetOrder(long autoOrder)
 			{
 				if (m_Current == null) return;
@@ -134,7 +145,7 @@ namespace ANovel.Engine
 			{
 				m_Playing?.Dispose();
 				m_Playing = null;
-				var dst = new Image(m_Container, dstId);
+				var dst = new Image(m_Name, m_Container, dstId);
 				if (m_Current != null)
 				{
 					var level = Screen.GetLevel(m_Level);
@@ -159,6 +170,24 @@ namespace ANovel.Engine
 					m_Prev = null;
 				}
 			}
+
+			public void StorePlaying(IEnvData data)
+			{
+				if (m_Current != null)
+				{
+					m_Current.StorePlaying(m_Name, data);
+				}
+			}
+
+
+			public void RestorePlaying(IEnvDataHolder data)
+			{
+				if (m_Current != null)
+				{
+					m_Current.RestorePlaying(m_Name, data);
+				}
+			}
 		}
+
 	}
 }

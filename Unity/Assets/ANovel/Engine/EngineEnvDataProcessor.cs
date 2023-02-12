@@ -1,4 +1,4 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 
 namespace ANovel.Engine
 {
@@ -34,22 +34,15 @@ namespace ANovel.Engine
 		protected void ParseMessage(EnvDataUpdateParam param, out MessageEnvData data)
 		{
 			var text = param.Text;
-			var top = text.GetLine(0).Trim();
-			if (top.StartsWith("【") && top.EndsWith("】"))
+
+			if (text.TryParseName("【", "】", out var key, out var name))
 			{
-				string name = top.Substring(1, top.Length - 2);
-				string key = name;
-				var split = name.IndexOf('/');
-				if (split >= 0)
-				{
-					key = name.Substring(split + 1);
-					name = name.Substring(0, split);
-				}
 				data = new MessageEnvData
 				{
 					Name = name,
 					Chara = key,
 					Message = text.GetRange(1),
+					RawText = text.Get(),
 				};
 			}
 			else
@@ -59,6 +52,7 @@ namespace ANovel.Engine
 					Name = "",
 					Chara = "",
 					Message = text.Get(),
+					RawText = text.Get(),
 				};
 			}
 		}

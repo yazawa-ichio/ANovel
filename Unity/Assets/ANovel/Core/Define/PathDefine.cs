@@ -1,4 +1,4 @@
-namespace ANovel.Core.Define
+﻿namespace ANovel.Core.Define
 {
 	[System.Serializable]
 	public class PathDefine

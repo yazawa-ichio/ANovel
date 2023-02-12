@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ANovel.Core
@@ -133,6 +133,15 @@ namespace ANovel.Core
 			}
 		}
 
+		public void Merge(EnvData data)
+		{
+			EnsureEntry(data.m_Dic.Keys);
+			foreach (var entry in data.m_Dic)
+			{
+				m_Dic[entry.Key].Merge(entry.Value);
+			}
+		}
+
 		public EnvDataSnapshot SaveByInterface<TInterface>()
 		{
 			var data = new EnvDataSnapshot();
@@ -172,7 +181,19 @@ namespace ANovel.Core
 			}
 		}
 
-
+		public IEnumerable<KeyValuePair<string, TInterface>> GetAllByInterface<TInterface>() where TInterface : class
+		{
+			foreach (var kvp in m_Dic)
+			{
+				if (typeof(TInterface).IsAssignableFrom(kvp.Key))
+				{
+					foreach (var ret in kvp.Value.GetAll())
+					{
+						yield return new KeyValuePair<string, TInterface>(ret.Key, ret.Value as TInterface);
+					}
+				}
+			}
+		}
 	}
 
 

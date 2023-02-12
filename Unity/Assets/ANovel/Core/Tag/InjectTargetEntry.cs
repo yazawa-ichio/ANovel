@@ -1,4 +1,4 @@
-
+﻿
 
 using ANovel.Core.Define;
 using System;
@@ -108,7 +108,7 @@ namespace ANovel.Core
 			}
 		}
 
-		public void Set(Tag tag, object target, Dictionary<string, string> param, HashSet<string> targets, HashSet<string> ignores)
+		public void Set(Tag tag, object target, IReadOnlyDictionary<string, string> param, HashSet<string> targets, HashSet<string> ignores)
 		{
 			TrySetFields();
 			foreach (var required in m_Required)

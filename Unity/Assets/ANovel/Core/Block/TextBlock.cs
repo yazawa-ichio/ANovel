@@ -1,4 +1,4 @@
-using ANovel.Core;
+﻿using ANovel.Core;
 using ANovel.Serialization;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace ANovel
 		Extension,
 	}
 
-	public class TextBlock : IDisposable, ICustomMapSerialization
+	public class TextBlock : IDisposable, ICustomMapSerialization, ITextBlock
 	{
 		static ThreadLocal<StringBuilder> s_StringBuilder = new ThreadLocal<StringBuilder>(() => new StringBuilder());
 

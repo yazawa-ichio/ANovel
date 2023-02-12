@@ -1,4 +1,4 @@
-
+﻿
 namespace ANovel.Engine
 {
 	public abstract class SoundCommand : SyncCommandBase
