@@ -36,7 +36,7 @@ namespace ANovel.Core.Tests
 		public void エラーテスト()
 		{
 			Error("&if condition=true\n*ErrorLabel&endif");
-			Error("&elsif condition=true&endif");
+			Error("&elseif condition=true&endif");
 			Error("&else");
 			Error("&endif");
 			Error("&if condition=val");

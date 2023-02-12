@@ -2,8 +2,8 @@
 #macro name="macro_if"
 &if condition="%condition%"
 @test_log message="condition if ok"
-&elsif condition=$"{condition}"
-@test_log message="condition elsif ok"
+&elseif condition=$"{condition}"
+@test_log message="condition elseif ok"
 &else
 @test_log message="condition else ok"
 &endif
@@ -35,7 +35,7 @@ condition if ok
 
 &val name="condition" value="true"
 @macro_if condition="false"
-condition elsif ok
+condition elseif ok
 
 &val name="condition" value="false"
 @macro_if condition="false"

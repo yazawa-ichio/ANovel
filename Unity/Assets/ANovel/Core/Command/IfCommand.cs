@@ -70,7 +70,7 @@ namespace ANovel.Commands
 	}
 
 
-	[TagName("elsif")]
+	[TagName("elseif")]
 	internal class ElseIfCommand : ConditionCommand
 	{
 		public override bool IsStartScope => false;

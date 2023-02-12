@@ -11,9 +11,9 @@ count:0
 
 &if left="1" right=$"{count}"
 count:1
-&elsif condition=$"2 == {count}"
+&elseif condition=$"2 == {count}"
 count:2
-&elsif condition=$"3 == {count}"
+&elseif condition=$"3 == {count}"
 count:3
 &else
 count:0
@@ -46,11 +46,11 @@ first
 		&val name="disp" value="second"
 second
 		&jump label="Loop2"
-	&elsif has_val="third" not
+	&elseif has_val="third" not
 		&val name="third" value="bbb"
 		&val name="disp" value="bbb"
 bbb
-	&elsif has_val="second"
+	&elseif has_val="second"
 		&flag name="end"
 	&endif
 &endif

@@ -3862,7 +3862,7 @@
             ]
         },
         {
-            "Name": "elsif",
+            "Name": "elseif",
             "Symbols": "",
             "LineType": "&",
             "Description": "ElseIfCommand",
