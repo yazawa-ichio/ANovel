@@ -33,6 +33,8 @@ namespace ANovel
 
 		public IHistory History => m_Conductor.History;
 
+		public IVariableContainer GlobalVariables => m_Conductor.GlobalVariables;
+
 		public event Action<Exception> OnError;
 
 		public event Action OnStopCommand;
