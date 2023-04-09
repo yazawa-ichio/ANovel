@@ -3,179 +3,6 @@
     "ResourcePath": "Resources/ANovel",
     "Tags": [
         {
-            "Name": "localize_data",
-            "Symbols": "",
-            "LineType": "#",
-            "Description": "LocalizeDataCommand",
-            "Arguments": [
-                {
-                    "Name": "type",
-                    "Description": "",
-                    "Required": false,
-                    "InputType": "Enum",
-                    "InputOptions": [
-                        "Auto",
-                        "Csv",
-                        "Tsv",
-                        "Json"
-                    ]
-                },
-                {
-                    "Name": "usekey",
-                    "Description": "",
-                    "Required": false,
-                    "InputType": "Bool",
-                    "InputOptions": []
-                },
-                {
-                    "Name": "usedefault",
-                    "Description": "",
-                    "Required": false,
-                    "InputType": "Bool",
-                    "InputOptions": []
-                },
-                {
-                    "Name": "path",
-                    "Description": "",
-                    "Required": true,
-                    "InputType": "String",
-                    "InputOptions": []
-                }
-            ]
-        },
-        {
-            "Name": "define_symbol",
-            "Symbols": "",
-            "LineType": "#",
-            "Description": "DefineSymbol",
-            "Arguments": [
-                {
-                    "Name": "name",
-                    "Description": "",
-                    "Required": true,
-                    "InputType": "String",
-                    "InputOptions": []
-                }
-            ]
-        },
-        {
-            "Name": "if",
-            "Symbols": "",
-            "LineType": "#",
-            "Description": "IfScope",
-            "Arguments": [
-                {
-                    "Name": "condition",
-                    "Description": "",
-                    "Required": true,
-                    "InputType": "String",
-                    "InputOptions": []
-                },
-                {
-                    "Name": "not",
-                    "Description": "",
-                    "Required": false,
-                    "InputType": "Bool",
-                    "InputOptions": []
-                }
-            ]
-        },
-        {
-            "Name": "elseif",
-            "Symbols": "",
-            "LineType": "#",
-            "Description": "ElseIfScope",
-            "Arguments": [
-                {
-                    "Name": "condition",
-                    "Description": "",
-                    "Required": true,
-                    "InputType": "String",
-                    "InputOptions": []
-                },
-                {
-                    "Name": "not",
-                    "Description": "",
-                    "Required": false,
-                    "InputType": "Bool",
-                    "InputOptions": []
-                }
-            ]
-        },
-        {
-            "Name": "else",
-            "Symbols": "",
-            "LineType": "#",
-            "Description": "ElseScope",
-            "Arguments": []
-        },
-        {
-            "Name": "endif",
-            "Symbols": "",
-            "LineType": "#",
-            "Description": "EndIfScope",
-            "Arguments": []
-        },
-        {
-            "Name": "import",
-            "Symbols": "",
-            "LineType": "#",
-            "Description": "ImportCommand",
-            "Arguments": [
-                {
-                    "Name": "path",
-                    "Description": "",
-                    "Required": true,
-                    "InputType": "String",
-                    "InputOptions": []
-                }
-            ]
-        },
-        {
-            "Name": "macro",
-            "Symbols": "",
-            "LineType": "#",
-            "Description": "MacroScope",
-            "Arguments": [
-                {
-                    "Name": "name",
-                    "Description": "",
-                    "Required": true,
-                    "InputType": "String",
-                    "InputOptions": []
-                }
-            ]
-        },
-        {
-            "Name": "endmacro",
-            "Symbols": "",
-            "LineType": "#",
-            "Description": "EndMacroScope",
-            "Arguments": []
-        },
-        {
-            "Name": "action",
-            "Symbols": "",
-            "LineType": "#",
-            "Description": "ActionDefine",
-            "Arguments": [
-                {
-                    "Name": "name",
-                    "Description": "",
-                    "Required": false,
-                    "InputType": "String",
-                    "InputOptions": []
-                }
-            ]
-        },
-        {
-            "Name": "endaction",
-            "Symbols": "",
-            "LineType": "#",
-            "Description": "EndActionDefine",
-            "Arguments": []
-        },
-        {
             "Name": "define_chara",
             "Symbols": "",
             "LineType": "#",
@@ -747,19 +574,177 @@
             ]
         },
         {
-            "Name": "action_wait",
+            "Name": "localize_data",
             "Symbols": "",
-            "LineType": "@",
-            "Description": "ActionWaitCommand",
+            "LineType": "#",
+            "Description": "LocalizeDataCommand",
             "Arguments": [
                 {
-                    "Name": "time",
-                    "Description": "指定時間",
+                    "Name": "type",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Auto",
+                        "Csv",
+                        "Tsv",
+                        "Json"
+                    ]
+                },
+                {
+                    "Name": "usekey",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "usedefault",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "path",
+                    "Description": "",
                     "Required": true,
-                    "InputType": "MilliSecond",
+                    "InputType": "String",
                     "InputOptions": []
                 }
             ]
+        },
+        {
+            "Name": "define_symbol",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "DefineSymbol",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "if",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "IfScope",
+            "Arguments": [
+                {
+                    "Name": "condition",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "not",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "elseif",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "ElseIfScope",
+            "Arguments": [
+                {
+                    "Name": "condition",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "not",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "else",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "ElseScope",
+            "Arguments": []
+        },
+        {
+            "Name": "endif",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "EndIfScope",
+            "Arguments": []
+        },
+        {
+            "Name": "import",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "ImportCommand",
+            "Arguments": [
+                {
+                    "Name": "path",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "macro",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "MacroScope",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "endmacro",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "EndMacroScope",
+            "Arguments": []
+        },
+        {
+            "Name": "action",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "ActionDefine",
+            "Arguments": [
+                {
+                    "Name": "name",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "endaction",
+            "Symbols": "",
+            "LineType": "#",
+            "Description": "EndActionDefine",
+            "Arguments": []
         },
         {
             "Name": "bg_action",
@@ -1309,10 +1294,10 @@
             ]
         },
         {
-            "Name": "bg_control",
+            "Name": "bg_layout",
             "Symbols": "",
             "LineType": "@",
-            "Description": "BGControlCommand",
+            "Description": "BGLayoutCommand",
             "Arguments": [
                 {
                     "Name": "sync",
@@ -1922,10 +1907,10 @@
             ]
         },
         {
-            "Name": "chara_control",
+            "Name": "chara_layout",
             "Symbols": "",
             "LineType": "@",
-            "Description": "CharaControlCommand",
+            "Description": "CharaLayoutCommand",
             "Arguments": [
                 {
                     "Name": "name",
@@ -2520,10 +2505,10 @@
             ]
         },
         {
-            "Name": "image_control",
+            "Name": "image_layout",
             "Symbols": "",
             "LineType": "@",
-            "Description": "ImageControlCommand",
+            "Description": "ImageLayoutCommand",
             "Arguments": [
                 {
                     "Name": "name",
@@ -2747,6 +2732,126 @@
                     "InputOptions": []
                 }
             ]
+        },
+        {
+            "Name": "ps_blur",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "PSBlurCommand",
+            "Arguments": [
+                {
+                    "Name": "distance",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "deviation",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "ps_bloom",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "PSBloomCommand",
+            "Arguments": [
+                {
+                    "Name": "intensity",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "threshold",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "softknee",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "ps_color",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "PSSimpleColorEffectCommand",
+            "Arguments": [
+                {
+                    "Name": "type",
+                    "Description": "",
+                    "Required": true,
+                    "InputType": "Enum",
+                    "InputOptions": [
+                        "Grayscale",
+                        "Sepia",
+                        "Negative"
+                    ]
+                },
+                {
+                    "Name": "rate",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "ps_hsv_shift",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "PSHsvShiftParamCommand",
+            "Arguments": [
+                {
+                    "Name": "h",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "s",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "v",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rate",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "ps_clear",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "PSClearCommand",
+            "Arguments": []
         },
         {
             "Name": "se",
@@ -3768,6 +3873,78 @@
             ]
         },
         {
+            "Name": "action_wait",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "ActionWaitCommand",
+            "Arguments": [
+                {
+                    "Name": "time",
+                    "Description": "指定時間",
+                    "Required": true,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "transition",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "画面切り替えを行います",
+            "Arguments": [
+                {
+                    "Name": "sync",
+                    "Description": "実行を同期するか？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "canskip",
+                    "Description": "スキップ可能か？",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "rule",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "String",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "time",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "MilliSecond",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "vague",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Number",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "capture",
+                    "Description": "現在の画面をキャプチャーして切り替えます",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "copy",
+                    "Description": "現在の情報を切り替え先にコピーします",
+                    "Required": false,
+                    "InputType": "Bool",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
             "Name": "async",
             "Symbols": "",
             "LineType": "&",
@@ -3825,7 +4002,7 @@
             ]
         },
         {
-            "Name": "elsif",
+            "Name": "elseif",
             "Symbols": "",
             "LineType": "&",
             "Description": "ElseIfCommand",
@@ -4202,63 +4379,6 @@
                     "InputOptions": []
                 }
             ]
-        },
-        {
-            "Name": "transition",
-            "Symbols": "",
-            "LineType": "&",
-            "Description": "画面切り替えを行います",
-            "Arguments": [
-                {
-                    "Name": "sync",
-                    "Description": "実行を同期するか？",
-                    "Required": false,
-                    "InputType": "Bool",
-                    "InputOptions": []
-                },
-                {
-                    "Name": "canskip",
-                    "Description": "スキップ可能か？",
-                    "Required": false,
-                    "InputType": "Bool",
-                    "InputOptions": []
-                },
-                {
-                    "Name": "rule",
-                    "Description": "",
-                    "Required": false,
-                    "InputType": "String",
-                    "InputOptions": []
-                },
-                {
-                    "Name": "time",
-                    "Description": "",
-                    "Required": false,
-                    "InputType": "MilliSecond",
-                    "InputOptions": []
-                },
-                {
-                    "Name": "vague",
-                    "Description": "",
-                    "Required": false,
-                    "InputType": "Number",
-                    "InputOptions": []
-                },
-                {
-                    "Name": "capture",
-                    "Description": "現在の画面をキャプチャーして切り替えます",
-                    "Required": false,
-                    "InputType": "Bool",
-                    "InputOptions": []
-                },
-                {
-                    "Name": "copy",
-                    "Description": "現在の情報を切り替え先にコピーします",
-                    "Required": false,
-                    "InputType": "Bool",
-                    "InputOptions": []
-                }
-            ]
         }
     ],
     "CompletionItem": {
@@ -4294,8 +4414,8 @@
                 "LineType": "#",
                 "RegisterTag": "define_chara",
                 "Key": "@{dispname}",
-                "Replace": "@chara_control name=\"{name}\"",
-                "SecondaryKey": "control",
+                "Replace": "@chara_layout name=\"{name}\"",
+                "SecondaryKey": "layout",
                 "SecondaryKeyValue": "",
                 "Label": ""
             },
@@ -4330,8 +4450,8 @@
                 "LineType": "#",
                 "RegisterTag": "define_chara",
                 "Key": "@{dispname}",
-                "Replace": "@chara_control name=\"{name}\"",
-                "SecondaryKey": "control",
+                "Replace": "@chara_layout name=\"{name}\"",
+                "SecondaryKey": "layout",
                 "SecondaryKeyValue": "",
                 "Label": "{name}({dispname})"
             },
@@ -4511,7 +4631,7 @@
             {
                 "LineType": "#",
                 "RegisterTag": "define_chara",
-                "TargetTag": "chara_control",
+                "TargetTag": "chara_layout",
                 "Argument": "name",
                 "Value": "{dispname}",
                 "SecondaryKey": "",

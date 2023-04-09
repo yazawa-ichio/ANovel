@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ANovel.Engine.PostEffects;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -19,10 +20,13 @@ namespace ANovel.Engine
 		Camera m_Camera;
 		bool m_BackgroundAlpha;
 		LayerMask m_LayerMask;
+		int m_RendererIndex;
 
 		public Camera Camera => m_Camera;
 
 		public RenderTexture ViewTexture { get; private set; }
+
+		public PostEffectController PostEffectController { get; private set; }
 
 		public RectTransform Root { get; private set; }
 
@@ -37,6 +41,11 @@ namespace ANovel.Engine
 		void Awake()
 		{
 			ScreenId = new ScreenId(this);
+		}
+
+		public void SetRenderer(int index)
+		{
+			m_RendererIndex = index;
 		}
 
 		public void Setup(bool backgroundAlpha, LayerMask layerMask)
@@ -66,6 +75,7 @@ namespace ANovel.Engine
 		}
 
 		static readonly string s_DefaultLevelName = Level.Center.ToString();
+
 		public ILevel GetLevel(string level)
 		{
 			if (string.IsNullOrEmpty(level))
@@ -118,6 +128,18 @@ namespace ANovel.Engine
 				m_Camera.nearClipPlane = -1000f;
 				m_Camera.farClipPlane = 1000f;
 				m_Camera.enabled = Enabled;
+				PostEffectController = camera.AddComponent<PostEffectController>();
+				PostEffectController.Setup(ScreenId);
+#if ANOVEL_URP
+				if (UnityEngine.Rendering.Universal.UniversalRenderPipeline.asset != null)
+				{
+					var data = m_Camera.gameObject.AddComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>();
+					if (data != null)
+					{
+						data.SetRenderer(m_RendererIndex);
+					}
+				}
+#endif
 			}
 			if (m_Canvas == null)
 			{
@@ -178,6 +200,7 @@ namespace ANovel.Engine
 				}
 				ResetRootTransform(level.Root);
 			}
+			PostEffectController.Clear();
 		}
 
 	}

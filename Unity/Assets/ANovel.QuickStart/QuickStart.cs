@@ -13,6 +13,7 @@ namespace ANovel.QuickStart
 
 		void Start()
 		{
+			Application.targetFrameRate = 30;
 			m_Engine = FindObjectOfType<ANovelEngine>();
 			Run();
 		}

@@ -22,6 +22,7 @@ namespace ANovel.Engine
 		ScreenTransitionConfig m_TransitionConfig;
 		RenderTexture m_Capture;
 		FloatFadeHandle m_FadeHandle;
+		int m_RendererIndex;
 
 		public event Action<BeginSwapEvent> OnBeginSwap;
 
@@ -39,7 +40,14 @@ namespace ANovel.Engine
 
 		public ScreenView Current => m_Current;
 
-		public ScreenController(Transform root, Shader shader, bool backgroundAlpha, LayerMask layerMask)
+		public ScreenView Prev => m_Prev;
+
+		public void SetRenderer(int index)
+		{
+			m_RendererIndex = index;
+		}
+
+		public void Init(Transform root, Shader shader, bool backgroundAlpha, LayerMask layerMask)
 		{
 			m_Root = root;
 			m_Material = new UIImageMaterial(new Material(shader));
@@ -90,7 +98,9 @@ namespace ANovel.Engine
 			var obj = new GameObject(name);
 			obj.transform.SetParent(m_Root);
 			obj.layer = m_Root.gameObject.layer;
-			return obj.AddComponent<ScreenView>();
+			var view = obj.AddComponent<ScreenView>();
+			view.SetRenderer(m_RendererIndex);
+			return view;
 		}
 
 		public void Update(float deltaTime)

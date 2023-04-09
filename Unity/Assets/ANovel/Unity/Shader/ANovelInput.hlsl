@@ -1,3 +1,5 @@
+#pragma multi_compile_local _ _ANOVEL_TRANS_RULE
+#pragma multi_compile_local _ _ANOVEL_ENV_COLOR _ANOVEL_ENV_COLOR_TEX
 
 sampler2D _MainTex;
 float4 _MainTex_ST;

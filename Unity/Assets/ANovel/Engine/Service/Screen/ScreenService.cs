@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ANovel.Engine.PostEffects;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ namespace ANovel.Engine
 		ITransitionController Transition { get; }
 		Vector2 Size { get; }
 		ILevel GetLevel(string level);
+		IPostEffectCollection PostEffects { get; }
 	}
 
 	public class BeginSwapEvent
@@ -52,7 +54,12 @@ namespace ANovel.Engine
 		LayerMask m_LayerMask;
 		[SerializeField]
 		CustomLevel[] m_CustomLevel = Array.Empty<CustomLevel>();
-
+#if !ANOVEL_URP
+		[SerializeField, HideInInspector]
+#else
+		[SerializeField, RendererIndex]
+#endif
+		int m_RendererIndex;
 		Transform m_Root;
 		ScreenController m_ScreenController;
 		ImagePool m_Pool;
@@ -85,6 +92,8 @@ namespace ANovel.Engine
 
 		public IScreenId CurrentId => m_ScreenController.Current.ScreenId;
 
+		public IPostEffectCollection PostEffects => GetPostEffect();
+
 		protected override void Initialize()
 		{
 			if (m_Shader == null)
@@ -95,7 +104,9 @@ namespace ANovel.Engine
 			obj.layer = gameObject.layer;
 			m_Root = obj.transform;
 			m_Root.SetParent(transform);
-			m_ScreenController = new ScreenController(m_Root, m_Shader, m_BackgroundAlpha, m_LayerMask);
+			m_ScreenController = new ScreenController();
+			m_ScreenController.SetRenderer(m_RendererIndex);
+			m_ScreenController.Init(m_Root, m_Shader, m_BackgroundAlpha, m_LayerMask);
 			m_ScreenController.SetTarget(m_Target);
 			foreach (var level in Enum.GetValues(typeof(Level)))
 			{
@@ -112,6 +123,17 @@ namespace ANovel.Engine
 		protected override void OnUpdate(IEngineTime time)
 		{
 			m_ScreenController?.Update(time.DeltaTime);
+		}
+
+		IPostEffectCollection GetPostEffect()
+		{
+			/*
+			if (Transition.IsTransition && Transition.)
+			{
+				return m_ScreenController.Prev.PostEffectController;
+			}
+			*/
+			return m_ScreenController.Current.PostEffectController;
 		}
 
 		void LateUpdate()
@@ -156,4 +178,5 @@ namespace ANovel.Engine
 		}
 
 	}
+
 }

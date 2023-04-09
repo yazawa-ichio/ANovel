@@ -36,9 +36,6 @@
             #pragma vertex DefaultVert
             #pragma fragment DefaultFrag
             #pragma target 2.0
-            #pragma multi_compile_local _ _ANOVEL_TRANS_RULE
-            #pragma multi_compile_local _ _ANOVEL_ENV_COLOR _ANOVEL_ENV_COLOR_TEX
-
             #include "UnityCG.cginc"
             #include "ANovelInput.hlsl"
             #include "ANovelPasses.hlsl"
