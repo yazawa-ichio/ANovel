@@ -18,11 +18,11 @@ namespace ANovel.Engine.PostEffects
 
 		[Range(-180f, 180f)]
 		public float H;
-		[Range(0f, 1f)]
+		[Range(0f, 1f), RateArgument]
 		public float S;
-		[Range(0f, 1f)]
+		[Range(0f, 1f), RateArgument]
 		public float V;
-		[Range(0f, 1f)]
+		[Range(0f, 1f), RateArgument]
 		public float Rate;
 	}
 

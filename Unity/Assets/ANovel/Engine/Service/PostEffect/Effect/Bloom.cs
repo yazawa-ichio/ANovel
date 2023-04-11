@@ -14,11 +14,11 @@ namespace ANovel.Engine.PostEffects
 			SoftKnee = 0.2f,
 		};
 
-		[Range(0f, 10f)]
+		[Range(0f, 10f), RateArgument]
 		public float Intensity;
-		[Range(0f, 1f)]
+		[Range(0f, 1f), RateArgument]
 		public float Threshold;
-
+		[Range(0f, 1f), RateArgument]
 		public float SoftKnee;
 	}
 

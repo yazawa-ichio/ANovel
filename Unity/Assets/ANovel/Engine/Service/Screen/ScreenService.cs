@@ -100,6 +100,10 @@ namespace ANovel.Engine
 			{
 				m_Shader = ShaderCache.Get(UIImageMaterial.ShaderName);
 			}
+			else
+			{
+				ShaderCache.Set(UIImageMaterial.ShaderName, m_Shader);
+			}
 			var obj = new GameObject(typeof(ScreenService).Name);
 			obj.layer = gameObject.layer;
 			m_Root = obj.transform;

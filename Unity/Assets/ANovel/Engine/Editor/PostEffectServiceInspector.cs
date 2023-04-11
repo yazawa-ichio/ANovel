@@ -40,7 +40,7 @@ namespace ANovel.Engine.PostEffects
 			}
 			if (GUILayout.Button("+"))
 			{
-				property.InsertArrayElementAtIndex(property.arraySize);
+				Add();
 			}
 		}
 
@@ -76,6 +76,32 @@ namespace ANovel.Engine.PostEffects
 				}
 			}
 		}
+
+		void Add()
+		{
+			GenericMenu menu = new GenericMenu();
+			foreach (var type in TypeCache.GetTypesDerivedFrom<IPostEffect>())
+			{
+				if (type.IsAbstract || type.IsInterface)
+				{
+					continue;
+				}
+				menu.AddItem(new GUIContent(type.FullName.Replace("ANovel.Engine.PostEffects.", "").Replace(".", "/")), false, (x) =>
+				{
+					var target = (System.Type)x;
+					var so = serializedObject;
+					so.Update();
+					var property = so.FindProperty("m_PostEffects");
+					property.InsertArrayElementAtIndex(property.arraySize);
+					property = property.GetArrayElementAtIndex(property.arraySize - 1);
+					property.managedReferenceValue = System.Activator.CreateInstance(target);
+					so.ApplyModifiedProperties();
+
+				}, type);
+			}
+			menu.ShowAsContext();
+		}
+
 	}
 #endif
 }

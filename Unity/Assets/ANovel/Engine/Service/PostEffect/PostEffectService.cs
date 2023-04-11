@@ -16,6 +16,7 @@ namespace ANovel.Engine.PostEffects
 			new Blur(),
 			new SimpleColorEffect(),
 			new HsvShift(),
+			new ChromaticAberration(),
 		};
 
 		IScreenService Screen => Container.Get<IScreenService>();

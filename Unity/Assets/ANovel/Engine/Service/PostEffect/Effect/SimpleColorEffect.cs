@@ -22,7 +22,7 @@ namespace ANovel.Engine.PostEffects
 		[Argument(Required = true)]
 		public EffectType Type;
 
-		[Range(0f, 1f)]
+		[Range(0f, 1f), RateArgument]
 		public float Rate;
 	}
 

@@ -58,11 +58,20 @@ namespace ANovel.Engine
 	}
 
 	[TagName("ps_hsv_shift")]
-	public class PSHsvShiftParamCommand : PSCommandBase<HsvShiftParam>
+	public class PSHsvShiftCommand : PSCommandBase<HsvShiftParam>
 	{
 		protected override HsvShiftParam GetDefault()
 		{
 			return HsvShiftParam.Default;
+		}
+	}
+
+	[TagName("ps_chromatic_aberration")]
+	public class PSChromaticAberrationCommand : PSCommandBase<ChromaticAberrationParam>
+	{
+		protected override ChromaticAberrationParam GetDefault()
+		{
+			return ChromaticAberrationParam.Default;
 		}
 	}
 
