@@ -8,6 +8,7 @@ Shader "ANovel/Bloom"
         _Threshold("Threshold", float) = 0.9
         _SoftKnee("SoftKnee", float) = 0.1
         _Intensity("Intensity", float) = 0.1
+        _Distance("Distance", float) = 1
     }
     SubShader
     {
@@ -33,12 +34,22 @@ Shader "ANovel/Bloom"
         }
         Pass
         {
-            Name "ANovel Bloom Downsample"
+            Name "ANovel Bloom Downsample H"
         HLSLPROGRAM
             #pragma target 2.0
             #include "ANovelBloom.hlsl"
             #pragma vertex vert
-            #pragma fragment frag_downsample
+            #pragma fragment frag_downsample_h
+        ENDHLSL
+        }
+        Pass
+        {
+            Name "ANovel Bloom Downsample V"
+        HLSLPROGRAM
+            #pragma target 2.0
+            #include "ANovelBloom.hlsl"
+            #pragma vertex vert
+            #pragma fragment frag_downsample_v
         ENDHLSL
         }
         Pass
@@ -49,6 +60,16 @@ Shader "ANovel/Bloom"
             #include "ANovelBloom.hlsl"
             #pragma vertex vert
             #pragma fragment frag_upsample
+        ENDHLSL
+        }
+        Pass
+        {
+            Name "ANovel Bloom Finish"
+        HLSLPROGRAM
+            #pragma target 2.0
+            #include "ANovelBloom.hlsl"
+            #pragma vertex vert
+            #pragma fragment frag_finish
         ENDHLSL
         }
     }
