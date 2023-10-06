@@ -7,5 +7,6 @@ Library
 obj/
 Logs
 Build
+UserSettings
 CodeCoverage
 ProjectSettings/Packages/com.unity.testtools.codecoverage

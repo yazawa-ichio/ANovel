@@ -8,6 +8,11 @@ namespace ANovel
 	{
 		static Dictionary<string, Shader> s_Dic = new Dictionary<string, Shader>();
 
+		public static void Set(string name, Shader shader)
+		{
+			s_Dic[name] = shader;
+		}
+
 		public static Shader Get(string name)
 		{
 			// Unloadされている可能性があるのでnullチェックする

@@ -108,5 +108,3 @@ namespace ANovel.Engine
 
 	}
 }
-
-
