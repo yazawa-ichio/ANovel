@@ -2765,21 +2765,21 @@
                     "Name": "intensity",
                     "Description": "",
                     "Required": false,
-                    "InputType": "Number",
+                    "InputType": "Rate",
                     "InputOptions": []
                 },
                 {
                     "Name": "threshold",
                     "Description": "",
                     "Required": false,
-                    "InputType": "Number",
+                    "InputType": "Rate",
                     "InputOptions": []
                 },
                 {
                     "Name": "softknee",
                     "Description": "",
                     "Required": false,
-                    "InputType": "Number",
+                    "InputType": "Rate",
                     "InputOptions": []
                 }
             ]
@@ -2805,7 +2805,7 @@
                     "Name": "rate",
                     "Description": "",
                     "Required": false,
-                    "InputType": "Number",
+                    "InputType": "Rate",
                     "InputOptions": []
                 }
             ]
@@ -2814,7 +2814,7 @@
             "Name": "ps_hsv_shift",
             "Symbols": "",
             "LineType": "@",
-            "Description": "PSHsvShiftParamCommand",
+            "Description": "PSHsvShiftCommand",
             "Arguments": [
                 {
                     "Name": "h",
@@ -2827,21 +2827,57 @@
                     "Name": "s",
                     "Description": "",
                     "Required": false,
-                    "InputType": "Number",
+                    "InputType": "Rate",
                     "InputOptions": []
                 },
                 {
                     "Name": "v",
                     "Description": "",
                     "Required": false,
-                    "InputType": "Number",
+                    "InputType": "Rate",
                     "InputOptions": []
                 },
                 {
                     "Name": "rate",
                     "Description": "",
                     "Required": false,
-                    "InputType": "Number",
+                    "InputType": "Rate",
+                    "InputOptions": []
+                }
+            ]
+        },
+        {
+            "Name": "ps_chromatic_aberration",
+            "Symbols": "",
+            "LineType": "@",
+            "Description": "PSChromaticAberrationCommand",
+            "Arguments": [
+                {
+                    "Name": "x",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "y",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "around",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
+                    "InputOptions": []
+                },
+                {
+                    "Name": "center",
+                    "Description": "",
+                    "Required": false,
+                    "InputType": "Rate",
                     "InputOptions": []
                 }
             ]
@@ -4359,7 +4395,7 @@
             ]
         },
         {
-            "Name": "localize_data_index",
+            "Name": "localize_index",
             "Symbols": "",
             "LineType": "&",
             "Description": "LocalizeDataIndexCommand",
@@ -4367,14 +4403,22 @@
                 {
                     "Name": "index",
                     "Description": "",
-                    "Required": false,
+                    "Required": true,
                     "InputType": "Number",
                     "InputOptions": []
-                },
+                }
+            ]
+        },
+        {
+            "Name": "localize_key",
+            "Symbols": "",
+            "LineType": "&",
+            "Description": "LocalizeKeyCommand",
+            "Arguments": [
                 {
                     "Name": "key",
                     "Description": "",
-                    "Required": false,
+                    "Required": true,
                     "InputType": "String",
                     "InputOptions": []
                 }

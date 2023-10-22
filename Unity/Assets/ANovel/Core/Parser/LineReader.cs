@@ -13,6 +13,8 @@
 
 		public bool EndOfFile => m_Index > m_Line.Length;
 
+		public bool InsertLastStop { get; set; } = true;
+
 		public LineReader(string name, string text)
 		{
 			m_Name = name;
@@ -58,6 +60,10 @@
 			}
 			if (m_Index == m_Line.Length)
 			{
+				if (!InsertLastStop)
+				{
+					return false;
+				}
 				var index = m_Index++;
 				data = new LineData("stop", "&stop", index, LineType.SystemCommand);
 				return true;

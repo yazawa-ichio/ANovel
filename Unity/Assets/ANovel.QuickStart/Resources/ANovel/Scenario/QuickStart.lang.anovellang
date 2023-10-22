@@ -1,0 +1,48 @@
+{
+    "Keys": [
+        "069723de4f09",
+        "5b8ba8ec55d0",
+        "d569efe9e6d1",
+        "b71b0968f2a2",
+        "dce5c2c8ce45",
+        "49d31cdab284",
+        "2b7540cb699c",
+        "b0d33fed224e",
+        "d989eff0d345",
+        "009da580016a"
+    ],
+    "List": [
+        {
+            "Default": true,
+            "Language": "ja",
+            "Lines": [
+                "ANovelのQuickStartです。",
+                "シンプルな構成のサンプルになります。",
+                "背景を表示します。",
+                "画像を表示します。",
+                "キャラの表示",
+                "@キャラ1の用に書くことも出来ます",
+                "キャラと画像を消す",
+                "一括で表示する",
+                "全て消す。",
+                "最初に戻ります"
+            ]
+        },
+        {
+            "Default": false,
+            "Language": "en",
+            "Lines": [
+                "ANovel's QuickStart.",
+                "This is a sample with a simple configuration.",
+                "Show background.",
+                "Display an image.",
+                "Character display.",
+                "@キャラ1 allow write.",
+                "Delete characters and images.",
+                "display in bulk.",
+                "erase everything.",
+                "goto start."
+            ]
+        }
+    ]
+}

@@ -3,26 +3,31 @@
 ;キャラクターを定義
 #define_chara name="c1" dispname="キャラ1"
 
-#localize_data path="QuickStart_LocalizeData"
+#localize_data path="QuickStart.lang"
 
 *start
 
 ;&localize_index index="0"
 
+&localize_key key="069723de4f09"
 ANovelのQuickStartです。
 
+&localize_key key="5b8ba8ec55d0"
 シンプルな構成のサンプルになります。
 
 @bg path="an-bg"
 
+&localize_key key="d569efe9e6d1"
 背景を表示します。
 
 @image name="i1" path="an-image-i1" x=-200
 
+&localize_key key="b71b0968f2a2"
 画像を表示します。
 
 @chara name="c1" x=200
 
+&localize_key key="dce5c2c8ce45"
 キャラの表示
 
 &async
@@ -32,6 +37,7 @@ ANovelのQuickStartです。
 @キャラ1 layout x="200" time="200" sync
 &end
 
+&localize_key key="49d31cdab284"
 ```
 @キャラ1の用に書くことも出来ます
 ```
@@ -39,6 +45,7 @@ ANovelのQuickStartです。
 @image_hide name="i1" time="1000"
 @chara_hide_all time="1000"
 
+&localize_key key="2b7540cb699c"
 キャラと画像を消す
 
 &transition
@@ -46,6 +53,7 @@ ANovelのQuickStartです。
 @キャラ1 x="-200"
 &end
 
+&localize_key key="b0d33fed224e"
 一括で表示する
 
 @image_layout name="i1" x=-500 time="1000"
@@ -55,8 +63,11 @@ ANovelのQuickStartです。
 &transition copy="false" capture="false" time="1000"
 &end
 
+&localize_key key="d989eff0d345"
 全て消す。
 
+&localize_key key="009da580016a"
 最初に戻ります
 
 &jump path="QuickStart" label="start"
+

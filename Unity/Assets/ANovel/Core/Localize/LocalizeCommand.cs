@@ -57,30 +57,36 @@ namespace ANovel.Core
 	}
 
 
-	[TagName("localize_data_index")]
+	[TagName("localize_index")]
 	public class LocalizeDataIndexCommand : SystemCommand
 	{
-		[Argument]
+		[Argument(Required = true)]
 		int m_Index;
-		[Argument]
+
+		protected override void UpdateEnvData(IEnvData data)
+		{
+			if (Meta.TryGetSingle<LocalizeMetaData>(out var lang))
+			{
+				data.TryGetSingle<LocalizeIndexEnvData>(out var envData);
+				envData.Index = m_Index;
+				data.SetSingle(envData);
+			}
+		}
+	}
+
+	[TagName("localize_key")]
+	public class LocalizeKeyCommand : SystemCommand
+	{
+		[Argument(Required = true)]
 		string m_Key;
 
 		protected override void UpdateEnvData(IEnvData data)
 		{
 			if (Meta.TryGetSingle<LocalizeMetaData>(out var lang))
 			{
-				if (!string.IsNullOrEmpty(m_Key))
-				{
-					data.TryGetSingle<LocalizeIndexEnvData>(out var envData);
-					envData.Index = lang.GetKeyIndex(m_Key);
-					data.SetSingle(envData);
-				}
-				else
-				{
-					data.TryGetSingle<LocalizeIndexEnvData>(out var envData);
-					envData.Index = m_Index;
-					data.SetSingle(envData);
-				}
+				data.TryGetSingle<LocalizeIndexEnvData>(out var envData);
+				envData.Index = lang.GetKeyIndex(m_Key);
+				data.SetSingle(envData);
 			}
 		}
 	}
