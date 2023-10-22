@@ -26,15 +26,15 @@ namespace ANovel.Core
 	public class LocalizeData
 	{
 		public string[] Keys;
-		public List<LanguageData> List = new List<LanguageData>(4);
+		public List<LanguageData> List = new(4);
 
-		internal static LocalizeData Create(string text, bool tab)
+		public static LocalizeData Create(string text, bool tab)
 		{
 			var data = new LocalizeData();
 			var parseData = CsvParser.LoadFromString(text, tab ? CsvParser.Delimiter.Tab : CsvParser.Delimiter.Comma);
 			var first = parseData[0];
 			int? keyIndex = null;
-			Dictionary<int, LanguageData> dic = new Dictionary<int, LanguageData>();
+			Dictionary<int, LanguageData> dic = new();
 			for (int i = 0; i < first.Count; i++)
 			{
 				var langKey = first[i];

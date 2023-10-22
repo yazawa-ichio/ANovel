@@ -18,12 +18,12 @@ namespace ANovel
 		string m_Language;
 
 		bool m_Initialized;
-		CancellationTokenSource m_Cancellation = new CancellationTokenSource();
+		CancellationTokenSource m_Cancellation = new();
 
 		Setting m_Setting;
 		Conductor m_Conductor;
 		IService[] m_Services;
-		ScopeLocker m_Locker = new ScopeLocker();
+		ScopeLocker m_Locker = new();
 
 		public EngineConfig Config => m_Config;
 
