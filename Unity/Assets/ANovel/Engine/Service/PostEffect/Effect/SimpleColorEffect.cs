@@ -1,13 +1,12 @@
 ﻿using System.Globalization;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 
 namespace ANovel.Engine.PostEffects
 {
 	public struct SimpleColorEffectParam : IPostEffectParam
 	{
-		public static readonly SimpleColorEffectParam Default = new SimpleColorEffectParam()
+		public static readonly SimpleColorEffectParam Default = new()
 		{
 			Rate = 1f,
 		};
@@ -29,7 +28,7 @@ namespace ANovel.Engine.PostEffects
 	public class SimpleColorEffect : PostEffectBase<SimpleColorEffectParam>
 	{
 		Material m_Material;
-		RenderTargetHandle m_TempHandle;
+		int m_TempHandle;
 		int m_RateId;
 		SimpleColorEffectParam.EffectType m_PrevType;
 
@@ -50,7 +49,7 @@ namespace ANovel.Engine.PostEffects
 			{
 				m_Material = new Material(m_Shader);
 				m_Material.DisableKeyword("_ANOVEL_COLOR_CHANGE_" + SimpleColorEffectParam.EffectType.Grayscale.ToString().ToUpper(CultureInfo.InvariantCulture));
-				m_TempHandle.Init("_TempRT");
+				m_TempHandle = Shader.PropertyToID("_TempRT");
 				m_RateId = Shader.PropertyToID("_Rate");
 				m_PrevType = SimpleColorEffectParam.EffectType.Grayscale;
 			}
@@ -64,10 +63,10 @@ namespace ANovel.Engine.PostEffects
 
 			m_Material.EnableKeyword("_ANOVEL_COLOR_CHANGE_" + param.Type.ToString().ToUpper(CultureInfo.InvariantCulture));
 			m_Material.SetFloat(m_RateId, param.Rate);
-			cmd.GetTemporaryRT(m_TempHandle.id, targetDescriptor);
-			cmd.Blit(target, m_TempHandle.Identifier(), m_Material);
-			cmd.Blit(m_TempHandle.Identifier(), target);
-			cmd.ReleaseTemporaryRT(m_TempHandle.id);
+			cmd.GetTemporaryRT(m_TempHandle, targetDescriptor);
+			cmd.Blit(target, m_TempHandle, m_Material);
+			cmd.Blit(m_TempHandle, target);
+			cmd.ReleaseTemporaryRT(m_TempHandle);
 		}
 	}
 }

@@ -1,13 +1,12 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 
 namespace ANovel.Engine.PostEffects
 {
 	public struct BloomParam : IPostEffectParam
 	{
-		public static readonly BloomParam Default = new BloomParam()
+		public static readonly BloomParam Default = new()
 		{
 			Intensity = 0.8f,
 			Threshold = 0.5f,
@@ -29,12 +28,12 @@ namespace ANovel.Engine.PostEffects
 
 
 		Material m_Material;
-		RenderTargetHandle m_TempHandle;
+		int m_TempHandle;
 		int m_IntensityId;
 
 
-		RenderTargetHandle[] m_TempDownHandle = new RenderTargetHandle[MaxIteration];
-		RenderTargetHandle[] m_TempUpHandle = new RenderTargetHandle[MaxIteration];
+		int[] m_TempDownHandle = new int[MaxIteration];
+		int[] m_TempUpHandle = new int[MaxIteration];
 
 		[SerializeField]
 		protected Shader m_Shader;
@@ -52,12 +51,12 @@ namespace ANovel.Engine.PostEffects
 			if (m_Material == null)
 			{
 				m_Material = new Material(m_Shader);
-				m_TempHandle.Init("_TempRT");
+				m_TempHandle = Shader.PropertyToID("_TempRT");
 				m_IntensityId = Shader.PropertyToID("_Intensity");
 				for (int i = 0; i < MaxIteration; i++)
 				{
-					m_TempDownHandle[i].Init("_TempDownRT" + i);
-					m_TempUpHandle[i].Init("_TempUpRT" + i);
+					m_TempDownHandle[i] = Shader.PropertyToID("_TempDownRT" + i);
+					m_TempUpHandle[i] = Shader.PropertyToID("_TempUpRT" + i);
 				}
 			}
 			m_Material.SetFloat(m_IntensityId, param.Intensity);
@@ -70,11 +69,11 @@ namespace ANovel.Engine.PostEffects
 			//descriptor.colorFormat = RenderTextureFormat.R8;
 
 			// Prefilter
-			cmd.GetTemporaryRT(m_TempHandle.id, descriptor);
-			cmd.Blit(target, m_TempHandle.Identifier());
+			cmd.GetTemporaryRT(m_TempHandle, descriptor);
+			cmd.Blit(target, m_TempHandle);
 
-			cmd.GetTemporaryRT(m_TempDownHandle[0].id, descriptor);
-			cmd.Blit(target, m_TempDownHandle[0].Identifier(), m_Material, 0);
+			cmd.GetTemporaryRT(m_TempDownHandle[0], descriptor);
+			cmd.Blit(target, m_TempDownHandle[0], m_Material, 0);
 
 
 
@@ -99,14 +98,14 @@ namespace ANovel.Engine.PostEffects
 				descriptor.width = tw;
 				descriptor.height = th;
 
-				cmd.GetTemporaryRT(m_TempDownHandle[i].id, descriptor, FilterMode.Bilinear);
-				cmd.GetTemporaryRT(m_TempUpHandle[i].id, descriptor, FilterMode.Bilinear);
+				cmd.GetTemporaryRT(m_TempDownHandle[i], descriptor, FilterMode.Bilinear);
+				cmd.GetTemporaryRT(m_TempUpHandle[i], descriptor, FilterMode.Bilinear);
 
 				// Classic two pass gaussian blur - use mipUp as a temporary target
 				//   First pass does 2x downsampling + 9-tap gaussian
 				//   Second pass does 9-tap gaussian using a 5-tap filter + bilinear filtering
-				cmd.Blit(lastDown.id, mipUp.id, m_Material, 1);
-				cmd.Blit(mipUp.id, mipDown.id, m_Material, 2);
+				cmd.Blit(lastDown, mipUp, m_Material, 1);
+				cmd.Blit(mipUp, mipDown, m_Material, 2);
 
 				lastDown = mipDown;
 			}
@@ -117,18 +116,18 @@ namespace ANovel.Engine.PostEffects
 				var highMip = m_TempDownHandle[i];
 				var dst = m_TempUpHandle[i];
 
-				cmd.SetGlobalTexture("_BloomTex", lowMip.id);
-				cmd.Blit(highMip.id, dst.id, m_Material, 3);
+				cmd.SetGlobalTexture("_BloomTex", lowMip);
+				cmd.Blit(highMip, dst, m_Material, 3);
 			}
 
-			cmd.SetGlobalTexture("_BloomTex", m_TempUpHandle[0].id);
-			cmd.Blit(m_TempHandle.id, target, m_Material, 4);
+			cmd.SetGlobalTexture("_BloomTex", m_TempUpHandle[0]);
+			cmd.Blit(m_TempHandle, target, m_Material, 4);
 
-			cmd.ReleaseTemporaryRT(m_TempHandle.id);
+			cmd.ReleaseTemporaryRT(m_TempHandle);
 			for (int i = 0; i < mipCount; i++)
 			{
-				cmd.ReleaseTemporaryRT(m_TempDownHandle[i].id);
-				cmd.ReleaseTemporaryRT(m_TempUpHandle[i].id);
+				cmd.ReleaseTemporaryRT(m_TempDownHandle[i]);
+				cmd.ReleaseTemporaryRT(m_TempUpHandle[i]);
 			}
 
 			/*

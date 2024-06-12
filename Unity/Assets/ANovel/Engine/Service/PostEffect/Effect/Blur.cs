@@ -1,13 +1,12 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 
 namespace ANovel.Engine.PostEffects
 {
 	public struct BlurParam : IPostEffectParam
 	{
-		public static readonly BlurParam Default = new BlurParam()
+		public static readonly BlurParam Default = new()
 		{
 			Distance = 1f,
 			Deviation = 10f
@@ -24,7 +23,7 @@ namespace ANovel.Engine.PostEffects
 	{
 
 		Material m_Material;
-		RenderTargetHandle m_TempHandle;
+		int m_TempHandle;
 		int m_SamplingDistanceId;
 		int m_DeviationId;
 
@@ -44,7 +43,7 @@ namespace ANovel.Engine.PostEffects
 			if (m_Material == null)
 			{
 				m_Material = new Material(m_Shader);
-				m_TempHandle.Init("_TempRT");
+				m_TempHandle = Shader.PropertyToID("_TempRT");
 				m_SamplingDistanceId = Shader.PropertyToID("_SamplingDistance");
 				m_DeviationId = Shader.PropertyToID("_Deviation");
 			}
@@ -55,12 +54,12 @@ namespace ANovel.Engine.PostEffects
 			descriptor.depthBufferBits = 0;
 			descriptor.width = (int)(descriptor.width / 2f);
 			descriptor.height = (int)(descriptor.height / 2f);
-			cmd.GetTemporaryRT(m_TempHandle.id, descriptor);
+			cmd.GetTemporaryRT(m_TempHandle, descriptor);
 
-			cmd.Blit(target, m_TempHandle.Identifier(), m_Material);
-			cmd.Blit(m_TempHandle.Identifier(), target);
+			cmd.Blit(target, m_TempHandle, m_Material);
+			cmd.Blit(m_TempHandle, target);
 
-			cmd.ReleaseTemporaryRT(m_TempHandle.id);
+			cmd.ReleaseTemporaryRT(m_TempHandle);
 		}
 	}
 }

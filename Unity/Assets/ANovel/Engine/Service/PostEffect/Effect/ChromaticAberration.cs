@@ -1,14 +1,13 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 
 namespace ANovel.Engine.PostEffects
 {
 
 	public struct ChromaticAberrationParam : IPostEffectParam
 	{
-		public static readonly ChromaticAberrationParam Default = new ChromaticAberrationParam()
+		public static readonly ChromaticAberrationParam Default = new()
 		{
 		};
 
@@ -27,7 +26,7 @@ namespace ANovel.Engine.PostEffects
 	public class ChromaticAberration : PostEffectBase<ChromaticAberrationParam>
 	{
 		Material m_Material;
-		RenderTargetHandle m_TempHandle;
+		int m_TempHandle;
 		int m_ChromaPositionId;
 		int m_ChromaAmountCenterId;
 		int m_ChromaAmountAroundId;
@@ -48,7 +47,7 @@ namespace ANovel.Engine.PostEffects
 			if (m_Material == null)
 			{
 				m_Material = new Material(m_Shader);
-				m_TempHandle.Init("_TempRT");
+				m_TempHandle = Shader.PropertyToID("_TempRT");
 				m_ChromaPositionId = Shader.PropertyToID("_ChromaPosition");
 				m_ChromaAmountCenterId = Shader.PropertyToID("_ChromaAmountCenter");
 				m_ChromaAmountAroundId = Shader.PropertyToID("_ChromaAmountAround");
@@ -58,10 +57,10 @@ namespace ANovel.Engine.PostEffects
 			m_Material.SetFloat(m_ChromaAmountCenterId, param.Center);
 			m_Material.SetFloat(m_ChromaAmountAroundId, param.Around);
 
-			cmd.GetTemporaryRT(m_TempHandle.id, targetDescriptor);
-			cmd.Blit(target, m_TempHandle.Identifier(), m_Material);
-			cmd.Blit(m_TempHandle.Identifier(), target);
-			cmd.ReleaseTemporaryRT(m_TempHandle.id);
+			cmd.GetTemporaryRT(m_TempHandle, targetDescriptor);
+			cmd.Blit(target, m_TempHandle, m_Material);
+			cmd.Blit(m_TempHandle, target);
+			cmd.ReleaseTemporaryRT(m_TempHandle);
 
 		}
 	}

@@ -1,4 +1,5 @@
-﻿using UnityEngine.Rendering.Universal;
+﻿#if ANOVEL_URP
+using UnityEngine.Rendering.Universal;
 
 namespace ANovel.Engine.PostEffects
 {
@@ -18,3 +19,4 @@ namespace ANovel.Engine.PostEffects
 		}
 	}
 }
+#endif

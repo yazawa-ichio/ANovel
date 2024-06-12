@@ -2,7 +2,6 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 
 namespace ANovel.Engine.PostEffects
 {
@@ -18,9 +17,9 @@ namespace ANovel.Engine.PostEffects
 	{
 		Camera m_Camera;
 		CommandBuffer m_CommandBuffer;
-		RenderTargetHandle m_BufferHandle;
+		int m_BufferHandle;
 
-		List<PostEffectTask> m_Task = new List<PostEffectTask>();
+		List<PostEffectTask> m_Task = new();
 
 		public bool HasEffect => GetTasks().Any();
 
@@ -54,7 +53,7 @@ namespace ANovel.Engine.PostEffects
 		void Awake()
 		{
 			m_Camera = GetComponent<Camera>();
-			m_BufferHandle.Init("ANovelPostEffectBuffer");
+			m_BufferHandle = Shader.PropertyToID("ANovelPostEffectBuffer");
 			m_CommandBuffer = new CommandBuffer();
 			m_CommandBuffer.name = "ANovelPostEffect";
 			m_Camera.AddCommandBuffer(CameraEvent.AfterImageEffects, m_CommandBuffer);
@@ -71,15 +70,15 @@ namespace ANovel.Engine.PostEffects
 			var targetTexture = m_Camera.targetTexture;
 			var targetDescriptor = new RenderTextureDescriptor(targetTexture.width, targetTexture.height, targetTexture.format);
 			var target = new RenderTargetIdentifier(m_Camera.targetTexture);
-			cmd.GetTemporaryRT(m_BufferHandle.id, targetDescriptor);
-			cmd.Blit(target, m_BufferHandle.Identifier());
+			cmd.GetTemporaryRT(m_BufferHandle, targetDescriptor);
+			cmd.Blit(target, m_BufferHandle);
 			foreach (var effect in GetTasks())
 			{
 				effect.Effect.SetCameraColor(target);
-				effect.Effect.Execute(effect.Param, cmd, targetDescriptor, m_BufferHandle.Identifier());
+				effect.Effect.Execute(effect.Param, cmd, targetDescriptor, m_BufferHandle);
 			}
-			cmd.Blit(m_BufferHandle.Identifier(), target);
-			cmd.ReleaseTemporaryRT(m_BufferHandle.id);
+			cmd.Blit(m_BufferHandle, target);
+			cmd.ReleaseTemporaryRT(m_BufferHandle);
 		}
 
 	}

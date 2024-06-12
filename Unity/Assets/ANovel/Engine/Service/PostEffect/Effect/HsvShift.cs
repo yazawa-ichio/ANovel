@@ -1,14 +1,13 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 
 namespace ANovel.Engine.PostEffects
 {
 	[Serializable]
 	public struct HsvShiftParam : IPostEffectParam
 	{
-		public static readonly HsvShiftParam Default = new HsvShiftParam()
+		public static readonly HsvShiftParam Default = new()
 		{
 			H = 0,
 			S = 1f,
@@ -31,7 +30,7 @@ namespace ANovel.Engine.PostEffects
 	{
 
 		Material m_Material;
-		RenderTargetHandle m_TempHandle;
+		int m_TempHandle;
 		int m_RateId;
 		int m_HsvId;
 
@@ -51,7 +50,7 @@ namespace ANovel.Engine.PostEffects
 			if (m_Material == null)
 			{
 				m_Material = new Material(m_Shader);
-				m_TempHandle.Init("_TempRT");
+				m_TempHandle = Shader.PropertyToID("_TempRT");
 				m_RateId = Shader.PropertyToID("_Rate");
 				m_HsvId = Shader.PropertyToID("_HSV");
 				m_Material.DisableKeyword("_ANOVEL_COLOR_CHANGE_GRAYSCALE");
@@ -60,10 +59,10 @@ namespace ANovel.Engine.PostEffects
 			m_Material.SetFloat(m_RateId, param.Rate);
 			m_Material.SetVector(m_HsvId, new Vector4(param.H / 360f, param.S, param.V));
 
-			cmd.GetTemporaryRT(m_TempHandle.id, targetDescriptor);
-			cmd.Blit(target, m_TempHandle.Identifier(), m_Material);
-			cmd.Blit(m_TempHandle.Identifier(), target);
-			cmd.ReleaseTemporaryRT(m_TempHandle.id);
+			cmd.GetTemporaryRT(m_TempHandle, targetDescriptor);
+			cmd.Blit(target, m_TempHandle, m_Material);
+			cmd.Blit(m_TempHandle, target);
+			cmd.ReleaseTemporaryRT(m_TempHandle);
 		}
 	}
 }
